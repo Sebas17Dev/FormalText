@@ -1,6 +1,9 @@
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const reviewButton = document.getElementById("btn-review");
+const wordCountDisplay = document.getElementById("word-count");
+const charCountDisplay = document.getElementById("char-count");
+const paragraphCountDisplay = document.getElementById("paragraph-count");
 
 // Custom message
 const consoleStyles = `
@@ -71,8 +74,8 @@ function checkDocument() {
     const highlightedText = documentText.split(/\b/).map(word => {
         if (informalWordsData[word]) {
             foundInformalWords = true;
-            const substitutes = informalWordsData[word].substitutes.length > 0 ? 
-                ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : 
+            const substitutes = informalWordsData[word].substitutes.length > 0 ?
+                ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` :
                 '';
             const titleText = `${informalWordsData[word].explanation}${substitutes}`;
             return `<span class="highlight" title="${titleText}">${word}</span>`;
@@ -80,7 +83,7 @@ function checkDocument() {
         return word;
     }).join('');
 
-    documentInput.innerHTML = highlightedText; 
+    documentInput.innerHTML = highlightedText;
 
     let explanations = '';
     Object.keys(informalWordsData).forEach(word => {
@@ -115,6 +118,38 @@ function updateFeedbackDiv(hasInformalWords) {
         feedbackDiv.classList.add("success");
     }
 }
+
+// Función para contar palabras
+const countWords = text => {
+    const words = text.trim().split(/\s+/);
+    return words.filter(word => word.length > 0).length;
+}
+
+// Función para contar caracteres
+const countCharacters = text => {
+    return text.length;
+}
+
+// Función para contar párrafos
+const countParagraphs = text => {
+    const paragraphs = text.split(/\n+/);
+    return paragraphs.filter(paragraph => paragraph.trim().length > 0).length; // Cuenta solo los párrafos no vacíos
+}
+
+// Actualiza el contador de palabras, caracteres y párrafos
+function updateCounts() {
+    const text = documentInput.innerText || documentInput.textContent;
+    const wordCount = countWords(text);
+    const charCount = countCharacters(text);
+    const paragraphCount = countParagraphs(text);
+
+    wordCountDisplay.textContent = `Palabras: ${wordCount}`;
+    charCountDisplay.textContent = `Caracteres: ${charCount}`; // Actualiza el conteo de caracteres
+    paragraphCountDisplay.textContent = `Párrafos: ${paragraphCount}`; // Actualiza el conteo de párrafos
+}
+
+// Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
+documentInput.addEventListener('input', updateCounts);
 
 // Agregar el evento al botón de revisar
 reviewButton.addEventListener("click", checkDocument);

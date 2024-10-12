@@ -232,6 +232,14 @@ header p {
     margin-bottom: 20px;
 }
 
+.counts {
+    display: flex; 
+    margin-top: 10px;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
 textarea {
     width: 100%;
     height: 300px;
@@ -254,6 +262,7 @@ textarea:focus {
 .editable {
     width: 100%;
     height: 300px;
+    margin-bottom: 1rem;
     padding: 15px;
     border: 2px solid #ddd;
     border-radius: 8px;
