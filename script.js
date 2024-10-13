@@ -20,7 +20,12 @@ const customMessage = "Welcome! This site was built with HTML, CSS, and JavaScri
 console.log("%c" + customMessage, consoleStyles);
 
 
-const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero']);
+const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero', 'sus', 'esta', 'sin', 'lo', 'han', 'vez', 'ser', 'ha']);
+
+// Función para normalizar el texto eliminando acentos y caracteres especiales
+function normalizeWord(word) {
+    return word.normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
+}
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
@@ -38,9 +43,8 @@ function checkDocument() {
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
     let wordCount = {}; // Para contar las repeticiones de palabras
 
-    // Resaltar palabras informales en el texto y crear enlaces
-    const highlightedText = documentText.split(/\b/).map(word => {
-        const lowerCaseWord = word.toLowerCase(); // Convertir la palabra a minúsculas
+    const highlightedText = documentText.split(/([^\p{L}\p{N}]+)/gu).map(word => {
+        const lowerCaseWord = normalizeWord(word.toLowerCase()); // Normalizar la palabra y convertirla a minúsculas
 
         // Verificar si la palabra es común
         if (commonWords.has(lowerCaseWord)) {
@@ -65,6 +69,7 @@ function checkDocument() {
 
         return word;
     }).join('');
+
 
     documentInput.innerHTML = highlightedText;
 
