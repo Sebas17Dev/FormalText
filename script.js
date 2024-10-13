@@ -60,6 +60,7 @@ const informalWordsData = {
 };
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
+// Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
     const documentText = documentInput.innerText.toLowerCase().trim(); // Obtener el texto del div editable
 
@@ -71,40 +72,60 @@ function checkDocument() {
     }
 
     let foundInformalWords = false;
+    let wordCounter = 0; // Para generar IDs únicos
+    let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
+
+    // Resaltar palabras informales en el texto y crear enlaces
     const highlightedText = documentText.split(/\b/).map(word => {
         if (informalWordsData[word]) {
             foundInformalWords = true;
-            const substitutes = informalWordsData[word].substitutes.length > 0 ?
-                ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` :
-                '';
-            const titleText = `${informalWordsData[word].explanation}${substitutes}`;
-            return `<span class="highlight" title="${titleText}">${word}</span>`;
+            const wordId = `word-${wordCounter++}`; // Crear un ID único para cada palabra
+            if (!wordOccurrences[word]) {
+                wordOccurrences[word] = []; // Inicializar lista de ocurrencias
+            }
+            wordOccurrences[word].push(wordId); // Almacenar el ID de esta ocurrencia
+            const titleText = informalWordsData[word].explanation;
+            return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
         }
         return word;
     }).join('');
 
     documentInput.innerHTML = highlightedText;
 
+    // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
     let explanations = '';
-    Object.keys(informalWordsData).forEach(word => {
-        if (documentText.includes(word)) {
-            explanations += `Palabra: "${word}"\nExplicación: ${informalWordsData[word].explanation}\n`;
-            if (informalWordsData[word].substitutes.length > 0) {
-                explanations += `Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}\n\n`;
-            }
-        }
+    Object.keys(wordOccurrences).forEach((word) => {
+        const substitutes = informalWordsData[word].substitutes.length > 0 ?
+            ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
+        const occurrencesLinks = wordOccurrences[word].map(id => `<a href="#${id}" class="word-link">${word}</a>`).join(', ');
+
+        // Crear un div para cada explicación
+        explanations += `<div class="explanation">${occurrencesLinks}: ${informalWordsData[word].explanation}${substitutes}</div>`;
     });
 
-    // Mostrar el mensaje de confirmación o que no hay palabras informales
+    // Actualizar feedbackDiv con explicaciones y enlaces
     if (foundInformalWords) {
-        alert(`Se han encontrado palabras no formales en el documento. Aquí está el resumen:\n\n${explanations}`);
+        feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+        feedbackDiv.classList.remove("hidden", "success", "warning");
+        feedbackDiv.classList.add("error");
     } else {
-        alert('El documento no contiene palabras no formales.');
+        feedbackDiv.innerHTML = `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
+        feedbackDiv.classList.remove("hidden", "error", "warning");
+        feedbackDiv.classList.add("success");
     }
 
-    // Actualizar feedbackDiv después de revisar el documento
-    updateFeedbackDiv(foundInformalWords);
+    // Añadir funcionalidad de scroll a las palabras no formales en el feedback
+    document.querySelectorAll('.word-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+            const targetWord = document.getElementById(link.getAttribute('href').substring(1)); // Obtener el ID de destino
+            if (targetWord) {
+                targetWord.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
 }
+
 
 // Función para actualizar el div de retroalimentación
 function updateFeedbackDiv(hasInformalWords) {
