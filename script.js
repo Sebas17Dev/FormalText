@@ -1,6 +1,7 @@
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
+const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
 const wordCountDisplay = document.getElementById("word-count");
 const charCountDisplay = document.getElementById("char-count");
@@ -26,6 +27,15 @@ const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'la
 // Función para normalizar el texto eliminando acentos y caracteres especiales
 function normalizeWord(word) {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
+}
+
+// Función para limpiar el documento
+const clearDocument = () => {
+    documentInput.innerText = '';
+    feedbackDiv.classList.add('hidden');
+    charCountDisplay.innerText = 'Caracteres: 0';
+    wordCountDisplay.innerText = 'Palabras: 0'; 
+    paragraphCountDisplay.innerText = 'Párrafos: 0';
 }
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
@@ -244,4 +254,15 @@ checkRepeatedWords.addEventListener("change", function() {
 window.addEventListener("load", function() {
     const savedValue = localStorage.getItem("checkRepeatedWords");
     checkRepeatedWords.checked = savedValue === "true"; 
+});
+
+// Evento del botón de limpiar
+clearButton.addEventListener("click", clearDocument);
+
+// Escucha el evento de teclado
+document.addEventListener('keydown', event => {
+    if (event.ctrlKey && event.key === 'l') {
+        event.preventDefault();
+        clearDocument();
+    }
 });

@@ -309,29 +309,6 @@ strong {
     padding: 10px;
 }
 
-.btn {
-    padding: .6rem 1.2rem;
-    border-radius: var(--radius);
-    color: #fff;
-    cursor: pointer;
-}
-
-/* Review Button */
-#btn-review {
-    margin: 0 auto;
-    font-size: 1.2em;
-    background-color: var(--primary-color);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#btn-review:hover {
-    background-color: #005bb5;
-    transform: translateY(-2px);
-}
-
-#btn-review span {
-    font-size: 0.8em;
-}
 
 
 /*Switch styles*/
@@ -548,6 +525,46 @@ input[type="checkbox"]:checked + label::before::after {
     cursor: pointer;
     align-items: center;
 }
+
+
+/* Estilo general del grupo de botones */
+.btn {
+    padding: .6rem 1.2rem;
+    border-radius: var(--radius);
+    color: #fff;
+    cursor: pointer;
+}
+
+.button-group {
+    display: flex;
+    margin-top: 1.2rem;
+    justify-content: space-evenly;
+}
+
+#btn-review {
+    font-size: 1.2em;
+    background-color: var(--primary-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#btn-review:hover {
+    background-color: #005bb5;
+    transform: translateY(-2px);
+}
+
+#btn-clear {  
+    padding: 0.2rem 0.5rem;
+    background-color: #f44336;
+}
+
+#btn-clear:hover {
+    background-color: #e53935;
+}
+
+#btn-review span, #btn-clear span{
+    font-size: 0.8em;
+}
+
 
 #version {
     position: relative;
