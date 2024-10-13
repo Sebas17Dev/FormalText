@@ -236,6 +236,7 @@ header p {
 .counts {
     display: flex;
     margin-top: 10px;
+    flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
     justify-content: center;
@@ -482,7 +483,7 @@ input[type="checkbox"] + label::before {
     height: 20px;
     margin-right: 10px;
     border: 2px solid var(--color-primary-text);
-    border-radius: 5px;
+    border-radius: 25%;
     vertical-align: middle;
     cursor: pointer;
     content: '';
@@ -538,6 +539,8 @@ input[type="checkbox"]:checked + label::before::after {
 .button-group {
     display: flex;
     margin-top: 1.2rem;
+    flex-wrap: wrap;
+    row-gap: 1rem;
     justify-content: space-evenly;
 }
 
@@ -572,7 +575,7 @@ input[type="checkbox"]:checked + label::before::after {
     margin-top: 2rem;
     font-size: 1em;
     font-weight: 600;
-    color: #888;
+    color: var(--primary-color);
     text-align: center;
 }
 

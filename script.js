@@ -6,6 +6,8 @@ const reviewButton = document.getElementById("btn-review");
 const wordCountDisplay = document.getElementById("word-count");
 const charCountDisplay = document.getElementById("char-count");
 const paragraphCountDisplay = document.getElementById("paragraph-count");
+const avgWordsInParagraphsDisplay = document.getElementById("avg-words-in-paragraphs");
+const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-in-paragraphs");
 
 // Custom message
 const consoleStyles = `
@@ -36,6 +38,8 @@ const clearDocument = () => {
     charCountDisplay.innerText = 'Caracteres: 0';
     wordCountDisplay.innerText = 'Palabras: 0'; 
     paragraphCountDisplay.innerText = 'Párrafos: 0';
+    avgWordsInParagraphsDisplay.innerText = 'Promedio de palabras en párrafos: 0';
+    avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
 }
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
@@ -205,6 +209,37 @@ const countParagraphs = text => {
     return paragraphs.filter(paragraph => paragraph.trim().length > 0).length; // Cuenta solo los párrafos no vacíos
 }
 
+// Función para contar las oraciones en un texto
+const countSentences = text => {
+    const sentences = text.split(/[.!?]+\s*/); // Divide por los caracteres que suelen marcar el fin de una oración
+    return sentences.filter(sentence => sentence.trim().length > 0).length; // Filtra oraciones no vacías
+}
+
+// Función para calcular el promedio de palabras por párrafo
+const calculateAvgWordsInParagraphs = (text) => {
+    const paragraphs = text.split(/\n+/).filter(paragraph => paragraph.trim().length > 0); // Divide el texto en párrafos no vacíos
+    const totalWords = paragraphs.reduce((total, paragraph) => total + countWords(paragraph), 0); // Suma el total de palabras en los párrafos
+    return paragraphs.length > 0 ? (totalWords / paragraphs.length).toFixed(2) : 0; // Calcula el promedio
+}
+
+// Función para calcular el promedio de oraciones por párrafo
+const calculateAvgSentencesInParagraphs = (text) => {
+    const paragraphs = text.split(/\n+/).filter(paragraph => paragraph.trim().length > 0); // Divide el texto en párrafos no vacíos
+    const totalSentences = paragraphs.reduce((total, paragraph) => total + countSentences(paragraph), 0); // Suma el total de oraciones en los párrafos
+    return paragraphs.length > 0 ? (totalSentences / paragraphs.length).toFixed(2) : 0; // Calcula el promedio
+}
+
+// Actualiza el promedio de palabras y oraciones por párrafo
+function updateAverages() {
+    const text = documentInput.innerText || documentInput.textContent;
+    const avgWords = calculateAvgWordsInParagraphs(text);
+    const avgSentences = calculateAvgSentencesInParagraphs(text);
+
+    avgWordsInParagraphsDisplay.textContent = `Promedio de palabras en párrafos: ${avgWords}`;
+    avgSentencesInParagraphsDisplay.textContent = `Promedio de oraciones en párrafos: ${avgSentences}`;
+}
+
+
 // Actualiza el contador de palabras, caracteres y párrafos
 function updateCounts() {
     const text = documentInput.innerText || documentInput.textContent;
@@ -213,11 +248,15 @@ function updateCounts() {
     const paragraphCount = countParagraphs(text);
 
     wordCountDisplay.textContent = `Palabras: ${wordCount}`;
-    charCountDisplay.textContent = `Caracteres: ${charCount}`; // Actualiza el conteo de caracteres
-    paragraphCountDisplay.textContent = `Párrafos: ${paragraphCount}`; // Actualiza el conteo de párrafos
+    charCountDisplay.textContent = `Caracteres: ${charCount}`;
+    paragraphCountDisplay.textContent = `Párrafos: ${paragraphCount}`;
 }
 
-documentInput.addEventListener('input', updateCounts);
+// Escucha el evento 'input' para actualizar en tiempo real
+documentInput.addEventListener('input', () => {
+    updateCounts();
+    updateAverages();
+});
 
 function cleanText(text) {
     return text
