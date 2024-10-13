@@ -234,7 +234,7 @@ header p {
 }
 
 .counts {
-    display: flex; 
+    display: flex;
     margin-top: 10px;
     align-items: center;
     gap: 1rem;
@@ -279,7 +279,8 @@ textarea:focus {
     overflow-wrap: break-word;
 }
 
-b{
+b,
+strong {
     font-weight: bold;
 }
 
@@ -294,7 +295,7 @@ b{
 .feedback a.word-link {
     padding-bottom: 2px;
     font-weight: bold;
-    color: var(--secondary-color); 
+    color: var(--secondary-color);
     transition: transform 0.3s ease;
 }
 
@@ -308,8 +309,7 @@ b{
     padding: 10px;
 }
 
-
-.btn{
+.btn {
     padding: .6rem 1.2rem;
     border-radius: var(--radius);
     color: #fff;
@@ -320,7 +320,7 @@ b{
 #btn-review {
     margin: 0 auto;
     font-size: 1.2em;
-    background-color: #0073e6;
+    background-color: var(--primary-color);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -442,11 +442,118 @@ input:checked+.slider::before {
     margin-right: 10px;
 }
 
+.repeated-words-section {
+    margin: 1rem;
+    padding: 0.5rem;
+    border-bottom: 5px solid #ffa500;
+    border-left: 5px solid #ffa500;
+    border-radius: var(--radius);
+}
+
+.repeated-words-list {
+    display: flex;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.repeated-words-paragraph {
+    margin: 1rem 0;
+}
+
+.repeated-words-paragraph h4 {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.repeated-word-items {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.repeated-word {
+    margin-bottom: 5px;
+}
+
+.word-highlight {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.word-count {
+    font-style: italic;
+    color: var(--primary-color);
+}
+
+
+/* Estilo general del checkbox */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+input[type="checkbox"] {
+    display: none; 
+}
+
+input[type="checkbox"] + label::before {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 2px solid var(--color-primary-text);
+    border-radius: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+    content: '';
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="checkbox"]:checked + label::before {
+    background-color: var(--primary-color);
+}
+
+input[type="checkbox"] + label::before {
+    position: relative;
+    content: '';
+}
+
+input[type="checkbox"]:checked + label::before::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background-color: #fff;
+    content: '';
+    transition: transform 0.3s ease;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+input[type="checkbox"] + label::before::after {
+    transform: scale(0);
+}
+
+input[type="checkbox"]:checked + label::before::after {
+    transform: scale(1);
+}
+
+.checkbox-wrapper label {
+    display: flex;
+    font-size: 1em;
+    cursor: pointer;
+    align-items: center;
+}
+
 #version {
-    position: relative; 
+    position: relative;
     bottom: 0;
-    margin-top: 2rem; 
-    font-size: 1em; 
+    margin-top: 2rem;
+    font-size: 1em;
     font-weight: 600;
     color: #888;
     text-align: center;

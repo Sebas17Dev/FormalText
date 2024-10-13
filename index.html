@@ -29,21 +29,25 @@
         <header>
             <h1>FormalText</h1>
             <p>Pegue su documento a continuación y revise su redacción</p>
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="check-repeated-words">
+                <label for="check-repeated-words">Verificar palabras repetidas en párrafos</label>
+            </div>
             <div id="feedback" class="feedback hidden"></div>
         </header>
 
         <section class="editor-container">
-            <div class="editable" id="document-input" contenteditable="true" placeholder="Pegue su documento aquí..."></div>
+            <div class="editable" id="document-input" contenteditable="true"></div>
             <div class="counts">
                 <p id="char-count">Caracteres: 0</p>
                 <p id="word-count">Palabras: 0</p>
                 <p id="paragraph-count">Párrafos: 0</p>
             </div>
         </section>
-        
+
         <button class="btn" id="btn-review">Revisar documento<br><span>(Ctrl + Enter)</span></button>
 
-        <p id="version">Versión: 0.1.5</p>
+        <p id="version">Versión: 0.1.6</p>
     </div>
 </body>
 

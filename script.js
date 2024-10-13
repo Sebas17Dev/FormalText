@@ -1,5 +1,6 @@
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
+const checkRepeatedWords = document.getElementById("check-repeated-words");
 const reviewButton = document.getElementById("btn-review");
 const wordCountDisplay = document.getElementById("word-count");
 const charCountDisplay = document.getElementById("char-count");
@@ -29,7 +30,7 @@ function normalizeWord(word) {
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
-    const documentText = documentInput.innerText.trim(); // Obtener el texto del div editable
+    const documentText = documentInput.innerText.trim();
 
     if (documentText === '') {
         feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> El campo está vacío. Por favor ingresa algún texto.`;
@@ -38,46 +39,71 @@ function checkDocument() {
         return; // Salir si el documento está vacío
     }
 
+    // Limpiar el contenido actual antes de procesar el nuevo texto
+    documentInput.innerHTML = '';
+
     let foundInformalWords = false;
     let wordCounter = 0; // Para generar IDs únicos
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
-    let wordCount = {}; // Para contar las repeticiones de palabras
+    let repeatedWordsPerParagraph = {}; // Para almacenar palabras repetidas por párrafo
 
-    const highlightedText = documentText.split(/([^\p{L}\p{N}]+)/gu).map(word => {
-        const lowerCaseWord = normalizeWord(word.toLowerCase()); // Normalizar la palabra y convertirla a minúsculas
+    // Dividir el texto en párrafos
+    const paragraphs = documentText.split(/\n+/); 
 
-        // Verificar si la palabra es común
-        if (commonWords.has(lowerCaseWord)) {
-            return word; // Si es una palabra común, no contarla ni resaltarla
-        }
+    paragraphs.forEach((paragraph, paragraphIndex) => {
+        let wordCount = {};
 
-        if (informalWordsData[lowerCaseWord]) {
-            foundInformalWords = true;
-            const wordId = `word-${wordCounter++}`; // Crear un ID único para cada palabra
-            if (!wordOccurrences[lowerCaseWord]) {
-                wordOccurrences[lowerCaseWord] = []; // Inicializar lista de ocurrencias
+        // Procesar el texto de cada párrafo
+        const highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
+            const lowerCaseWord = normalizeWord(word.toLowerCase()); // Normalizar la palabra y convertirla a minúsculas
+
+            // Verificar si la palabra es común
+            if (commonWords.has(lowerCaseWord)) {
+                return word; // Si es una palabra común, no contarla ni resaltarla
             }
-            wordOccurrences[lowerCaseWord].push(wordId); // Almacenar el ID de esta ocurrencia
-            const titleText = informalWordsData[lowerCaseWord].explanation;
-            return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
+
+            if (informalWordsData[lowerCaseWord]) {
+                foundInformalWords = true;
+                const wordId = `word-${wordCounter++}`; 
+                if (!wordOccurrences[lowerCaseWord]) {
+                    wordOccurrences[lowerCaseWord] = []; // Inicializar lista de ocurrencias
+                }
+                wordOccurrences[lowerCaseWord].push(wordId); // Almacenar el ID de esta ocurrencia
+                const titleText = informalWordsData[lowerCaseWord].explanation;
+                return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
+            }
+
+            // Contar las repeticiones de palabras (excepto palabras comunes)
+            if (lowerCaseWord.match(/[a-z]/) && lowerCaseWord.length > 1) { // Ignorar palabras muy cortas o no alfabéticas
+                wordCount[lowerCaseWord] = (wordCount[lowerCaseWord] || 0) + 1;
+            }
+
+            return word;
+        }).join('');
+
+        // Actualizar el texto del párrafo con las palabras resaltadas
+        documentInput.innerHTML += highlightedText + '<br>'; // Agregar cada párrafo procesado al documento
+
+        // Verificar si hay palabras repetidas en este párrafo, si el usuario lo eligió
+        if (checkRepeatedWords.checked) {
+            let repeatedWords = [];
+            Object.entries(wordCount).forEach(([word, count]) => {
+                if (count > 1) {
+                    repeatedWords.push(`${word}: ${count} veces`);
+                }
+            });
+
+            if (repeatedWords.length > 0) {
+                repeatedWordsPerParagraph[`Párrafo ${paragraphIndex + 1}`] = repeatedWords;
+            }
         }
-
-        // Contar las repeticiones de palabras (excepto palabras comunes)
-        if (lowerCaseWord.match(/[a-z]/) && lowerCaseWord.length > 1) { // Ignorar palabras muy cortas o no alfabéticas
-            wordCount[lowerCaseWord] = (wordCount[lowerCaseWord] || 0) + 1;
-        }
-
-        return word;
-    }).join('');
-
-
-    documentInput.innerHTML = highlightedText;
+    });
 
     // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
     let explanations = '';
     Object.keys(wordOccurrences).forEach((word) => {
         const substitutes = informalWordsData[word].substitutes.length > 0 ?
-            ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
+            `Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
         const occurrencesLinks = wordOccurrences[word].map(id => `<a href="#${id}" class="word-link">${word}</a>`).join(', ');
 
         // Crear un div para cada explicación
@@ -95,19 +121,44 @@ function checkDocument() {
         feedbackDiv.classList.add("success");
     }
 
-    // Mostrar palabras repetidas
-    showRepeatedWords(wordCount);
+    // Mostrar palabras repetidas por párrafo, si la opción está activada
+    if (checkRepeatedWords.checked) {
+        showRepeatedWordsByParagraph(repeatedWordsPerParagraph);
+    }
+}
 
-    // Añadir funcionalidad de scroll a las palabras no formales en el feedback
-    document.querySelectorAll('.word-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-            const targetWord = document.getElementById(link.getAttribute('href').substring(1)); // Obtener el ID de destino
-            if (targetWord) {
-                targetWord.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+// Función para mostrar palabras repetidas por párrafo
+function showRepeatedWordsByParagraph(repeatedWordsPerParagraph) {
+    let repeatedWordsHtml = `
+        <div class="repeated-words-section">
+            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
+            <ul class="repeated-words-list">`;
+
+    let hasRepeatedWords = false;
+
+    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
+        hasRepeatedWords = true;
+
+        repeatedWordsHtml += `
+            <li class="repeated-words-paragraph">
+                <h4>${paragraph}:</h4>
+                <ul class="repeated-word-items">`;
+
+        repeatedWords.forEach(wordCount => {
+            repeatedWordsHtml += `<li class="repeated-word">
+                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
+                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
+            </li>`;
         });
+
+        repeatedWordsHtml += `</ul></li>`;
     });
+
+    repeatedWordsHtml += '</ul></div>';
+
+    if (hasRepeatedWords) {
+        feedbackDiv.innerHTML += repeatedWordsHtml;
+    }
 }
 
 // Función para mostrar palabras repetidas
@@ -182,4 +233,15 @@ document.addEventListener('keydown', event => {
         event.preventDefault();
         checkDocument();
     }
+});
+
+// Agregar evento para guardar la selección en localStorage
+checkRepeatedWords.addEventListener("change", function() {
+    localStorage.setItem("checkRepeatedWords", checkRepeatedWords.checked);
+});
+
+// Cargar el estado guardado del checkbox al iniciar la aplicación
+window.addEventListener("load", function() {
+    const savedValue = localStorage.getItem("checkRepeatedWords");
+    checkRepeatedWords.checked = savedValue === "true"; 
 });
