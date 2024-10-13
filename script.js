@@ -19,6 +19,9 @@ const consoleStyles = `
 const customMessage = "Welcome! This site was built with HTML, CSS, and JavaScript. We hope you have a great experience.";
 console.log("%c" + customMessage, consoleStyles);
 
+
+const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero']);
+
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
     const documentText = documentInput.innerText.trim(); // Obtener el texto del div editable
@@ -33,10 +36,17 @@ function checkDocument() {
     let foundInformalWords = false;
     let wordCounter = 0; // Para generar IDs únicos
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
+    let wordCount = {}; // Para contar las repeticiones de palabras
 
     // Resaltar palabras informales en el texto y crear enlaces
     const highlightedText = documentText.split(/\b/).map(word => {
         const lowerCaseWord = word.toLowerCase(); // Convertir la palabra a minúsculas
+
+        // Verificar si la palabra es común
+        if (commonWords.has(lowerCaseWord)) {
+            return word; // Si es una palabra común, no contarla ni resaltarla
+        }
+
         if (informalWordsData[lowerCaseWord]) {
             foundInformalWords = true;
             const wordId = `word-${wordCounter++}`; // Crear un ID único para cada palabra
@@ -47,6 +57,12 @@ function checkDocument() {
             const titleText = informalWordsData[lowerCaseWord].explanation;
             return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
         }
+
+        // Contar las repeticiones de palabras (excepto palabras comunes)
+        if (lowerCaseWord.match(/[a-z]/) && lowerCaseWord.length > 1) { // Ignorar palabras muy cortas o no alfabéticas
+            wordCount[lowerCaseWord] = (wordCount[lowerCaseWord] || 0) + 1;
+        }
+
         return word;
     }).join('');
 
@@ -74,6 +90,9 @@ function checkDocument() {
         feedbackDiv.classList.add("success");
     }
 
+    // Mostrar palabras repetidas
+    showRepeatedWords(wordCount);
+
     // Añadir funcionalidad de scroll a las palabras no formales en el feedback
     document.querySelectorAll('.word-link').forEach(link => {
         link.addEventListener('click', function (e) {
@@ -86,16 +105,20 @@ function checkDocument() {
     });
 }
 
-// Función para actualizar el div de retroalimentación
-function updateFeedbackDiv(hasInformalWords) {
-    if (hasInformalWords) {
-        feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> El documento contiene palabras no formales.`;
-        feedbackDiv.classList.remove("hidden", "success", "warning");
-        feedbackDiv.classList.add("error");
-    } else {
-        feedbackDiv.innerHTML = `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
-        feedbackDiv.classList.remove("hidden", "error", "warning");
-        feedbackDiv.classList.add("success");
+// Función para mostrar palabras repetidas
+function showRepeatedWords(wordCount) {
+    let repeatedWordsHtml = '<i class="fa-solid fa-info-circle"></i> Palabras repetidas:<br>';
+    let hasRepeatedWords = false;
+
+    Object.entries(wordCount).forEach(([word, count]) => {
+        if (count > 1) {
+            hasRepeatedWords = true;
+            repeatedWordsHtml += `${word}: ${count} veces<br>`;
+        }
+    });
+
+    if (hasRepeatedWords) {
+        feedbackDiv.innerHTML += `<div class="repeated-words">${repeatedWordsHtml}</div>`;
     }
 }
 
