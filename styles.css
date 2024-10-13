@@ -329,6 +329,10 @@ b{
     transform: translateY(-2px);
 }
 
+#btn-review span {
+    font-size: 0.8em;
+}
+
 
 /*Switch styles*/
 .switch {

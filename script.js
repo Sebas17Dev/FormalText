@@ -19,53 +19,12 @@ const consoleStyles = `
 const customMessage = "Welcome! This site was built with HTML, CSS, and JavaScript. We hope you have a great experience.";
 console.log("%c" + customMessage, consoleStyles);
 
-// Lista de palabras informales con explicación y posibles sustitutos
-const informalWordsData = {
-    'guay': {
-        explanation: 'Es una palabra coloquial que no es adecuada para contextos formales.',
-        substitutes: ['genial', 'excelente', 'maravilloso']
-    },
-    'chévere': {
-        explanation: 'Es un término coloquial usado principalmente en Latinoamérica, que no es adecuado en textos formales.',
-        substitutes: ['genial', 'fantástico', 'excelente']
-    },
-    'tío': {
-        explanation: 'Es una palabra coloquial para referirse a una persona, pero su uso es muy informal.',
-        substitutes: ['persona', 'individuo', 'señor/señora']
-    },
-    'flipar': {
-        explanation: 'Es un término muy coloquial que expresa sorpresa, pero no es adecuado en escritura formal.',
-        substitutes: ['sorprenderse', 'asombrarse']
-    },
-    'currar': {
-        explanation: 'Es una palabra coloquial para trabajar. No debe usarse en situaciones formales.',
-        substitutes: ['trabajar', 'laborar']
-    },
-    'chungo': {
-        explanation: 'Es una palabra coloquial que significa difícil o malo, pero no es adecuada en textos formales.',
-        substitutes: ['difícil', 'complicado', 'desafiante']
-    },
-    'rollo': {
-        explanation: 'Es un término coloquial que se usa para referirse a algo aburrido o tedioso.',
-        substitutes: ['tema', 'asunto', 'situación']
-    },
-    'mogollón': {
-        explanation: 'Es una expresión coloquial que indica una gran cantidad, pero es demasiado informal.',
-        substitutes: ['mucho', 'gran cantidad', 'abundancia']
-    },
-    'pasota': {
-        explanation: 'Es una palabra coloquial que describe una actitud indiferente, no adecuada en escritos formales.',
-        substitutes: []
-    }
-};
-
-// Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
-    const documentText = documentInput.innerText.toLowerCase().trim(); // Obtener el texto del div editable
+    const documentText = documentInput.innerText.trim(); // Obtener el texto del div editable
 
     if (documentText === '') {
-        feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> El documento está vacío. Por favor ingresa algún texto.`;
+        feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> El campo está vacío. Por favor ingresa algún texto.`;
         feedbackDiv.classList.remove("hidden", "success", "error");
         feedbackDiv.classList.add("warning");
         return; // Salir si el documento está vacío
@@ -77,14 +36,15 @@ function checkDocument() {
 
     // Resaltar palabras informales en el texto y crear enlaces
     const highlightedText = documentText.split(/\b/).map(word => {
-        if (informalWordsData[word]) {
+        const lowerCaseWord = word.toLowerCase(); // Convertir la palabra a minúsculas
+        if (informalWordsData[lowerCaseWord]) {
             foundInformalWords = true;
             const wordId = `word-${wordCounter++}`; // Crear un ID único para cada palabra
-            if (!wordOccurrences[word]) {
-                wordOccurrences[word] = []; // Inicializar lista de ocurrencias
+            if (!wordOccurrences[lowerCaseWord]) {
+                wordOccurrences[lowerCaseWord] = []; // Inicializar lista de ocurrencias
             }
-            wordOccurrences[word].push(wordId); // Almacenar el ID de esta ocurrencia
-            const titleText = informalWordsData[word].explanation;
+            wordOccurrences[lowerCaseWord].push(wordId); // Almacenar el ID de esta ocurrencia
+            const titleText = informalWordsData[lowerCaseWord].explanation;
             return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
         }
         return word;
@@ -116,7 +76,7 @@ function checkDocument() {
 
     // Añadir funcionalidad de scroll a las palabras no formales en el feedback
     document.querySelectorAll('.word-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
             const targetWord = document.getElementById(link.getAttribute('href').substring(1)); // Obtener el ID de destino
             if (targetWord) {
@@ -125,7 +85,6 @@ function checkDocument() {
         });
     });
 }
-
 
 // Función para actualizar el div de retroalimentación
 function updateFeedbackDiv(hasInformalWords) {
@@ -169,8 +128,30 @@ function updateCounts() {
     paragraphCountDisplay.textContent = `Párrafos: ${paragraphCount}`; // Actualiza el conteo de párrafos
 }
 
-// Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
 documentInput.addEventListener('input', updateCounts);
+
+function cleanText(text) {
+    return text
+        .replace(/\r?\n|\r/g, '\n')
+        .replace(/<[^>]*>/g, '')
+        .trim();
+}
+
+// Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
+documentInput.addEventListener('paste', function (event) {
+    event.preventDefault();
+    const text = (event.clipboardData || window.clipboardData).getData('text');
+    const cleanedText = cleanText(text);
+    document.execCommand('insertText', false, cleanedText);
+});
 
 // Agregar el evento al botón de revisar
 reviewButton.addEventListener("click", checkDocument);
+
+// Escucha el evento de teclado
+document.addEventListener('keydown', event => {
+    if (event.ctrlKey && event.key === 'Enter') {
+        event.preventDefault();
+        checkDocument();
+    }
+});
