@@ -1,6 +1,7 @@
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
+const checkParagraphLength = document.getElementById("check-paragraph-length");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
 const wordCountDisplay = document.getElementById("word-count");
@@ -8,6 +9,7 @@ const charCountDisplay = document.getElementById("char-count");
 const paragraphCountDisplay = document.getElementById("paragraph-count");
 const avgWordsInParagraphsDisplay = document.getElementById("avg-words-in-paragraphs");
 const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-in-paragraphs");
+const maxWordsPerParagraph = 170;
 
 // Custom message
 const consoleStyles = `
@@ -36,7 +38,7 @@ const clearDocument = () => {
     documentInput.innerText = '';
     feedbackDiv.classList.add('hidden');
     charCountDisplay.innerText = 'Caracteres: 0';
-    wordCountDisplay.innerText = 'Palabras: 0'; 
+    wordCountDisplay.innerText = 'Palabras: 0';
     paragraphCountDisplay.innerText = 'Párrafos: 0';
     avgWordsInParagraphsDisplay.innerText = 'Promedio de palabras en párrafos: 0';
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
@@ -60,12 +62,19 @@ function checkDocument() {
     let wordCounter = 0; // Para generar IDs únicos
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
     let repeatedWordsPerParagraph = {}; // Para almacenar palabras repetidas por párrafo
+    let tooLongParagraphs = [];
 
     // Dividir el texto en párrafos
-    const paragraphs = documentText.split(/\n+/); 
+    const paragraphs = documentText.split(/\n+/);
 
     paragraphs.forEach((paragraph, paragraphIndex) => {
         let wordCount = {};
+        const wordsInParagraph = paragraph.trim().split(/\s+/).length;
+
+        // Verificar si el párrafo excede el límite de palabras
+        if (checkParagraphLength.checked && wordsInParagraph > maxWordsPerParagraph) {
+            tooLongParagraphs.push(`Párrafo ${paragraphIndex + 1} (${wordsInParagraph} palabras)`);
+        }
 
         // Procesar el texto de cada párrafo
         const highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
@@ -78,7 +87,7 @@ function checkDocument() {
 
             if (informalWordsData[lowerCaseWord]) {
                 foundInformalWords = true;
-                const wordId = `word-${wordCounter++}`; 
+                const wordId = `word-${wordCounter++}`;
                 if (!wordOccurrences[lowerCaseWord]) {
                     wordOccurrences[lowerCaseWord] = []; // Inicializar lista de ocurrencias
                 }
@@ -124,16 +133,32 @@ function checkDocument() {
         explanations += `<div class="explanation">${occurrencesLinks}: ${informalWordsData[word].explanation}${substitutes}</div>`;
     });
 
+    let feedbackContent = ""; // Variable temporal para acumular el contenido
+
     // Actualizar feedbackDiv con explicaciones y enlaces
     if (foundInformalWords) {
-        feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
         feedbackDiv.classList.remove("hidden", "success", "warning");
         feedbackDiv.classList.add("error");
     } else {
-        feedbackDiv.innerHTML = `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
+        feedbackContent += `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
         feedbackDiv.classList.remove("hidden", "error", "warning");
         feedbackDiv.classList.add("success");
     }
+
+    // Mostrar advertencia sobre párrafos demasiado largos
+    if (checkParagraphLength.checked && tooLongParagraphs.length > 0) {
+        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite de ${maxWordsPerParagraph} palabras:<br><ul>`;
+        tooLongParagraphs.forEach(paragraph => {
+            feedbackContent += `<li>${paragraph}</li>`;
+        });
+        feedbackContent += `</ul>`;
+        feedbackDiv.classList.remove("hidden", "success");
+        feedbackDiv.classList.add("error");
+    }
+
+    // Finalmente, actualizar el contenido del feedbackDiv
+    feedbackDiv.innerHTML = feedbackContent;
 
     // Mostrar palabras repetidas por párrafo, si la opción está activada
     if (checkRepeatedWords.checked) {
@@ -172,23 +197,6 @@ function showRepeatedWordsByParagraph(repeatedWordsPerParagraph) {
 
     if (hasRepeatedWords) {
         feedbackDiv.innerHTML += repeatedWordsHtml;
-    }
-}
-
-// Función para mostrar palabras repetidas
-function showRepeatedWords(wordCount) {
-    let repeatedWordsHtml = '<i class="fa-solid fa-info-circle"></i> Palabras repetidas:<br>';
-    let hasRepeatedWords = false;
-
-    Object.entries(wordCount).forEach(([word, count]) => {
-        if (count > 1) {
-            hasRepeatedWords = true;
-            repeatedWordsHtml += `${word}: ${count} veces<br>`;
-        }
-    });
-
-    if (hasRepeatedWords) {
-        feedbackDiv.innerHTML += `<div class="repeated-words">${repeatedWordsHtml}</div>`;
     }
 }
 
@@ -285,14 +293,24 @@ document.addEventListener('keydown', event => {
 });
 
 // Agregar evento para guardar la selección en localStorage
-checkRepeatedWords.addEventListener("change", function() {
+checkRepeatedWords.addEventListener("change", function () {
     localStorage.setItem("checkRepeatedWords", checkRepeatedWords.checked);
 });
 
+checkParagraphLength.addEventListener('change', function () {
+    // Guardar el estado actual del checkbox en localStorage
+    localStorage.setItem('checkParagraphLength', checkParagraphLength.checked);
+});
+
 // Cargar el estado guardado del checkbox al iniciar la aplicación
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     const savedValue = localStorage.getItem("checkRepeatedWords");
-    checkRepeatedWords.checked = savedValue === "true"; 
+    checkRepeatedWords.checked = savedValue === "true";
+});
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    const savedValue = localStorage.getItem('checkParagraphLength');
+    checkParagraphLength.checked = savedValue === 'true';
 });
 
 // Evento del botón de limpiar

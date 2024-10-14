@@ -290,6 +290,7 @@ strong {
     font-weight: bold;
     color: rgb(255, 85, 85);
     background-color: yellow;
+    cursor: help;
 }
 
 /* Enlaces hacia palabras informales */
@@ -468,8 +469,9 @@ input:checked+.slider::before {
 /* Estilo general del checkbox */
 .checkbox-wrapper {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     align-items: center;
-    gap: 0.5rem;
     justify-content: center;
 }
 
