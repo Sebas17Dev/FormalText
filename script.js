@@ -340,6 +340,10 @@ checkParagraphLength.addEventListener('change', () => {
     localStorage.setItem('checkParagraphLength', checkParagraphLength.checked);
 });
 
+checkAllConnectives.addEventListener('change', () => {
+    localStorage.setItem('checkAllConnectives', checkAllConnectives.checked);
+});
+
 // Cargar el estado guardado del checkbox al iniciar la aplicación
 window.addEventListener("load", () => {
     const savedValue = localStorage.getItem("checkRepeatedWords");
@@ -349,6 +353,11 @@ window.addEventListener("load", () => {
 window.addEventListener('load', () => {
     const savedValue = localStorage.getItem('checkParagraphLength');
     checkParagraphLength.checked = savedValue === 'true';
+});
+
+window.addEventListener('load', () => {
+    const savedValue = localStorage.getItem('checkAllConnectives');
+    checkAllConnectives.checked = savedValue === 'true';
 });
 
 // Agregar el evento al botón de revisar

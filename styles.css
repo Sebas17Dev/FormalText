@@ -208,6 +208,7 @@ body {
     color: var(--color-primary-text);
     text-align: center;
     background-color: var(--color-secondary-bg);
+    transition: color var(--transition-slow) var(--transition-timing-function-default);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -253,7 +254,7 @@ textarea {
     background-color: var(--color-primary-bg);
     outline: none;
     resize: none;
-    transition: border-color 0.3s, background-color 0.3s;
+    transition: border-color var(--transition-medium) var(--transition-timing-function-default), background-color var(--transition-medium) var(--transition-timing-function-default);
 }
 
 textarea:focus {
@@ -276,7 +277,7 @@ textarea:focus {
     background-color: var(--color-primary-bg);
     outline: none;
     resize: none;
-    transition: border-color 0.3s, background-color 0.3s;
+    transition: border-color 0.3s var(--transition-timing-function-default), background-color 0.3s var(--transition-timing-function-default);
     overflow-wrap: break-word;
 }
 
@@ -303,7 +304,7 @@ strong {
     padding-bottom: 2px;
     font-weight: bold;
     color: var(--secondary-color);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s var(--transition-timing-function-default);
 }
 
 .feedback a.word-link:hover {
@@ -374,7 +375,7 @@ input:checked+.slider::before {
     top: 50%;
     font-size: 1em;
     opacity: 0;
-    transition: opacity 0.4s;
+    transition: opacity .4s var(--transition-timing-function-default);
     transform: translate(-50%, -50%);
 }
 
@@ -497,7 +498,7 @@ input:checked+.slider::before {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background-color: var(--color-secondary-bg);
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s var(--transition-timing-function-default);
 }
 
 .connector-category:hover {
@@ -545,7 +546,7 @@ input:checked+.slider::before {
     color: #666;
     background-color: #f9f9f9;
     opacity: 0;
-    transition: opacity 0.5s ease, max-height 0.5s ease;
+    transition: opacity 0.5s var(--transition-timing-function-default), max-height 0.5s var(--transition-timing-function-default);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -563,11 +564,15 @@ input:checked+.slider::before {
     border-radius: 5px;
     font-weight: 500;
     background-color: var(--secondary-color);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s var(--transition-timing-function-default);
 }
 
 .show-example:hover {
-    background-color: #97005b;
+    background-color: #9d65e2;
+}
+
+.show-example:active {
+    background-color: #9250e3;
 }
 
 
@@ -594,7 +599,7 @@ input[type="checkbox"]+label::before {
     vertical-align: middle;
     cursor: pointer;
     content: '';
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s var(--transition-timing-function-default), border-color 0.3s var(--transition-timing-function-default);
 }
 
 input[type="checkbox"]:checked+label::before {
@@ -615,7 +620,7 @@ input[type="checkbox"]:checked+label::before::after {
     border-radius: 2px;
     background-color: #fff;
     content: '';
-    transition: transform 0.3s ease;
+    transition: transform 0.3s var(--transition-timing-function-default);
     transform: translate(-50%, -50%) scale(1);
 }
 
@@ -655,7 +660,7 @@ input[type="checkbox"]:checked+label::before::after {
 #btn-review {
     font-size: 1.2em;
     background-color: var(--primary-color);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s var(--transition-timing-function-default), transform 0.2s var(--transition-timing-function-default);
 }
 
 #btn-review:hover {
