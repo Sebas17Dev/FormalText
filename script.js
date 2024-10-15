@@ -9,7 +9,9 @@ const charCountDisplay = document.getElementById("char-count");
 const paragraphCountDisplay = document.getElementById("paragraph-count");
 const avgWordsInParagraphsDisplay = document.getElementById("avg-words-in-paragraphs");
 const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-in-paragraphs");
+const exampleButtons = document.querySelectorAll('.btn.show-example');
 const maxWordsPerParagraph = 170;
+const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero', 'sus', 'esta', 'sin', 'lo', 'han', 'vez', 'ser', 'ha']);
 
 // Custom message
 const consoleStyles = `
@@ -22,14 +24,12 @@ const consoleStyles = `
     font-weight: bold;
 `;
 
-const customMessage = "Welcome! This site was built with HTML, CSS, and JavaScript. We hope you have a great experience.";
+const customMessage = "¡Hola! Esta aplicación web fue hecha con HTML, CSS, y JavaScript. Espero que te sea de mucha utilidad ★•`‿↼";
 console.log("%c" + customMessage, consoleStyles);
 
 
-const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero', 'sus', 'esta', 'sin', 'lo', 'han', 'vez', 'ser', 'ha']);
-
 // Función para normalizar el texto eliminando acentos y caracteres especiales
-function normalizeWord(word) {
+const normalizeWord = word => {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
 }
 
@@ -42,6 +42,40 @@ const clearDocument = () => {
     paragraphCountDisplay.innerText = 'Párrafos: 0';
     avgWordsInParagraphsDisplay.innerText = 'Promedio de palabras en párrafos: 0';
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
+}
+
+// Función para mostrar palabras repetidas por párrafo
+const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
+    let repeatedWordsHtml = `
+        <div class="repeated-words-section">
+            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
+            <ul class="repeated-words-list">`;
+
+    let hasRepeatedWords = false;
+
+    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
+        hasRepeatedWords = true;
+
+        repeatedWordsHtml += `
+            <li class="repeated-words-paragraph">
+                <h4>${paragraph}:</h4>
+                <ul class="repeated-word-items">`;
+
+        repeatedWords.forEach(wordCount => {
+            repeatedWordsHtml += `<li class="repeated-word">
+                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
+                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
+            </li>`;
+        });
+
+        repeatedWordsHtml += `</ul></li>`;
+    });
+
+    repeatedWordsHtml += '</ul></div>';
+
+    if (hasRepeatedWords) {
+        feedbackDiv.innerHTML += repeatedWordsHtml;
+    }
 }
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
@@ -166,40 +200,6 @@ function checkDocument() {
     }
 }
 
-// Función para mostrar palabras repetidas por párrafo
-function showRepeatedWordsByParagraph(repeatedWordsPerParagraph) {
-    let repeatedWordsHtml = `
-        <div class="repeated-words-section">
-            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
-            <ul class="repeated-words-list">`;
-
-    let hasRepeatedWords = false;
-
-    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
-        hasRepeatedWords = true;
-
-        repeatedWordsHtml += `
-            <li class="repeated-words-paragraph">
-                <h4>${paragraph}:</h4>
-                <ul class="repeated-word-items">`;
-
-        repeatedWords.forEach(wordCount => {
-            repeatedWordsHtml += `<li class="repeated-word">
-                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
-                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
-            </li>`;
-        });
-
-        repeatedWordsHtml += `</ul></li>`;
-    });
-
-    repeatedWordsHtml += '</ul></div>';
-
-    if (hasRepeatedWords) {
-        feedbackDiv.innerHTML += repeatedWordsHtml;
-    }
-}
-
 // Función para contar palabras
 const countWords = text => {
     const words = text.trim().split(/\s+/);
@@ -224,21 +224,21 @@ const countSentences = text => {
 }
 
 // Función para calcular el promedio de palabras por párrafo
-const calculateAvgWordsInParagraphs = (text) => {
+const calculateAvgWordsInParagraphs = text => {
     const paragraphs = text.split(/\n+/).filter(paragraph => paragraph.trim().length > 0); // Divide el texto en párrafos no vacíos
     const totalWords = paragraphs.reduce((total, paragraph) => total + countWords(paragraph), 0); // Suma el total de palabras en los párrafos
     return paragraphs.length > 0 ? (totalWords / paragraphs.length).toFixed(2) : 0; // Calcula el promedio
 }
 
 // Función para calcular el promedio de oraciones por párrafo
-const calculateAvgSentencesInParagraphs = (text) => {
+const calculateAvgSentencesInParagraphs = text => {
     const paragraphs = text.split(/\n+/).filter(paragraph => paragraph.trim().length > 0); // Divide el texto en párrafos no vacíos
     const totalSentences = paragraphs.reduce((total, paragraph) => total + countSentences(paragraph), 0); // Suma el total de oraciones en los párrafos
     return paragraphs.length > 0 ? (totalSentences / paragraphs.length).toFixed(2) : 0; // Calcula el promedio
 }
 
 // Actualiza el promedio de palabras y oraciones por párrafo
-function updateAverages() {
+const updateAverages = () => {
     const text = documentInput.innerText || documentInput.textContent;
     const avgWords = calculateAvgWordsInParagraphs(text);
     const avgSentences = calculateAvgSentencesInParagraphs(text);
@@ -247,9 +247,8 @@ function updateAverages() {
     avgSentencesInParagraphsDisplay.textContent = `Promedio de oraciones en párrafos: ${avgSentences}`;
 }
 
-
 // Actualiza el contador de palabras, caracteres y párrafos
-function updateCounts() {
+const updateCounts = () => {
     const text = documentInput.innerText || documentInput.textContent;
     const wordCount = countWords(text);
     const charCount = countCharacters(text);
@@ -260,25 +259,52 @@ function updateCounts() {
     paragraphCountDisplay.textContent = `Párrafos: ${paragraphCount}`;
 }
 
-// Escucha el evento 'input' para actualizar en tiempo real
-documentInput.addEventListener('input', () => {
-    updateCounts();
-    updateAverages();
-});
-
-function cleanText(text) {
+const cleanText = text => {
     return text
         .replace(/\r?\n|\r/g, '\n')
         .replace(/<[^>]*>/g, '')
         .trim();
 }
 
+// Función para alternar la visibilidad del ejemplo
+function toggleExample(button) {
+    const exampleParagraph = button.closest('li').querySelector('.example');
+    exampleParagraph.classList.toggle('show');
+    button.textContent = exampleParagraph.classList.contains('show') ? 'Ocultar ejemplo' : 'Ver ejemplo';
+}
+
+// Escucha el evento 'input' para actualizar en tiempo real
+documentInput.addEventListener('input', () => {
+    updateCounts();
+    updateAverages();
+});
+
 // Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
-documentInput.addEventListener('paste', function (event) {
+documentInput.addEventListener('paste', event => {
     event.preventDefault();
     const text = (event.clipboardData || window.clipboardData).getData('text');
     const cleanedText = cleanText(text);
     document.execCommand('insertText', false, cleanedText);
+});
+
+// Agregar evento para guardar la selección en localStorage
+checkRepeatedWords.addEventListener("change", () => {
+    localStorage.setItem("checkRepeatedWords", checkRepeatedWords.checked);
+});
+
+checkParagraphLength.addEventListener('change', () => {
+    localStorage.setItem('checkParagraphLength', checkParagraphLength.checked);
+});
+
+// Cargar el estado guardado del checkbox al iniciar la aplicación
+window.addEventListener("load", () => {
+    const savedValue = localStorage.getItem("checkRepeatedWords");
+    checkRepeatedWords.checked = savedValue === "true";
+});
+
+window.addEventListener('load', () => {
+    const savedValue = localStorage.getItem('checkParagraphLength');
+    checkParagraphLength.checked = savedValue === 'true';
 });
 
 // Agregar el evento al botón de revisar
@@ -292,27 +318,6 @@ document.addEventListener('keydown', event => {
     }
 });
 
-// Agregar evento para guardar la selección en localStorage
-checkRepeatedWords.addEventListener("change", function () {
-    localStorage.setItem("checkRepeatedWords", checkRepeatedWords.checked);
-});
-
-checkParagraphLength.addEventListener('change', function () {
-    // Guardar el estado actual del checkbox en localStorage
-    localStorage.setItem('checkParagraphLength', checkParagraphLength.checked);
-});
-
-// Cargar el estado guardado del checkbox al iniciar la aplicación
-window.addEventListener("load", function () {
-    const savedValue = localStorage.getItem("checkRepeatedWords");
-    checkRepeatedWords.checked = savedValue === "true";
-});
-
-window.addEventListener('DOMContentLoaded', (event) => {
-    const savedValue = localStorage.getItem('checkParagraphLength');
-    checkParagraphLength.checked = savedValue === 'true';
-});
-
 // Evento del botón de limpiar
 clearButton.addEventListener("click", clearDocument);
 
@@ -322,4 +327,11 @@ document.addEventListener('keydown', event => {
         event.preventDefault();
         clearDocument();
     }
+});
+
+// Asignar el evento de click a cada botón
+exampleButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        toggleExample(this);
+    });
 });
