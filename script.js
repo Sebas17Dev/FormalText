@@ -384,8 +384,3 @@ exampleButtons.forEach(button => {
 checkAllConnectives.addEventListener('change', () => {
     markConnectives();
 });
-
-// Evento para manejar la entrada del texto
-documentInput.addEventListener('input', () => {
-    markConnectives();
-});
