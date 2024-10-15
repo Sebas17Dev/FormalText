@@ -2,6 +2,7 @@ const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
+const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
 const wordCountDisplay = document.getElementById("word-count");
@@ -12,6 +13,23 @@ const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-i
 const exampleButtons = document.querySelectorAll('.btn.show-example');
 const maxWordsPerParagraph = 170;
 const commonWords = new Set(['el', 'la', 'y', 'en', 'de', 'a', 'que', 'los', 'las', 'un', 'una', 'por', 'con', 'para', 'del', 'al', 'se', 'es', 'no', 'su', 'más', 'como', 'pero', 'sus', 'esta', 'sin', 'lo', 'han', 'vez', 'ser', 'ha']);
+const connectives = new Set([
+    "otra vez", "de nuevo", "también", "y", "igualmente", "de igual importancia",
+    "así mismo", "además", "por otra parte", "de la misma forma", "al lado de",
+    "aunque", "pero", "a la inversa", "recíprocamente", "a pesar de", "sino",
+    "sino que", "no obstante", "al contrario", "por otra parte", "de otra manera",
+    "hasta ahora", "sobre", "a través de", "después", "antes", "alrededor de",
+    "a la vez", "por encima de", "eventualmente", "finalmente", "entonces",
+    "por último", "en primer lugar", "entre tanto", "ahora", "después de esto",
+    "por tanto", "por lo tanto", "por lo que", "porque", "pues", "con que",
+    "por consiguiente", "luego", "tanto que", "por ejemplo", "de hecho",
+    "en otras palabras", "esto es", "mejor dicho", "es decir", "en conclusión",
+    "en resumen", "para concluir", "sea", "en general", "en suma", "así",
+    "de este modo", "de la misma forma", "de la misma manera", "de forma similar",
+    "de igual forma", "como", "al contrario", "después de todo", "en cambio",
+    "por el contrario", "por otra parte", "a pesar de", "sin embargo"
+]);
+
 
 // Custom message
 const consoleStyles = `
@@ -113,6 +131,12 @@ function checkDocument() {
         // Procesar el texto de cada párrafo
         const highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
             const lowerCaseWord = normalizeWord(word.toLowerCase()); // Normalizar la palabra y convertirla a minúsculas
+
+
+            // Verificar si es un conector
+            if (checkAllConnectives.checked && connectives.has(lowerCaseWord)) {
+                return `<span class="connective">${word}</span>`;
+            }
 
             // Verificar si la palabra es común
             if (commonWords.has(lowerCaseWord)) {
@@ -266,6 +290,26 @@ const cleanText = text => {
         .trim();
 }
 
+// Función para marcar conectivos en el texto
+const markConnectives = () => {
+    const documentText = documentInput.innerText.trim();
+    if (documentText === '') return;
+
+    documentInput.innerHTML = '';
+
+    const highlightedText = documentText.split(/([^\p{L}\p{N}]+)/gu).map(word => {
+        const lowerCaseWord = word.toLowerCase(); // Normalizar la palabra a minúsculas
+
+        if (checkAllConnectives.checked && connectives.has(lowerCaseWord)) {
+            return `<span class="connective">${word}</span>`;
+        }
+
+        return word; // Retornar la palabra original si no es un conectivo
+    }).join('');
+
+    documentInput.innerHTML = highlightedText;
+}
+
 // Función para alternar la visibilidad del ejemplo
 function toggleExample(button) {
     const exampleParagraph = button.closest('li').querySelector('.example');
@@ -331,7 +375,17 @@ document.addEventListener('keydown', event => {
 
 // Asignar el evento de click a cada botón
 exampleButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
         toggleExample(this);
     });
+});
+
+// Evento para manejar el cambio en el checkbox
+checkAllConnectives.addEventListener('change', () => {
+    markConnectives();
+});
+
+// Evento para manejar la entrada del texto
+documentInput.addEventListener('input', () => {
+    markConnectives();
 });
