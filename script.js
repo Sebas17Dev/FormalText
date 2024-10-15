@@ -29,7 +29,7 @@ const connectives = new Set([
     "de igual forma", "como", "al contrario", "después de todo", "en cambio",
     "por el contrario", "por otra parte", "a pesar de", "sin embargo"
 ]);
-
+let isReviewing = false;
 
 // Custom message
 const consoleStyles = `
@@ -100,7 +100,11 @@ const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
 function checkDocument() {
     const documentText = documentInput.innerText.trim();
 
-    if (documentText === '') {
+    // Si no se está revisando y el documento está vacío, no hacer nada
+    if (documentText === '' && !isReviewing) return;
+
+    // Si el campo está vacío y se está intentando revisar, mostrar el mensaje de campo vacío
+    if (documentText === '' && isReviewing) {
         feedbackDiv.innerHTML = `<i class="fa-solid fa-exclamation-circle"></i> El campo está vacío. Por favor ingresa algún texto.`;
         feedbackDiv.classList.remove("hidden", "success", "error");
         feedbackDiv.classList.add("warning");
@@ -193,26 +197,26 @@ function checkDocument() {
 
     let feedbackContent = ""; // Variable temporal para acumular el contenido
 
-    // Actualizar feedbackDiv con explicaciones y enlaces
-    if (foundInformalWords) {
-        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+    // Condiciones finales combinadas
+    if (foundInformalWords || (checkParagraphLength.checked && tooLongParagraphs.length > 0)) {
+        if (foundInformalWords) {
+            feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+        }
+
+        if (checkParagraphLength.checked && tooLongParagraphs.length > 0) {
+            feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite recomendado de ${maxWordsPerParagraph} palabras:<br><ul>`;
+            tooLongParagraphs.forEach(paragraph => {
+                feedbackContent += `<li>${paragraph}</li>`;
+            });
+            feedbackContent += `</ul>`;
+        }
+
         feedbackDiv.classList.remove("hidden", "success", "warning");
         feedbackDiv.classList.add("error");
     } else {
         feedbackContent += `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
         feedbackDiv.classList.remove("hidden", "error", "warning");
         feedbackDiv.classList.add("success");
-    }
-
-    // Mostrar advertencia sobre párrafos demasiado largos
-    if (checkParagraphLength.checked && tooLongParagraphs.length > 0) {
-        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite de ${maxWordsPerParagraph} palabras:<br><ul>`;
-        tooLongParagraphs.forEach(paragraph => {
-            feedbackContent += `<li>${paragraph}</li>`;
-        });
-        feedbackContent += `</ul>`;
-        feedbackDiv.classList.remove("hidden", "success");
-        feedbackDiv.classList.add("error");
     }
 
     // Finalmente, actualizar el contenido del feedbackDiv
@@ -361,7 +365,11 @@ window.addEventListener('load', () => {
 });
 
 // Agregar el evento al botón de revisar
-reviewButton.addEventListener("click", checkDocument);
+reviewButton.addEventListener('click', () => {
+    isReviewing = true;
+    checkDocument();
+    isReviewing = false;
+});
 
 // Escucha el evento de teclado
 document.addEventListener('keydown', event => {
@@ -389,7 +397,7 @@ exampleButtons.forEach(button => {
     });
 });
 
-// Evento para manejar el cambio en el checkbox
-checkAllConnectives.addEventListener('change', () => {
-    markConnectives();
-});
+// Agregar eventos a los checkboxes para actualizar el análisis (sin mostrar el mensaje de campo vacío)
+checkRepeatedWords.addEventListener('change', checkDocument);
+checkParagraphLength.addEventListener('change', checkDocument);
+checkAllConnectives.addEventListener('change', checkDocument);
