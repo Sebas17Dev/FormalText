@@ -227,7 +227,7 @@ header h1 {
 
 header p {
     margin-bottom: 20px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
 }
 
 .editor-container {
@@ -249,7 +249,7 @@ textarea {
     padding: 15px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
     color: var(--color-primary-text);
     background-color: var(--color-primary-bg);
     outline: none;
@@ -270,7 +270,7 @@ textarea:focus {
     padding: 15px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
     color: var(--color-primary-text);
     text-align: justify;
     white-space: pre-wrap;
@@ -292,6 +292,11 @@ strong {
     color: rgb(255, 85, 85);
     background-color: yellow;
     cursor: help;
+}
+
+.repeated-word-highlight {
+    border-radius: 5%;
+    background-color: rgb(153, 0, 255);
 }
 
 .connective {
@@ -400,7 +405,7 @@ input:checked+.slider::before {
     margin-top: 20px;
     padding: 10px;
     border-radius: var(--radius);
-    font-size: 1.1rem;
+    font-size: 1.1em;
     flex-direction: column;
     align-items: center;
 }
@@ -481,7 +486,7 @@ input:checked+.slider::before {
 .recommended-connectors h2 {
     display: flex;
     margin-bottom: 2rem;
-    font-size: 1.8rem;
+    font-size: 1.8em;
     font-weight: 600;
     text-align: center;
     justify-content: center;
@@ -508,7 +513,7 @@ input:checked+.slider::before {
 .connector-category h3 {
     display: flex;
     margin-bottom: 1rem;
-    font-size: 1.5rem;
+    font-size: 1.5em;
     font-weight: 500;
     color: var(--primary-color);
     align-items: center;
@@ -531,7 +536,7 @@ input:checked+.slider::before {
 }
 
 .connector-category li span {
-    font-size: 1.1rem;
+    font-size: 1.1em;
     font-weight: 500;
 }
 
@@ -699,12 +704,53 @@ input[type="checkbox"]:checked+label::before::after {
 
 
 /* Responsive Design */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2rem;
+@media (max-width: 768px) {
+    .container {
+        max-width: 90%;
+        padding: 15px;
     }
 
-    textarea {
+    header h1 {
+        font-size: 2em;
+    }
+
+    textarea, .editable {
         height: 200px;
     }
+
+    .counts {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .recommended-connectors h2 {
+        font-size: 1.5em;
+    }
+
+    .connector-category h3 {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    header p {
+        font-size: 1em;
+    }
+
+    textarea, .editable {
+        height: 150px;
+    }
+
+    .recommended-connectors h2 {
+        font-size: 1.3em;
+    }
+
+    .connector-category li {
+        justify-content: center;
+    }
+    
 }

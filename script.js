@@ -46,11 +46,6 @@ const customMessage = "¡Hola! Esta aplicación web fue hecha con HTML, CSS, y J
 console.log("%c" + customMessage, consoleStyles);
 
 
-// Función para normalizar el texto eliminando acentos y caracteres especiales
-const normalizeWord = word => {
-    return word.normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
-}
-
 // Función para limpiar el documento
 const clearDocument = () => {
     documentInput.innerText = '';
@@ -60,6 +55,11 @@ const clearDocument = () => {
     paragraphCountDisplay.innerText = 'Párrafos: 0';
     avgWordsInParagraphsDisplay.innerText = 'Promedio de palabras en párrafos: 0';
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
+}
+
+// Función para normalizar el texto eliminando acentos y caracteres especiales
+function normalizeWord(word) {
+    return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
 }
 
 // Función para mostrar palabras repetidas por párrafo
@@ -125,6 +125,7 @@ function checkDocument() {
 
     paragraphs.forEach((paragraph, paragraphIndex) => {
         let wordCount = {};
+        let originalWordsMap = {}; 
         const wordsInParagraph = paragraph.trim().split(/\s+/).length;
 
         // Verificar si el párrafo excede el límite de palabras
@@ -134,8 +135,8 @@ function checkDocument() {
 
         // Procesar el texto de cada párrafo
         const highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
-            const lowerCaseWord = normalizeWord(word.toLowerCase()); // Normalizar la palabra y convertirla a minúsculas
-
+            const lowerCaseWord = normalizeWord(word); // Normalizar la palabra
+            originalWordsMap[lowerCaseWord] = word; // Almacenar la palabra original
 
             // Verificar si es un conector
             if (checkAllConnectives.checked && connectives.has(lowerCaseWord)) {
@@ -144,22 +145,23 @@ function checkDocument() {
 
             // Verificar si la palabra es común
             if (commonWords.has(lowerCaseWord)) {
-                return word; // Si es una palabra común, no contarla ni resaltarla
+                return word; // Si es común, no resaltar
             }
 
+            // Verificar si es una palabra informal
             if (informalWordsData[lowerCaseWord]) {
                 foundInformalWords = true;
                 const wordId = `word-${wordCounter++}`;
                 if (!wordOccurrences[lowerCaseWord]) {
-                    wordOccurrences[lowerCaseWord] = []; // Inicializar lista de ocurrencias
+                    wordOccurrences[lowerCaseWord] = []; // Inicializar ocurrencias
                 }
-                wordOccurrences[lowerCaseWord].push(wordId); // Almacenar el ID de esta ocurrencia
+                wordOccurrences[lowerCaseWord].push(wordId); // Almacenar ID
                 const titleText = informalWordsData[lowerCaseWord].explanation;
                 return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
             }
 
-            // Contar las repeticiones de palabras (excepto palabras comunes)
-            if (lowerCaseWord.match(/[a-z]/) && lowerCaseWord.length > 1) { // Ignorar palabras muy cortas o no alfabéticas
+            // Contar palabras repetidas
+            if (lowerCaseWord.match(/[a-záéíóú]/i) && lowerCaseWord.length > 1) {
                 wordCount[lowerCaseWord] = (wordCount[lowerCaseWord] || 0) + 1;
             }
 
@@ -174,7 +176,11 @@ function checkDocument() {
             let repeatedWords = [];
             Object.entries(wordCount).forEach(([word, count]) => {
                 if (count > 1) {
+                    const originalWord = originalWordsMap[word]; // Recuperar la palabra original
                     repeatedWords.push(`${word}: ${count} veces`);
+                    
+                    const regex = new RegExp(`\\b${originalWord}\\b`, 'gi');
+                    documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="repeated-word-highlight">${originalWord}</span>`);
                 }
             });
 
