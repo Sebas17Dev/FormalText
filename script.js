@@ -3,6 +3,7 @@ const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
 const checkMarkRepeatedWords = document.getElementById("mark-repeated-words");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
+const checkNumberFormat = document.getElementById('check-number-format');
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
@@ -63,6 +64,56 @@ function normalizeWord(word) {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
 }
 
+// Función para verificar el formato de los números en el documento
+function validateNumberFormat(paragraphText, paragraphIndex) {
+    const numberIssues = [];
+    const words = paragraphText.split(/\s+/); // Dividir el párrafo en palabras
+
+    const numberWords = {
+        "cero": 0, "uno": 1, "dos": 2, "tres": 3, "cuatro": 4, "cinco": 5, "seis": 6,
+        "siete": 7, "ocho": 8, "nueve": 9, "diez": 10, "once": 11, "doce": 12, "trece": 13,
+        "catorce": 14, "quince": 15, "dieciséis": 16, "diecisiete": 17, "dieciocho": 18, "diecinueve": 19, "veinte": 20
+    };
+
+    words.forEach((word, wordIndex) => {
+        const lowerWord = word.toLowerCase().replace(/[.,!?]/g, ""); // Normalizar palabra
+
+        // Verificar si es un número escrito en palabras
+        if (numberWords[lowerWord] !== undefined) {
+            const numValue = numberWords[lowerWord];
+            const nextWord = words[wordIndex + 1] ? words[wordIndex + 1].trim() : null;
+
+            // Si la siguiente palabra no es el número en paréntesis
+            if (nextWord !== `(${numValue})`) {
+                numberIssues.push(`El número en palabras "${word}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${word} (${numValue})".`);
+            }
+        }
+        // Verificar si es un número en formato dígito
+        else if (!isNaN(word)) {
+            const numValue = parseInt(word, 10);
+            const numberAsWord = numberToWord(numValue);
+            const previousWord = words[wordIndex - 1] ? words[wordIndex - 1].toLowerCase() : null;
+            const nextWord = words[wordIndex + 1] ? words[wordIndex + 1].trim() : null;
+
+            // Si no tiene el formato correcto con la palabra antes y el número en paréntesis después
+            if (previousWord !== numberAsWord || nextWord !== `(${numValue})`) {
+                numberIssues.push(`El número "${word}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${numberAsWord} (${word})".`);
+            }
+        }
+    });
+
+    return numberIssues;
+}
+
+
+// Función auxiliar para convertir números a palabras en español (simplificada)
+function numberToWord(num) {
+    const words = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez",
+        "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte"];
+
+    return num <= 20 ? words[num] : num.toString(); // Solo convertir hasta 20, caso contrario retornar el número como texto
+}
+
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
     const documentText = documentInput.innerText.trim();
@@ -86,6 +137,7 @@ function checkDocument() {
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
     let repeatedWordsPerParagraph = {}; // Para almacenar palabras repetidas por párrafo
     let tooLongParagraphs = [];
+    let numberFormatIssues = [];
 
     // Dividir el texto en párrafos
     const paragraphs = documentText.split(/\n+/);
@@ -157,6 +209,12 @@ function checkDocument() {
                 repeatedWordsPerParagraph[`Párrafo ${paragraphIndex + 1}`] = repeatedWords;
             }
         }
+
+        // Verificar formato de números, si la opción está activada
+        if (checkNumberFormat.checked) {
+            const numberIssuesInParagraph = validateNumberFormat(paragraph, paragraphIndex);
+            numberFormatIssues = numberFormatIssues.concat(numberIssuesInParagraph);
+        }
     });
 
     // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
@@ -192,6 +250,15 @@ function checkDocument() {
         feedbackContent += `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
         feedbackDiv.classList.remove("hidden", "error", "warning");
         feedbackDiv.classList.add("success");
+    }
+
+    // Verificar si hubo problemas con el formato de los números
+    if (numberFormatIssues.length > 0) {
+        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
+        numberFormatIssues.forEach(issue => {
+            feedbackContent += `<li>${issue}</li>`;
+        });
+        feedbackContent += `</ul>`;
     }
 
     // Finalmente, actualizar el contenido del feedbackDiv
@@ -349,8 +416,16 @@ checkRepeatedWords.addEventListener("change", () => {
     localStorage.setItem("checkRepeatedWords", checkRepeatedWords.checked);
 });
 
+checkMarkRepeatedWords.addEventListener("change", () => {
+    localStorage.setItem("checkMarkPepeatedWords", checkMarkRepeatedWords.checked);
+});
+
 checkParagraphLength.addEventListener('change', () => {
     localStorage.setItem('checkParagraphLength', checkParagraphLength.checked);
+});
+
+checkNumberFormat.addEventListener('change', () => {
+    localStorage.setItem('checkNumberFormat', checkNumberFormat.checked);
 });
 
 checkAllConnectives.addEventListener('change', () => {
@@ -363,9 +438,19 @@ window.addEventListener("load", () => {
     checkRepeatedWords.checked = savedValue === "true";
 });
 
+window.addEventListener("load", () => {
+    const savedValue = localStorage.getItem("checkMarkPepeatedWords");
+    checkMarkRepeatedWords.checked = savedValue === "true";
+});
+
 window.addEventListener('load', () => {
     const savedValue = localStorage.getItem('checkParagraphLength');
     checkParagraphLength.checked = savedValue === 'true';
+});
+
+window.addEventListener("load", () => {
+    const savedValue = localStorage.getItem("checkNumberFormat");
+    checkNumberFormat.checked = savedValue === "true";
 });
 
 window.addEventListener('load', () => {
@@ -410,4 +495,5 @@ exampleButtons.forEach(button => {
 checkRepeatedWords.addEventListener('change', checkDocument);
 checkMarkRepeatedWords.addEventListener('change', checkDocument);
 checkParagraphLength.addEventListener('change', checkDocument);
+checkNumberFormat.addEventListener('change', checkDocument);
 checkAllConnectives.addEventListener('change', checkDocument);

@@ -265,7 +265,7 @@ textarea:focus {
 .editable {
     overflow-y: auto;
     width: 100%;
-    height: 300px;
+    height: 340px;
     margin-bottom: 1rem;
     padding: 15px;
     border: 2px solid #ddd;
