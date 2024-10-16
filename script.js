@@ -1,6 +1,7 @@
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
+const checkMarkRepeatedWords = document.getElementById("mark-repeated-words");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
@@ -62,40 +63,6 @@ function normalizeWord(word) {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
 }
 
-// Función para mostrar palabras repetidas por párrafo
-const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
-    let repeatedWordsHtml = `
-        <div class="repeated-words-section">
-            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
-            <ul class="repeated-words-list">`;
-
-    let hasRepeatedWords = false;
-
-    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
-        hasRepeatedWords = true;
-
-        repeatedWordsHtml += `
-            <li class="repeated-words-paragraph">
-                <h4>${paragraph}:</h4>
-                <ul class="repeated-word-items">`;
-
-        repeatedWords.forEach(wordCount => {
-            repeatedWordsHtml += `<li class="repeated-word">
-                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
-                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
-            </li>`;
-        });
-
-        repeatedWordsHtml += `</ul></li>`;
-    });
-
-    repeatedWordsHtml += '</ul></div>';
-
-    if (hasRepeatedWords) {
-        feedbackDiv.innerHTML += repeatedWordsHtml;
-    }
-}
-
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
     const documentText = documentInput.innerText.trim();
@@ -125,7 +92,7 @@ function checkDocument() {
 
     paragraphs.forEach((paragraph, paragraphIndex) => {
         let wordCount = {};
-        let originalWordsMap = {}; 
+        let originalWordsMap = {};
         const wordsInParagraph = paragraph.trim().split(/\s+/).length;
 
         // Verificar si el párrafo excede el límite de palabras
@@ -178,9 +145,11 @@ function checkDocument() {
                 if (count > 1) {
                     const originalWord = originalWordsMap[word]; // Recuperar la palabra original
                     repeatedWords.push(`${word}: ${count} veces`);
-                    
-                    const regex = new RegExp(`\\b${originalWord}\\b`, 'gi');
-                    documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="repeated-word-highlight">${originalWord}</span>`);
+
+                    if (checkMarkRepeatedWords.checked) {
+                        const regex = new RegExp(`\\b${originalWord}\\b`, 'gi');
+                        documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="repeated-word-highlight">${originalWord}</span>`);
+                    }
                 }
             });
 
@@ -231,6 +200,40 @@ function checkDocument() {
     // Mostrar palabras repetidas por párrafo, si la opción está activada
     if (checkRepeatedWords.checked) {
         showRepeatedWordsByParagraph(repeatedWordsPerParagraph);
+    }
+}
+
+// Función para mostrar palabras repetidas por párrafo
+const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
+    let repeatedWordsHtml = `
+        <div class="repeated-words-section">
+            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
+            <ul class="repeated-words-list">`;
+
+    let hasRepeatedWords = false;
+
+    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
+        hasRepeatedWords = true;
+
+        repeatedWordsHtml += `
+            <li class="repeated-words-paragraph">
+                <h4>${paragraph}:</h4>
+                <ul class="repeated-word-items">`;
+
+        repeatedWords.forEach(wordCount => {
+            repeatedWordsHtml += `<li class="repeated-word">
+                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
+                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
+            </li>`;
+        });
+
+        repeatedWordsHtml += `</ul></li>`;
+    });
+
+    repeatedWordsHtml += '</ul></div>';
+
+    if (hasRepeatedWords) {
+        feedbackDiv.innerHTML += repeatedWordsHtml;
     }
 }
 
@@ -405,5 +408,6 @@ exampleButtons.forEach(button => {
 
 // Agregar eventos a los checkboxes para actualizar el análisis (sin mostrar el mensaje de campo vacío)
 checkRepeatedWords.addEventListener('change', checkDocument);
+checkMarkRepeatedWords.addEventListener('change', checkDocument);
 checkParagraphLength.addEventListener('change', checkDocument);
 checkAllConnectives.addEventListener('change', checkDocument);
