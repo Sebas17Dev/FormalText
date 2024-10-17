@@ -1,11 +1,11 @@
 // Lista de palabras informales con explicación y posibles sustitutos
 const informalWordsData = {
     'cosa': {
-        explanation: 'Es impreciso. Debe sustituirse por un término más específico como "elemento", "factor", "objeto".',
+        explanation: 'Es impreciso. Debe sustituirse por un término más específico.',
         substitutes: ['elemento', 'factor', 'objeto']
     },
     'falta': {
-        explanation: 'Sustituir por "ausencia" o "carencia".',
+        explanation: 'Es una palabra de coloquio popular.',
         substitutes: ['ausencia', 'carencia']
     },
     'lo que es': {
@@ -13,23 +13,27 @@ const informalWordsData = {
         substitutes: []
     },
     'actualmente': {
-        explanation: 'Aunque no es incorrecto, es preferible usar "en la actualidad" o "en el presente".',
+        explanation: 'Aunque no es incorrecto, es preferible usar otros términos.',
         substitutes: ['en la actualidad', 'en el presente']
     },
-    'capacitación/adiestramiento': {
-        explanation: 'Este cambio depende del contexto. "Formación" es la mejor alternativa.',
+    'capacitación': {
+        explanation: 'Este cambio depende del contexto.',
+        substitutes: ['formación']
+    },
+    'adiestramiento': {
+        explanation: 'Este cambio depende del contexto.',
         substitutes: ['formación']
     },
     'hay que': {
-        explanation: 'Es informal. Debe sustituirse por expresiones como "es necesario", "se requiere", o "debe".',
+        explanation: 'Es informal, por lo que debe evitarse su uso.',
         substitutes: ['es necesario', 'se requiere', 'debe']
     },
     'poner': {
-        explanation: 'Es demasiado vago. Se puede usar "colocar", "implementar", "instalar", "incluir" según el contexto.',
+        explanation: 'Es demasiado vago. Se recomienda usar otras palabras según el contexto.',
         substitutes: ['colocar', 'implementar', 'instalar', 'incluir']
     },
     'hacer': {
-        explanation: 'Es demasiado genérico. Es mejor emplear "realizar", "desarrollar", "ejecutar", etc.',
+        explanation: 'Es demasiado genérico.',
         substitutes: ['realizar', 'desarrollar', 'ejecutar']
     },
     'muy': {
@@ -37,19 +41,19 @@ const informalWordsData = {
         substitutes: []
     },
     'bastante': {
-        explanation: 'Es informal. Sustituir por "suficiente" o "considerable".',
+        explanation: 'Es informal.',
         substitutes: ['suficiente', 'considerable']
     },
     'fácilmente': {
-        explanation: 'Informal, mejor usar "de manera sencilla" o "con facilidad".',
+        explanation: 'Informal.',
         substitutes: ['de manera sencilla', 'con facilidad']
     },
     'porque': {
-        explanation: 'En redacción formal, puede ser más adecuado usar "debido a que", "ya que", o "puesto que".',
+        explanation: 'En redacción formal, puede ser más adecuado usar otros términos.',
         substitutes: ['debido a que', 'ya que', 'puesto que']
     },
     'todo el mundo': {
-        explanation: 'Informal. Sustituir por "todos" o "la población general".',
+        explanation: 'Informal.',
         substitutes: ['todos', 'la población general']
     },
     'bueno/malo': {
@@ -61,16 +65,16 @@ const informalWordsData = {
         substitutes: ['se observa', 'se percibe', 'se aprecia']
     },
     'mejor': {
-        explanation: 'Sustituir por "más adecuado", "más óptimo" o "preferible".',
+        explanation: 'Se recomienda sustituir por versión más formal.',
         substitutes: ['más adecuado', 'más óptimo', 'preferible']
     },
-    'pienso/creo': {
+    'pienso': {
         explanation: 'No debe usarse en textos científicos, ya que introduce subjetividad.',
         substitutes: ['se considera', 'se observa', 'se ha determinado']
     },
-    'nosotros/nos': {
-        explanation: 'Debe evitarse para respetar la redacción en tercera persona.',
-        substitutes: []
+    'creo': {
+        explanation: 'No debe usarse en textos científicos, ya que introduce subjetividad.',
+        substitutes: ['se considera', 'se observa', 'se ha determinado']
     },
     'sería bueno': {
         explanation: 'Demasiado coloquial. Mejor usar "sería conveniente", "sería beneficioso", "resulta adecuado".',
@@ -81,7 +85,7 @@ const informalWordsData = {
         substitutes: []
     },
     'demasiado': {
-        explanation: 'Puede parecer subjetivo o coloquial. Mejor usar "en exceso", "en gran medida", "significativamente".',
+        explanation: 'Puede parecer subjetivo o coloquial.',
         substitutes: ['en exceso', 'en gran medida', 'significativamente']
     },
     'la verdad es que': {
@@ -89,35 +93,47 @@ const informalWordsData = {
         substitutes: []
     },
     'obviamente': {
-        explanation: 'Sugiere que algo es evidente sin pruebas. Es mejor usar "claramente", "es evidente que".',
+        explanation: 'Sugiere que algo es evidente sin pruebas.',
         substitutes: ['claramente', 'es evidente que']
     },
-    'demasiado poco/mucho': {
-        explanation: 'En lugar de esto, es mejor emplear términos como "en exceso", "insuficiente", "excesivamente".',
+    'demasiado poco': {
+        explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
         substitutes: ['en exceso', 'insuficiente', 'excesivamente']
     },
-    'quizás/tal vez': {
-        explanation: 'Deben evitarse en redacciones académicas, ya que son subjetivas e imprecisas.',
+    'demasiado mucho': {
+        explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
+        substitutes: ['en exceso', 'insuficiente', 'excesivamente']
+    },
+    'quizás': {
+        explanation: 'Debe evitarse en redacciones académicas, ya que es subjetivo e impreciso.',
+        substitutes: ['es posible que', 'puede que']
+    },
+    'tal vez': {
+        explanation: 'Debe evitarse en redacciones académicas, ya que es subjetivo e impreciso.',
         substitutes: ['es posible que', 'puede que']
     },
     'básicamente': {
         explanation: 'Esta palabra no agrega valor al texto. Debe eliminarse o reemplazarse por una explicación más clara.',
         substitutes: []
     },
-    'siempre/nunca': {
-        explanation: 'Estas expresiones tienden a ser demasiado absolutas. Usar "en la mayoría de los casos", "generalmente".',
+    'siempre': {
+        explanation: 'Esta expresión tiende a ser demasiado absoluta.',
+        substitutes: ['en la mayoría de los casos', 'generalmente']
+    },
+    'nunca': {
+        explanation: 'Esta expresión tiende a ser demasiado absoluta.',
         substitutes: ['en la mayoría de los casos', 'generalmente']
     },
     'un poco': {
-        explanation: 'Es informal y poco preciso. Sustituir por "ligeramente", "levemente" o "de forma limitada".',
+        explanation: 'Es informal y poco preciso.',
         substitutes: ['ligeramente', 'levemente', 'de forma limitada']
     },
     'más o menos': {
-        explanation: 'Es una expresión informal. Se debe reemplazar por "aproximadamente", "alrededor de".',
+        explanation: 'Es una expresión informal.',
         substitutes: ['aproximadamente', 'alrededor de']
     },
     'al parecer': {
-        explanation: 'Es subjetivo. Reemplazar por "se considera", "se estima".',
+        explanation: 'Es subjetivo.',
         substitutes: ['se considera', 'se estima']
     },
     'literalmente': {
@@ -129,11 +145,99 @@ const informalWordsData = {
         substitutes: ['de acuerdo con', 'según los datos disponibles']
     },
     'es decir': {
-        explanation: 'En algunos casos es informal, se recomienda reemplazar por "esto significa", o "lo que implica".',
+        explanation: 'En algunos casos es informal.',
         substitutes: ['esto significa', 'lo que implica']
     },
     'de alguna manera': {
         explanation: 'Evitar esta frase y ser más directo en la formulación de ideas.',
+        substitutes: []
+    },
+    'maldita': {
+        explanation: 'Es una palabra vulgar e inapropiada en textos formales.',
+        substitutes: []
+    },
+    'estúpido': {
+        explanation: 'Es un término ofensivo e informal.',
+        substitutes: ['irracional', 'inadecuado', 'imprudente']
+    },
+    'idiota': {
+        explanation: 'Es vulgar y despectivo, no apropiado en textos científicos.',
+        substitutes: ['persona ignorante', 'individuo poco informado']
+    },
+    'maldito': {
+        explanation: 'Es una palabra coloquial que no se debe usar en textos formales.',
+        substitutes: []
+    },
+    'tonto': {
+        explanation: 'Palabra informal y despectiva.',
+        substitutes: ['ingenuo', 'irreflexivo']
+    },
+    'malnacido': {
+        explanation: 'Vulgar y ofensivo, debe evitarse en cualquier contexto académico.',
+        substitutes: []
+    },
+    'mierda': {
+        explanation: 'Es un término vulgar y no se debe usar en escritos formales.',
+        substitutes: ['desastre', 'problema', 'situación desfavorable']
+    },
+    'imbécil': {
+        explanation: 'Es un insulto despectivo y no apropiado en ningún contexto formal.',
+        substitutes: ['persona incompetente', 'individuo poco razonable']
+    },
+    'carajo': {
+        explanation: 'Es una expresión vulgar e inapropiada para contextos serios.',
+        substitutes: []
+    },
+    'pendejo': {
+        explanation: 'Es vulgar y ofensivo, no adecuado para redacciones formales.',
+        substitutes: ['', 'persona inexperta']
+    },
+    'jodido': {
+        explanation: 'Es un término vulgar que no debe emplearse en textos académicos.',
+        substitutes: ['complicado', 'difícil']
+    },
+    'chingar': {
+        explanation: 'Es una expresión vulgar y ofensiva en varios países.',
+        substitutes: ['molestar', 'interferir']
+    },
+    'cabrón': {
+        explanation: 'Es un insulto fuerte y vulgar que no debe usarse en ningún contexto formal.',
+        substitutes: ['persona desagradable', 'persona abusiva']
+    },
+    'malparido': {
+        explanation: 'Es altamente ofensivo y vulgar, no debe emplearse en situaciones formales.',
+        substitutes: []
+    },
+    'tarado': {
+        explanation: 'Es despectivo y no debe usarse en escritos formales.',
+        substitutes: ['persona irracional', 'persona poco informada']
+    },
+    'gilipollas': {
+        explanation: 'Es un insulto vulgar en España, no adecuado para contextos formales.',
+        substitutes: ['persona imprudente', 'persona necia']
+    },
+    'huevón': {
+        explanation: 'Es un insulto coloquial en muchos países latinoamericanos.',
+        substitutes: ['']
+    },
+    'puta': {
+        explanation: 'Es vulgar y ofensivo. Debe evitarse en cualquier tipo de redacción formal.',
+        substitutes: []
+    },
+    'zorra': {
+        explanation: 'Es un insulto degradante y no debe utilizarse en textos formales.',
+        substitutes: []
+    },
+    'baboso': {
+        explanation: 'Es despectivo e informal.',
+        substitutes: ['persona tonta', 'persona ingenua']
+    },
+    'patán': {
+        explanation: 'Es despectivo y no adecuado para textos formales.',
+        substitutes: ['persona grosera', 'persona ruda']
+    },
+    'perra': {
+        explanation: 'Es ofensivo y degradante, no debe usarse en ningún contexto formal.',
         substitutes: []
     }
 };

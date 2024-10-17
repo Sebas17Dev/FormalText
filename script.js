@@ -1,5 +1,3 @@
-//Mi código es como un bebe, flexible pero fragil :D
-
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
@@ -113,7 +111,7 @@ const validateNumberFormat = (paragraphText, paragraphIndex) => {
 // Función auxiliar para convertir números a palabras en español (simplificada)
 const numberToWord = num => {
     // Verificamos si el número está dentro del rango y lo devolvemos
-    return num <= 1001 ? words[num] : num.toString();
+    return num <= 10000 ? words[num] : num.toString();
 }
 
 // Función para buscar pronombres de primera y segunda persona y verificar el uso de tercera persona
