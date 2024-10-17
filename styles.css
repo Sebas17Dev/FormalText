@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 /* Global variables */
 :root {
     --primary-color: #6e8efb;
@@ -9,7 +11,7 @@
     --color-text-selected: #fff;
     --color-bg-selected: #a777e3;
 
-    --font-primary: 'Helvetica Neue', Arial, sans-serif;
+    --font-primary: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
     --font-secondary: 'Segoe UI', Arial, sans-serif;
 
     --spacing: 1.4;
@@ -79,15 +81,15 @@
 
 ::-webkit-scrollbar-thumb {
     border-radius: 1rem;
-    background: var(--color-primary-text);
+    background: var(--primary-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary-text);
+    background: var(--primary-color);
 }
 
 ::-webkit-scrollbar-thumb:active {
-    background: var(--color-primary-text);
+    background: var(--primary-color);
 }
 
 ::-webkit-scrollbar-corner {
@@ -190,19 +192,92 @@ svg {
     fill: currentColor;
 }
 
+body {
+    padding-bottom: 1.25rem;
+}
+
 
 /*---Styles----*/
-body {
+nav {
+    background-color: var(--color-secondary-bg);
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
     display: flex;
-    padding: 1.25rem;
-    justify-content: center;
+    width: 100%;
+    justify-content: flex-end;
     align-items: center;
 }
+
+nav li {
+    display: flex;
+    height: 50px;
+    border-bottom: 2px solid transparent;
+    align-items: center;
+}
+
+nav li.active {
+    height: 50px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+nav a {
+    display: flex;
+    height: 100%;
+    padding: 0 25px;
+    transition: background-color .2s ease;
+    align-items: center;
+}
+
+nav li a:hover {
+    background-color: var(--primary-color);
+}
+
+nav li a:active {
+    background-color: var(--primary-color);
+}
+
+nav ul:not(.sidebar) li:first-child {
+    margin-right: auto;
+    margin-left: 2rem;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: none;
+    z-index: 999;
+    width: 250px;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
+    backdrop-filter: blur(10px);
+    justify-content: flex-start;
+}
+
+.sidebar.active {
+    display: flex;
+}
+
+.sidebar li,
+.sidebar a {
+    width: 100%;
+}
+
+.menu-button {
+    display: none;
+}
+
 
 /* Container */
 .container {
     width: 100%;
     max-width: 1000px;
+    margin: 1rem auto;
     padding: 30px;
     border-radius: var(--radius);
     color: var(--color-primary-text);
@@ -210,6 +285,14 @@ body {
     background-color: var(--color-secondary-bg);
     transition: color var(--transition-slow) var(--transition-timing-function-default);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    display: none;
+}
+
+section.active {
+    display: block;
 }
 
 /* Header */
@@ -221,7 +304,6 @@ header {
     display: block;
     width: 75px;
     margin: 0 auto;
-    margin-top: -3rem;
     border-radius: 50%;
 }
 
@@ -485,7 +567,6 @@ input:checked+.slider::before {
 
 /* Estilos para los conectivos recomendados */
 .recommended-connectors {
-    margin-top: 5rem;
     padding: 20px;
     border-radius: 10px;
     background-color: var(--color-primary-bg);
@@ -564,7 +645,7 @@ input:checked+.slider::before {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.example em{
+.example em {
     color: var(--secondary-color);
 }
 
@@ -713,17 +794,32 @@ input[type="checkbox"]:checked+label::before::after {
 
 
 /* Responsive Design */
+@media (min-width: 769px) {
+    .sidebar.active {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         max-width: 90%;
         padding: 15px;
     }
 
+    .hide-on-mobile {
+        display: none;
+    }
+
+    .menu-button {
+        display: block;
+    }
+
     header h1 {
         font-size: 2em;
     }
 
-    textarea, .editable {
+    textarea,
+    .editable {
         height: 200px;
     }
 
@@ -742,6 +838,10 @@ input[type="checkbox"]:checked+label::before::after {
 }
 
 @media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+    }
+
     header h1 {
         font-size: 1.8em;
     }
@@ -750,7 +850,8 @@ input[type="checkbox"]:checked+label::before::after {
         font-size: 1em;
     }
 
-    textarea, .editable {
+    textarea,
+    .editable {
         height: 150px;
     }
 
@@ -761,8 +862,5 @@ input[type="checkbox"]:checked+label::before::after {
     .connector-category li {
         justify-content: center;
     }
-    
+
 }
-
-
-

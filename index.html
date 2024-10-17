@@ -19,49 +19,70 @@
 </head>
 
 <body>
-    <div class="container">
-        <label for="slider" class="switch">
-            <input type="checkbox" id="slider">
-            <span class="slider">
-                <i class="fa-solid fa-moon icon moon-icon"></i>
-                <i class="fa-solid fa-sun icon sun-icon"></i>
-            </span>
-        </label>
-        <header>
-            <img src="../../public/images/logo.jpg" alt="Logo de FormalText" class="logo">
-            <h1>FormalText</h1>
-            <p>Pegue su documento a continuación y revise su redacción</p>
-            <div class="checkbox-wrapper">
-                <div>
-                    <input type="checkbox" id="check-repeated-words">
-                    <label for="check-repeated-words">Verificar palabras repetidas en párrafos</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="mark-repeated-words">
-                    <label for="mark-repeated-words">Marcar palabras repetidas</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="check-third-person">
-                    <label for="check-third-person">Verificar redacción en tercera persona</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="check-paragraph-length">
-                    <label for="check-paragraph-length">Verificar longitud de párrafos</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="check-number-format">
-                    <label for="check-number-format">Verificar formato de números</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="check-all-connectives">
-                    <label for="check-all-connectives">Marcar todos los conectivos</label>
-                </div>
-                
-            </div>
-            <div id="feedback" class="feedback hidden"></div>
-        </header>
+    <nav>
+        <ul class="sidebar">
+            <li onclick="hideSidebar()"><a href="#"><i class="fa-solid fa-x"></i></a></li>
+            <li class="active"><a href="#" data-section="inicio">Inicio</a></li>
+            <li><a href="#" data-section="reglas">Reglas de redacción</a></li>
+            <li><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
+            <li><a href="#" data-section="citas">Citas</a></li>
+        </ul>
+        <ul>
+            <li>
+                <label for="slider" class="switch">
+                    <input type="checkbox" id="slider">
+                    <span class="slider">
+                        <i class="fa-solid fa-moon icon moon-icon"></i>
+                        <i class="fa-solid fa-sun icon sun-icon"></i>
+                    </span>
+                </label>
+            </li>
+            
+            <li class="hide-on-mobile active"><a href="#" data-section="inicio">Inicio</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="reglas">Reglas de redacción</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="citas">Citas</a></li>
+            <li class="menu-button" onclick="showSidebar()"><a href="#"><i class="fa-solid fa-bars"></i></a></li>
+        </ul>
+    </nav>
 
-        <section class="editor-container">
+    <div class="container">
+        <!-- Sección para ingresar texto -->
+        <section id="inicio" class="editor-container active">
+            <header>
+                <img src="../../public/images/logo.jpg" alt="Logo de FormalText" class="logo">
+                <h1>FormalText</h1>
+                <p>Pegue su documento a continuación y revise su redacción</p>
+                <div class="checkbox-wrapper">
+                    <div>
+                        <input type="checkbox" id="check-repeated-words">
+                        <label for="check-repeated-words">Verificar palabras repetidas en párrafos</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="mark-repeated-words">
+                        <label for="mark-repeated-words">Marcar palabras repetidas</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="check-third-person">
+                        <label for="check-third-person">Verificar redacción en 3era persona</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="check-paragraph-length">
+                        <label for="check-paragraph-length">Verificar longitud de párrafos</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="check-number-format">
+                        <label for="check-number-format">Verificar formato de números</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="check-all-connectives">
+                        <label for="check-all-connectives">Marcar todos los conectivos</label>
+                    </div>
+                    
+                </div>
+                <div id="feedback" class="feedback hidden"></div>
+            </header>
+    
             <div class="editable" id="document-input" contenteditable="true"></div>
             <div class="counts">
                 <p id="char-count">Caracteres: 0</p>
@@ -76,9 +97,12 @@
                 <button class="btn" id="btn-review">Revisar documento<br><span>(Ctrl + Enter)</span></button>
             </div>
         </section>
+        
+        <!-- Sección para mostrar las reglas de redacción a seguir -->
+        <section id="reglas"></section>
 
-        <!-- Sección nueva para mostrar conectivos recomendados -->
-        <section class="recommended-connectors">
+        <!-- Sección para mostrar conectivos recomendados -->
+        <section id="conectivos" class="recommended-connectors">
             <h2><i class="fa-solid fa-link"></i> Conectivos recomendados</h2>
 
             <!-- Enlazar ideas similares o añadir una nueva idea -->
@@ -717,6 +741,8 @@
                 </ul>
             </div>
         </section>
+
+        <section id="citas"></section>
 
         <p id="version">Versión: 0.3.1</p>
     </div>

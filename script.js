@@ -1,3 +1,11 @@
+const sidebar = document.querySelector('.sidebar');
+const navLinks = document.querySelectorAll('nav a[data-section]');
+const sections = {
+    inicio: document.getElementById('inicio'),
+    reglas: document.getElementById('reglas'),
+    conectivos: document.getElementById('conectivos'),
+    citas: document.getElementById('citas')
+};
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
@@ -56,6 +64,32 @@ const consoleStyles = `
 const customMessage = "¡Hola! Esta aplicación web fue hecha con HTML, CSS, y JavaScript. Espero que te sea de mucha utilidad ★•`‿↼";
 console.log("%c" + customMessage, consoleStyles);
 
+//Funciones para mostrar u ocultar navbar
+const showSidebar = () => sidebar.classList.add('active');
+const hideSidebar = () => sidebar.classList.remove('active');
+
+// Agregar evento click a cada enlace de navegación
+navLinks.forEach(link => {
+    link.addEventListener('click', event => {
+        event.preventDefault();
+
+        const sectionId = link.dataset.section;
+
+        // Ocultar todas las secciones
+        Object.values(sections).forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Mostrar la sección seleccionada
+        sections[sectionId].classList.add('active'); 
+
+        navLinks.forEach(link => {
+            link.parentElement.classList.remove('active');
+        });
+
+        link.parentElement.classList.add('active');
+    });
+});
 
 // Función para limpiar el documento
 const clearDocument = () => {
@@ -517,3 +551,4 @@ window.addEventListener("load", () => {
 checkboxes.forEach(({ element, key }) => {
     element.addEventListener("change", () => handleCheckboxChange({ element, key }));
 });
+
