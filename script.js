@@ -68,11 +68,11 @@ console.log("%c" + customMessage, consoleStyles);
 const showSidebar = () => sidebar.classList.add('active');
 const hideSidebar = () => sidebar.classList.remove('active');
 
-// Agregar evento click a cada enlace de navegación
+// Evento click para todos los enlaces de navegación
 navLinks.forEach(link => {
     link.addEventListener('click', event => {
         event.preventDefault();
-
+        
         const sectionId = link.dataset.section;
 
         // Ocultar todas las secciones
@@ -81,13 +81,19 @@ navLinks.forEach(link => {
         });
 
         // Mostrar la sección seleccionada
-        sections[sectionId].classList.add('active'); 
+        sections[sectionId].classList.add('active');
 
+        // Eliminar clase active de todos los enlaces
         navLinks.forEach(link => {
             link.parentElement.classList.remove('active');
         });
 
-        link.parentElement.classList.add('active');
+        // Añadir clase active al enlace actual y su equivalente en el otro navbar
+        navLinks.forEach(navLink => {
+            if (navLink.dataset.section === sectionId) {
+                navLink.parentElement.classList.add('active');
+            }
+        });
     });
 });
 
