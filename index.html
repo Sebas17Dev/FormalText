@@ -37,7 +37,7 @@
                     </span>
                 </label>
             </li>
-            
+
             <li class="hide-on-mobile active"><a href="#" data-section="inicio">Inicio</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="reglas">Reglas de redacción</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
@@ -78,11 +78,11 @@
                         <input type="checkbox" id="check-all-connectives">
                         <label for="check-all-connectives">Marcar todos los conectivos</label>
                     </div>
-                    
+
                 </div>
                 <div id="feedback" class="feedback hidden"></div>
             </header>
-    
+
             <div class="editable" id="document-input" contenteditable="true"></div>
             <div class="counts">
                 <p id="char-count">Caracteres: 0</p>
@@ -97,9 +97,42 @@
                 <button class="btn" id="btn-review">Revisar documento<br><span>(Ctrl + Enter)</span></button>
             </div>
         </section>
-        
+
         <!-- Sección para mostrar las reglas de redacción a seguir -->
-        <section id="reglas"></section>
+        <section id="reglas">
+            <h2>Reglas de redacción</h2>
+            <ul>
+                <li><strong>Tipo de texto:</strong> El informe debe ser un texto académico-científico, objetivo y
+                    preciso en el uso de términos.</li>
+                <li><strong>Redacción en tercera persona:</strong> La redacción debe hacerse en tercera persona del
+                    singular (el, la, los; por ejemplo: "el proyectista", "los investigadores"). No se debe utilizar el
+                    plural inclusivo.</li>
+                <li><strong>Uso de artículos:</strong> Se debe utilizar correctamente el artículo definido (el, la, los,
+                    las) o indefinido (un, una, unos, unas), según corresponda, para mantener precisión y coherencia en
+                    la construcción de las oraciones.</li>
+                <li><strong>Uso de conectores:</strong> Se deben emplear conectores tanto entre oraciones como entre
+                    párrafos para garantizar la cohesión del texto (ejemplo: además, sin embargo, por otro lado).</li>
+                <li><strong>Evitar repetición de palabras:</strong> No se debe repetir una palabra más de dos veces en
+                    un mismo párrafo. Se recomienda usar sinónimos o expresiones equivalentes, siempre manteniendo la
+                    precisión en el lenguaje técnico.</li>
+                <li><strong>Abreviaturas y siglas:</strong> No se deben usar abreviaturas. Las siglas pueden emplearse
+                    para organismos, instrumentos o variables que se mencionen repetidamente, pero deben explicarse la
+                    primera vez que aparezcan. Escribir el nombre completo seguido de las siglas en mayúsculas y entre
+                    paréntesis, sin puntuación. Ejemplo: Universidad Politécnica Territorial José Antonio Anzoátegui
+                    (UPTJAA).</li>
+                <li><strong>Escritura de números:</strong> Los números deben escribirse primero en texto y luego entre
+                    paréntesis. Ejemplo: "tres (3), veinte (20), mil novecientos noventa y nueve (1999)". Esta regla no
+                    aplica en la fuente o subtítulos de tablas, gráficos o figuras.</li>
+                <li><strong>Coherencia en el texto:</strong> La redacción debe mantener la coherencia entre ideas y
+                    párrafos, con un desarrollo progresivo del tema a investigar.</li>
+                <li><strong>Conectores y coherencia:</strong> Para asegurar la coherencia, se deben usar conectores
+                    apropiados que relacionen las ideas de forma clara (ver conectivos recomendados).</li>
+                <li><strong>Estructura de los párrafos:</strong> Cada párrafo debe contener una idea principal y varias
+                    ideas secundarias que la desarrollen. La estructura lógica y la claridad son fundamentales.</li>
+                <li><strong>Estilo formal y técnico:</strong> El informe debe emplear un estilo de escritura formal y un
+                    lenguaje técnico adecuado al ámbito informático.</li>
+            </ul>
+        </section>
 
         <!-- Sección para mostrar conectivos recomendados -->
         <section id="conectivos" class="recommended-connectors">
@@ -744,7 +777,7 @@
 
         <section id="citas"></section>
 
-        <p id="version">Versión: 0.3.1</p>
+        <p id="version">Versión: 0.3.2</p>
     </div>
 </body>
 

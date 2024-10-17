@@ -671,6 +671,37 @@ input:checked+.slider::before {
 }
 
 
+/* Estilos para la sección de reglas de redacción */
+#reglas {
+    padding: 2rem;
+    border-radius: var(--radius);
+    background-color: var(--color-secondary-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#reglas h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#reglas li {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-left: 0.25rem solid var(--primary-color);
+    transition: background-color var(--transition-medium);
+}
+
+#reglas li:hover {
+    background-color: rgba(110, 142, 251, 0.1); 
+}
+
+#reglas li strong {
+    color: var(--primary-color);
+}
+
+
 /* Estilo general del checkbox */
 .checkbox-wrapper {
     display: flex;
