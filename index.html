@@ -9,10 +9,11 @@
     <meta name="keywords" content="formal, text, writing, improvement, grammar">
     <meta name="author" content="Sebastián Terán">
     <title>FormalText</title>
-    <link rel="icon" href="./images/favicon.png" type="image/png">
+    <link rel="icon" href="../../public/images/logo.jpg" type="image/jpg">
     <link rel="stylesheet" href="../../public/fontawesome/css/all.css">
     <link rel="stylesheet" href="styles.css">
     <script src="informalWords.js" type="text/javascript" defer></script>
+    <script src="numbers.js" type="text/javascript" defer></script>
     <script src="script.js" type="text/javascript" defer></script>
     <script src="darkMode.js" type="text/javascript" defer></script>
 </head>
@@ -27,6 +28,7 @@
             </span>
         </label>
         <header>
+            <img src="../../public/images/logo.jpg" alt="Logo de FormalText" class="logo">
             <h1>FormalText</h1>
             <p>Pegue su documento a continuación y revise su redacción</p>
             <div class="checkbox-wrapper">
@@ -37,6 +39,10 @@
                 <div>
                     <input type="checkbox" id="mark-repeated-words">
                     <label for="mark-repeated-words">Marcar palabras repetidas</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="check-third-person">
+                    <label for="check-third-person">Verificar redacción en tercera persona</label>
                 </div>
                 <div>
                     <input type="checkbox" id="check-paragraph-length">
@@ -712,7 +718,7 @@
             </div>
         </section>
 
-        <p id="version">Versión: 0.2.9</p>
+        <p id="version">Versión: 0.3.0</p>
     </div>
 </body>
 
