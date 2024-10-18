@@ -72,7 +72,7 @@ const hideSidebar = () => sidebar.classList.remove('active');
 navLinks.forEach(link => {
     link.addEventListener('click', event => {
         event.preventDefault();
-        
+
         const sectionId = link.dataset.section;
 
         // Ocultar todas las secciones
@@ -113,37 +113,71 @@ function normalizeWord(word) {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
 }
 
+// Función para verificar si una secuencia de palabras es un número compuesto (ej: "ochenta y nueve")
+const getNumberFromWords = (words, startIndex) => {
+    let fullNumberWord = words[startIndex]; // Inicializar con la primera palabra
+    let numValue = numberWords[fullNumberWord.toLowerCase()]; // Buscar el valor del primer número
+    let i = startIndex + 1;
+
+    // Mientras se encuentren más palabras numéricas, continuar formando el número
+    while (i < words.length && (words[i].toLowerCase() === 'y' || numberWords[words[i].toLowerCase()] !== undefined)) {
+        fullNumberWord += ' ' + words[i]; // Concatenar la palabra actual
+        if (numberWords[words[i].toLowerCase()] !== undefined) {
+            numValue += numberWords[words[i].toLowerCase()]; // Sumar el valor de la palabra actual
+        }
+        i++;
+    }
+
+    // Si es un número compuesto válido, devolver el número y el índice final
+    return { fullNumberWord, numValue, endIndex: i - 1 };
+}
+
 // Función para verificar el formato de los números en el documento
 const validateNumberFormat = (paragraphText, paragraphIndex) => {
     const numberIssues = [];
     const words = paragraphText.split(/\s+/); // Dividir el párrafo en palabras
+    let i = 0;
 
-    words.forEach((word, wordIndex) => {
-        const lowerWord = normalizeWord(word); // Normalizar palabra
+    while (i < words.length) {
+        const originalWord = words[i];
 
-        // Verificar si es un número escrito en palabras
-        if (numberWords[lowerWord] !== undefined) {
-            const numValue = numberWords[lowerWord];
-            const nextWord = words[wordIndex + 1] ? words[wordIndex + 1].trim() : null;
+        // Verificar si es un número compuesto (ej: "ochenta y nueve")
+        if (numberWords[originalWord.toLowerCase()] !== undefined) {
+            const { fullNumberWord, numValue, endIndex } = getNumberFromWords(words, i);
+            let nextWord = words[endIndex + 1] ? words[endIndex + 1].trim() : null;
+
+            // Normalizar la siguiente palabra para ignorar signos de puntuación comunes (coma, punto, punto y coma)
+            if (nextWord) {
+                nextWord = nextWord.replace(/[.,;:]/g, ''); // Elimina caracteres de puntuación
+            }
 
             // Si la siguiente palabra no es el número en paréntesis
             if (nextWord !== `(${numValue})`) {
-                numberIssues.push(`El número en palabras "${word}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${word} (${numValue})".`);
+                numberIssues.push(`El número en palabras "${fullNumberWord}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${fullNumberWord} (${numValue})".`);
             }
+
+            i = endIndex; // Saltar a la última palabra del número compuesto
         }
         // Verificar si es un número en formato dígito
-        else if (!isNaN(word)) {
-            const numValue = parseInt(word, 10);
-            const numberAsWord = numberToWord(numValue);
-            const previousWord = words[wordIndex - 1] ? words[wordIndex - 1].toLowerCase() : null;
-            const nextWord = words[wordIndex + 1] ? words[wordIndex + 1].trim() : null;
+        else if (!isNaN(originalWord)) {
+            const numValue = parseInt(originalWord, 10);
+            const numberAsWord = numberToWord(numValue); // Convertir el número en dígito a su forma en palabras
+            const previousWord = words[i - 1] ? words[i - 1].toLowerCase() : null; // No normalizar aquí, usar directamente
+            let nextWord = words[i + 1] ? words[i + 1].trim() : null;
+
+            // Normalizar la siguiente palabra para ignorar signos de puntuación comunes
+            if (nextWord) {
+                nextWord = nextWord.replace(/[.,;:]/g, ''); // Elimina caracteres de puntuación
+            }
 
             // Si no tiene el formato correcto con la palabra antes y el número en paréntesis después
             if (previousWord !== numberAsWord || nextWord !== `(${numValue})`) {
-                numberIssues.push(`El número "${word}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${numberAsWord} (${word})".`);
+                numberIssues.push(`El número "${originalWord}" en el párrafo ${paragraphIndex + 1} debe redactarse como "${numberAsWord} (${originalWord})".`);
             }
         }
-    });
+
+        i++; // Avanzar a la siguiente palabra
+    }
 
     return numberIssues;
 }
@@ -300,7 +334,7 @@ function checkDocument() {
     let explanations = '';
     Object.keys(wordOccurrences).forEach((word) => {
         const substitutes = informalWordsData[word].substitutes.length > 0 ?
-            `Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
+            ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
         const occurrencesLinks = wordOccurrences[word].map(id => `<a href="#${id}" class="word-link">${word}</a>`).join(', ');
 
         // Crear un div para cada explicación
