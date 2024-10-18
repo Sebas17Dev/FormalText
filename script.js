@@ -13,6 +13,7 @@ const checkMarkRepeatedWords = document.getElementById("mark-repeated-words");
 const checkThirdPerson = document.getElementById("check-third-person");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
 const checkNumberFormat = document.getElementById('check-number-format');
+const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-errors");
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
@@ -28,6 +29,7 @@ const checkboxes = [
     { element: checkThirdPerson, key: "checkThirdPerson" },
     { element: checkParagraphLength, key: "checkParagraphLength" },
     { element: checkNumberFormat, key: "checkNumberFormat" },
+    { element: checkMarkNumberFormatErrors, key: "checkMarkNumberFormatErrors" },
     { element: checkAllConnectives, key: "checkAllConnectives" },
 ];
 const maxWordsPerParagraph = 170;
@@ -109,7 +111,7 @@ const clearDocument = () => {
 }
 
 // Función para normalizar el texto eliminando acentos y caracteres especiales
-function normalizeWord(word) {
+const normalizeWord = word => {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
 }
 
@@ -191,35 +193,78 @@ const numberToWord = num => {
 // Función para buscar pronombres de primera y segunda persona y verificar el uso de tercera persona
 const checkPronounsUsage = documentText => {
     const firstAndSecondPersonPronouns = [
-        'yo', 'me', 'mi', 'mis', 'nosotros', 'nos', 'nuestro', 'nuestra', 'nuestros', 'nuestras',
-        'tú', 'te', 'tu', 'tus', 'usted', 'ustedes', 'vos', 'vuestra', 'vuestros'
+        // Primera persona
+        'yo', 'me', 'mi', 'mis',
+        'nosotros', 'nosotras', 'nos', 'nuestro', 'nuestra', 'nuestros', 'nuestras',
+
+        // Segunda persona
+        'tú', 'te', 'tu', 'tus',
+        'usted', 'ustedes', 'vos',
+        'vosotros', 'vosotras', 'vuestra', 'vuestros', 'vuestras'
     ];
+
+    const firstAndSecondPersonVerbs = [
+        'soy', 'estoy', 'tengo', 'vamos', 'hacemos',
+        'eres', 'estás', 'tienes', 'haces', 'vas'
+    ];
+
+    const inclusiveLanguage = ['todas', 'todos'];
 
     const paragraphs = documentText.split(/\n+/);
     const foundPronouns = {};
+    const foundVerbs = {};
+    const foundInclusiveTerms = {};
     let hasPronouns = false;
+    let hasVerbs = false;
+    let hasInclusiveLanguage = false;
     let feedbackMessage = "";
 
     paragraphs.forEach((paragraph, paragraphIndex) => {
         const wordsInParagraph = normalizeWord(paragraph).split(/\s+/);
-        foundPronouns[paragraphIndex + 1] = []; // Crear una lista para el párrafo actual
+        foundPronouns[paragraphIndex + 1] = [];
+        foundVerbs[paragraphIndex + 1] = []; // Crear lista para verbos
+        foundInclusiveTerms[paragraphIndex + 1] = [];
 
-        // Buscar pronombres de primera y segunda persona en el párrafo
         wordsInParagraph.forEach(word => {
             if (firstAndSecondPersonPronouns.includes(word)) {
-                foundPronouns[paragraphIndex + 1].push(word); // Agregar pronombre encontrado a la lista del párrafo
-                hasPronouns = true; // Marcar que se han encontrado pronombres
+                foundPronouns[paragraphIndex + 1].push(word);
+                hasPronouns = true;
+            }
+            if (firstAndSecondPersonVerbs.includes(word)) {
+                foundVerbs[paragraphIndex + 1].push(word); // Agregar verbo encontrado
+                hasVerbs = true; // Marcar que se han encontrado verbos
+            }
+            if (inclusiveLanguage.includes(word)) {
+                foundInclusiveTerms[paragraphIndex + 1].push(word);
+                hasInclusiveLanguage = true;
             }
         });
     });
 
-    if (hasPronouns) {
-        Object.entries(foundPronouns).forEach(([paragraphIndex, pronouns]) => {
-            if (pronouns.length > 0) {
-                feedbackMessage += `En el párrafo ${paragraphIndex}: ${pronouns.join(', ')}. <br>`;
-            }
-        });
-        feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene pronombres de primera o segunda persona: ${feedbackMessage} Asegúrese de escribir en tercera persona.<br>`;
+    if (hasPronouns || hasVerbs || hasInclusiveLanguage) {
+        if (hasPronouns) {
+            Object.entries(foundPronouns).forEach(([paragraphIndex, pronouns]) => {
+                if (pronouns.length > 0) {
+                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${pronouns.join(', ')}. <br>`;
+                }
+            });
+        }
+        if (hasVerbs) {
+            Object.entries(foundVerbs).forEach(([paragraphIndex, verbs]) => {
+                if (verbs.length > 0) {
+                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${verbs.join(', ')} (verbos). <br>`;
+                }
+            });
+        }
+        if (hasInclusiveLanguage) {
+            Object.entries(foundInclusiveTerms).forEach(([paragraphIndex, terms]) => {
+                if (terms.length > 0) {
+                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${terms.join(', ')} (términos inclusivos). <br>`;
+                }
+            });
+        }
+
+        feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene pronombres, verbos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.<br>`;
         feedbackDiv.classList.remove("hidden", "success");
         feedbackDiv.classList.add("error");
     } else {
@@ -327,6 +372,17 @@ function checkDocument() {
         if (checkNumberFormat.checked) {
             const numberIssuesInParagraph = validateNumberFormat(paragraph, paragraphIndex);
             numberFormatIssues = numberFormatIssues.concat(numberIssuesInParagraph);
+
+            /*
+            // Resaltar los errores de formato de número en el texto
+            if (checkMarkNumberFormatErrors.checked) {
+                numberIssuesInParagraph.forEach(issue => {
+                    const errorPattern = issue.split('"')[1]; // Extraer el texto que debería estar
+                    const regex = new RegExp(`(${errorPattern})`, 'g');
+                    documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="error-highlight">${errorPattern}</span>`);
+                });
+            }
+            */
         }
     });
 
@@ -578,6 +634,7 @@ window.addEventListener("load", () => {
         "checkThirdPerson": checkThirdPerson,
         "checkParagraphLength": checkParagraphLength,
         "checkNumberFormat": checkNumberFormat,
+        "checkMarkNumberFormatErrors": checkMarkNumberFormatErrors,
         "checkAllConnectives": checkAllConnectives,
     };
 
