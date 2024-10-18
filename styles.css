@@ -214,6 +214,7 @@ nav li {
     display: flex;
     height: 50px;
     border-bottom: 2px solid transparent;
+    transition: border-bottom var(--transition-fast) var(--transition-timing-function-default);
     align-items: center;
 }
 
@@ -243,15 +244,17 @@ nav ul:not(.sidebar) li:first-child {
     margin-left: 2rem;
 }
 
+
 .sidebar {
     position: fixed;
     top: 0;
     right: 0;
-    display: none;
     z-index: 999;
     width: 250px;
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
     box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
     flex-direction: column;
     align-items: flex-start;
@@ -260,7 +263,7 @@ nav ul:not(.sidebar) li:first-child {
 }
 
 .sidebar.active {
-    display: flex;
+    transform: translateX(0);
 }
 
 .sidebar li,
@@ -915,4 +918,29 @@ input[type="checkbox"]:checked+label::before::after {
         justify-content: center;
     }
 
+    .connector-category li div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .counts{
+        font-size: 0.9em;
+    }
+
+    .example{
+        padding: 0.2rem;
+    }
+
+    #reglas, #citas {
+        padding: 1rem;
+    }
+
+    #reglas li, #citas li{
+        padding: 0.5rem;
+    }
+
+    blockquote{
+        font-size: 0.9em;
+    }
 }
