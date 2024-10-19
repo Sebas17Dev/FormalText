@@ -323,7 +323,7 @@ function checkDocument() {
         }
 
         // Procesar el texto de cada párrafo
-        const highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
+        let highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
             const lowerCaseWord = normalizeWord(word); // Normalizar la palabra
             originalWordsMap[lowerCaseWord] = word; // Almacenar la palabra original
 
@@ -362,20 +362,17 @@ function checkDocument() {
             return word;
         }).join('');
 
-        // Actualizar el texto del párrafo con las palabras resaltadas
-        documentInput.innerHTML += highlightedText + '<br>'; // Agregar cada párrafo procesado al documento
 
-        // Verificar si hay palabras repetidas en este párrafo, si el usuario lo eligió
+        // Resaltar palabras repetidas solo en este párrafo
         if (checkRepeatedWords.checked) {
             let repeatedWords = [];
             Object.entries(wordCount).forEach(([word, count]) => {
                 if (count > 1) {
-                    const originalWord = originalWordsMap[word]; // Recuperar la palabra original
                     repeatedWords.push(`${word}: ${count} veces`);
 
                     if (checkMarkRepeatedWords.checked) {
-                        const regex = new RegExp(`\\b${originalWord}\\b`, 'gi');
-                        documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="repeated-word-highlight">${originalWord}</span>`);
+                        const regex = new RegExp(`\\b${originalWordsMap[word]}\\b`, 'gi');
+                        highlightedText = highlightedText.replace(regex, `<span class="repeated-word-highlight">${originalWordsMap[word]}</span>`);
                     }
                 }
             });
@@ -384,6 +381,8 @@ function checkDocument() {
                 repeatedWordsPerParagraph[`Párrafo ${paragraphIndex + 1}`] = repeatedWords;
             }
         }
+
+        documentInput.innerHTML += highlightedText + '<br>';
 
         // Verificar formato de números, si la opción está activada
         if (checkNumberFormat.checked) {

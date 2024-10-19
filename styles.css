@@ -369,7 +369,7 @@ textarea:focus {
     padding: 15px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 1.1em;
+    font-size: 1em;
     color: var(--color-primary-text);
     text-align: justify;
     white-space: pre-wrap;
