@@ -28,6 +28,7 @@ const checkboxes = [
     { element: checkRepeatedWords, key: "checkRepeatedWords" },
     { element: checkMarkRepeatedWords, key: "checkMarkPepeatedWords" },
     { element: checkThirdPerson, key: "checkThirdPerson" },
+    { element: checkMarkNonThirdPerson, key: "checkMarkNonThirdPerson" },
     { element: checkParagraphLength, key: "checkParagraphLength" },
     { element: checkNumberFormat, key: "checkNumberFormat" },
     { element: checkMarkNumberFormatErrors, key: "checkMarkNumberFormatErrors" },
@@ -51,6 +52,34 @@ const connectives = new Set([
     "de igual forma", "como", "al contrario", "después de todo", "en cambio",
     "por el contrario", "por otra parte", "a pesar de", "sin embargo"
 ]);
+const firstAndSecondPersonPronouns = [
+    // Primera persona
+    'yo', 'me', 'mi', 'mis',
+    'nosotros', 'nosotras', 'nos', 'nuestro', 'nuestra', 'nuestros', 'nuestras',
+
+    // Segunda persona
+    'tú', 'te', 'tu', 'tus',
+    'usted', 'ustedes', 'vos',
+    'vosotros', 'vosotras', 'vuestra', 'vuestros', 'vuestras'
+];
+
+const firstAndSecondPersonVerbs = [
+    // Verbos de primera persona
+    'soy', 'estoy', 'tengo', 'vamos', 'hacemos', 'hablo', 'escribo', 'pienso', 'creo',
+    'tenemos', 'veo', 'vengo', 'digo', 'cuento', 'pido', 'sigo', 'conozco', 'entiendo',
+    'aprendo', 'corro', 'camino', 'leo', 'espero', 'llego', 'salgo', 'pongo', 'dejo',
+    'empiezo', 'quiero', 'puedo', 'debo', 'siento',
+    'escucho', 'muevo', 'subo', 'bajo', 'cierro', 'abro',
+
+    // Verbos de segunda persona
+    'eres', 'estás', 'tienes', 'haces', 'vas', 'piensas', 'crees', 'escribes', 'hablas',
+    'vienes', 'dices', 'pides', 'sigues', 'conoces', 'entiendes', 'aprendes', 'corres',
+    'caminas', 'lees', 'esperas', 'llegas', 'sales', 'pones', 'dejas', 'llevas', 'trabajas',
+    'empiezas', 'terminas', 'usas', 'necesitas', 'quieres', 'puedes', 'debes', 'sientes',
+    'buscas', 'escuchas', 'mueves', 'subes', 'bajas', 'cierras', 'abres'
+];
+
+const inclusiveLanguage = ['todas', 'todos', 'nosotras', 'nosotros', 'ustedes'];
 let isReviewing = false;
 
 // Custom message
@@ -193,35 +222,6 @@ const numberToWord = num => {
 
 // Función para verificar el uso de tercera persona
 const checkPronounsUsage = documentText => {
-    const firstAndSecondPersonPronouns = [
-        // Primera persona
-        'yo', 'me', 'mi', 'mis',
-        'nosotros', 'nosotras', 'nos', 'nuestro', 'nuestra', 'nuestros', 'nuestras',
-
-        // Segunda persona
-        'tú', 'te', 'tu', 'tus',
-        'usted', 'ustedes', 'vos',
-        'vosotros', 'vosotras', 'vuestra', 'vuestros', 'vuestras'
-    ];
-
-    const firstAndSecondPersonVerbs = [
-        // Verbos de primera persona
-        'soy', 'estoy', 'tengo', 'vamos', 'hacemos', 'hablo', 'escribo', 'pienso', 'creo',
-        'tenemos', 'veo', 'vengo', 'digo', 'cuento', 'pido', 'sigo', 'conozco', 'entiendo',
-        'aprendo', 'corro', 'camino', 'leo', 'espero', 'llego', 'salgo', 'pongo', 'dejo',
-        'empiezo', 'quiero', 'puedo', 'debo', 'siento',
-        'escucho', 'muevo', 'subo', 'bajo', 'cierro', 'abro',
-
-        // Verbos de segunda persona
-        'eres', 'estás', 'tienes', 'haces', 'vas', 'piensas', 'crees', 'escribes', 'hablas',
-        'vienes', 'dices', 'pides', 'sigues', 'conoces', 'entiendes', 'aprendes', 'corres',
-        'caminas', 'lees', 'esperas', 'llegas', 'sales', 'pones', 'dejas', 'llevas', 'trabajas',
-        'empiezas', 'terminas', 'usas', 'necesitas', 'quieres', 'puedes', 'debes', 'sientes',
-        'buscas', 'escuchas', 'mueves', 'subes', 'bajas', 'cierras', 'abres'
-    ];
-
-    const inclusiveLanguage = ['todas', 'todos', 'nosotras', 'nosotros', 'ustedes'];
-
     const paragraphs = documentText.split(/\n+/);
     const foundPronouns = {};
     const foundVerbs = {};
@@ -329,7 +329,7 @@ function checkDocument() {
 
             // Verificar si es un conector
             if (checkAllConnectives.checked && connectives.has(lowerCaseWord)) {
-                return `<span class="connective">${word}</span>`;
+                return `<span class="connective-highlight">${word}</span>`;
             }
 
             // Verificar si la palabra es común
@@ -346,12 +346,17 @@ function checkDocument() {
                 }
                 wordOccurrences[lowerCaseWord].push(wordId); // Almacenar ID
                 const titleText = informalWordsData[lowerCaseWord].explanation;
-                return `<a href="#${wordId}" id="${wordId}" class="highlight" title="${titleText}">${word}</a>`;
+                return `<a href="#${wordId}" id="${wordId}" class="informal-highlight" title="${titleText}">${word}</a>`;
             }
 
             // Contar palabras repetidas
             if (lowerCaseWord.match(/[a-záéíóú]/i) && lowerCaseWord.length > 1) {
                 wordCount[lowerCaseWord] = (wordCount[lowerCaseWord] || 0) + 1;
+            }
+
+            // Verificar el formato de números si el checkbox está marcado
+            if (checkThirdPerson.checked && checkMarkNonThirdPerson.checked && (firstAndSecondPersonPronouns.includes(lowerCaseWord) || (firstAndSecondPersonVerbs.includes(lowerCaseWord)) || (inclusiveLanguage.includes(lowerCaseWord)))) {
+                return `<span class="non-third-person-highlight">${word}</span>`;
             }
 
             return word;
@@ -558,26 +563,6 @@ const cleanText = text => {
         .trim();
 }
 
-// Función para marcar conectivos en el texto
-const markConnectives = () => {
-    const documentText = documentInput.innerText.trim();
-    if (documentText === '') return;
-
-    documentInput.innerHTML = '';
-
-    const highlightedText = documentText.split(/([^\p{L}\p{N}]+)/gu).map(word => {
-        const lowerCaseWord = word.toLowerCase(); // Normalizar la palabra a minúsculas
-
-        if (checkAllConnectives.checked && connectives.has(lowerCaseWord)) {
-            return `<span class="connective">${word}</span>`;
-        }
-
-        return word; // Retornar la palabra original si no es un conectivo
-    }).join('');
-
-    documentInput.innerHTML = highlightedText;
-}
-
 // Función para alternar la visibilidad del ejemplo
 const toggleExample = button => {
     const exampleParagraph = button.closest('li').querySelector('.example');
@@ -644,6 +629,7 @@ window.addEventListener("load", () => {
         "checkRepeatedWords": checkRepeatedWords,
         "checkMarkPepeatedWords": checkMarkRepeatedWords,
         "checkThirdPerson": checkThirdPerson,
+        "checkMarkNonThirdPerson": checkMarkNonThirdPerson,
         "checkParagraphLength": checkParagraphLength,
         "checkNumberFormat": checkNumberFormat,
         "checkMarkNumberFormatErrors": checkMarkNumberFormatErrors,

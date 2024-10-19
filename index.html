@@ -60,7 +60,9 @@
                     </div>
                     <div>
                         <input type="checkbox" id="mark-repeated-words">
-                        <label for="mark-repeated-words">Marcar palabras repetidas</label>
+                        <label for="mark-repeated-words">
+                            Marcar palabras repetidas<span class="color-box"
+                                style="background-color: var(--repeated-word-color);"></span></label>
                     </div>
                     <div>
                         <input type="checkbox" id="check-third-person">
@@ -68,7 +70,9 @@
                     </div>
                     <div>
                         <input type="checkbox" id="mark-non-third-person">
-                        <label for="mark-non-third-person">Marcar palabras que no estén en 3era persona</label>
+                        <label for="mark-non-third-person">Marcar palabras que no estén en 3era persona
+                            <span class="color-box" style="background-color: var(--non-third-person-color);"></span>
+                        </label>
                     </div>
                     <div>
                         <input type="checkbox" id="check-paragraph-length">
@@ -78,13 +82,14 @@
                         <input type="checkbox" id="check-number-format">
                         <label for="check-number-format">Verificar formato de números</label>
                     </div>
-                    <div>
+                    <div style="display: none;">
                         <input type="checkbox" id="mark-number-format-errors">
                         <label for="mark-number-format-errors">Marcar errores en el formato de números</label>
                     </div>
                     <div>
                         <input type="checkbox" id="check-all-connectives">
-                        <label for="check-all-connectives">Marcar todos los conectivos</label>
+                        <label for="check-all-connectives">Marcar todos los conectivos<span class="color-box"
+                                style="background-color: var(--connective-color);"></span></label>
                     </div>
 
                 </div>
@@ -953,7 +958,7 @@
             </div>
         </section>
 
-        <p id="version">Versión: 0.4.5</p>
+        <p id="version">Versión: 0.4.6</p>
     </div>
 </body>
 
