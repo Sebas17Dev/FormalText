@@ -11,6 +11,7 @@ const documentInput = document.getElementById('document-input');
 const checkRepeatedWords = document.getElementById("check-repeated-words");
 const checkMarkRepeatedWords = document.getElementById("mark-repeated-words");
 const checkThirdPerson = document.getElementById("check-third-person");
+const checkMarkNonThirdPerson = document.getElementById("mark-non-third-person");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
 const checkNumberFormat = document.getElementById('check-number-format');
 const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-errors");
@@ -190,7 +191,7 @@ const numberToWord = num => {
     return num <= 10000 ? words[num] : num.toString();
 }
 
-// Función para buscar pronombres de primera y segunda persona y verificar el uso de tercera persona
+// Función para verificar el uso de tercera persona
 const checkPronounsUsage = documentText => {
     const firstAndSecondPersonPronouns = [
         // Primera persona
@@ -204,11 +205,22 @@ const checkPronounsUsage = documentText => {
     ];
 
     const firstAndSecondPersonVerbs = [
-        'soy', 'estoy', 'tengo', 'vamos', 'hacemos',
-        'eres', 'estás', 'tienes', 'haces', 'vas'
+        // Verbos de primera persona
+        'soy', 'estoy', 'tengo', 'vamos', 'hacemos', 'hablo', 'escribo', 'pienso', 'creo',
+        'tenemos', 'veo', 'vengo', 'digo', 'cuento', 'pido', 'sigo', 'conozco', 'entiendo',
+        'aprendo', 'corro', 'camino', 'leo', 'espero', 'llego', 'salgo', 'pongo', 'dejo',
+        'empiezo', 'quiero', 'puedo', 'debo', 'siento',
+        'escucho', 'muevo', 'subo', 'bajo', 'cierro', 'abro',
+
+        // Verbos de segunda persona
+        'eres', 'estás', 'tienes', 'haces', 'vas', 'piensas', 'crees', 'escribes', 'hablas',
+        'vienes', 'dices', 'pides', 'sigues', 'conoces', 'entiendes', 'aprendes', 'corres',
+        'caminas', 'lees', 'esperas', 'llegas', 'sales', 'pones', 'dejas', 'llevas', 'trabajas',
+        'empiezas', 'terminas', 'usas', 'necesitas', 'quieres', 'puedes', 'debes', 'sientes',
+        'buscas', 'escuchas', 'mueves', 'subes', 'bajas', 'cierras', 'abres'
     ];
 
-    const inclusiveLanguage = ['todas', 'todos'];
+    const inclusiveLanguage = ['todas', 'todos', 'nosotras', 'nosotros', 'ustedes'];
 
     const paragraphs = documentText.split(/\n+/);
     const foundPronouns = {};

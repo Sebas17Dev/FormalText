@@ -910,6 +910,10 @@ input[type="checkbox"]:checked+label::before::after {
         height: 150px;
     }
 
+    .checkbox-wrapper{
+        font-size: 0.9em;
+    }
+
     .recommended-connectors h2 {
         font-size: 1.3em;
     }
