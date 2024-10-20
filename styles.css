@@ -579,6 +579,7 @@ input:checked+.slider::before {
 .word-highlight {
     font-weight: bold;
     color: var(--secondary-color);
+    text-transform: capitalize;
 }
 
 .word-count {
@@ -820,7 +821,7 @@ input[type="checkbox"]:checked+label::before::after {
     display: flex;
     margin-top: 1.2rem;
     flex-wrap: wrap;
-    row-gap: 1rem;
+    gap: 1rem;
     justify-content: space-evenly;
 }
 
@@ -949,6 +950,10 @@ input[type="checkbox"]:checked+label::before::after {
 
     .counts{
         font-size: 0.9em;
+    }
+    
+    .button-group{
+        flex-wrap: wrap-reverse;
     }
 
     .example{

@@ -151,18 +151,33 @@ const getNumberFromWords = (words, startIndex) => {
     let numValue = numberWords[fullNumberWord.toLowerCase()]; // Buscar el valor del primer número
     let i = startIndex + 1;
 
+    let lastWasThousand = false; // Para controlar cuando encontramos "mil"
+    
     // Mientras se encuentren más palabras numéricas, continuar formando el número
     while (i < words.length && (words[i].toLowerCase() === 'y' || numberWords[words[i].toLowerCase()] !== undefined)) {
         fullNumberWord += ' ' + words[i]; // Concatenar la palabra actual
-        if (numberWords[words[i].toLowerCase()] !== undefined) {
-            numValue += numberWords[words[i].toLowerCase()]; // Sumar el valor de la palabra actual
+
+        // Caso especial: Si encontramos "mil", multiplicamos el valor actual por 1000
+        if (words[i].toLowerCase() === 'mil') {
+            numValue = (numValue === 0 ? 1 : numValue) * 1000;
+            lastWasThousand = true; // Indicamos que encontramos "mil"
+        } else if (numberWords[words[i].toLowerCase()] !== undefined) {
+            if (lastWasThousand) {
+                // Después de "mil", simplemente sumamos el siguiente número
+                numValue += numberWords[words[i].toLowerCase()];
+                lastWasThousand = false; // Reiniciar la bandera
+            } else {
+                // De lo contrario, seguimos sumando como antes
+                numValue += numberWords[words[i].toLowerCase()];
+            }
         }
+
         i++;
     }
 
     // Si es un número compuesto válido, devolver el número y el índice final
     return { fullNumberWord, numValue, endIndex: i - 1 };
-}
+};
 
 // Función para verificar el formato de los números en el documento
 const validateNumberFormat = (paragraphText, paragraphIndex) => {
@@ -361,7 +376,6 @@ function checkDocument() {
 
             return word;
         }).join('');
-
 
         // Resaltar palabras repetidas solo en este párrafo
         if (checkRepeatedWords.checked) {
