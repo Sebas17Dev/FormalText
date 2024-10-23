@@ -4,7 +4,8 @@ const sections = {
     inicio: document.getElementById('inicio'),
     reglas: document.getElementById('reglas'),
     conectivos: document.getElementById('conectivos'),
-    citas: document.getElementById('citas')
+    citas: document.getElementById('citas'),
+    palabras: document.getElementById('palabras')
 };
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
@@ -684,7 +685,6 @@ fileInput.addEventListener('change', event => {
     }
 });
 
-
 // Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
 documentInput.addEventListener('paste', event => {
     event.preventDefault();
@@ -761,3 +761,6 @@ checkboxes.forEach(({ element, key }) => {
 });
 
 updateButtonText();
+
+
+

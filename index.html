@@ -32,6 +32,7 @@
             <li><a href="#" data-section="reglas">Reglas de redacción y estructura</a></li>
             <li><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li><a href="#" data-section="citas">Citas</a></li>
+            <li><a href="#" data-section="palabras">Palabras a evitar</a></li>
         </ul>
         <ul>
             <li>
@@ -48,6 +49,7 @@
             <li class="hide-on-mobile"><a href="#" data-section="reglas">Reglas de redacción y estructura</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="citas">Citas</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="palabras">Plabras a evitar</a></li>
             <li class="menu-button" onclick="showSidebar()"><a href="#"><i class="fa-solid fa-bars"></i></a></li>
         </ul>
     </nav>
@@ -121,7 +123,7 @@
                 </label>
                 <input class="hidden" type="file" id="file-input" accept=".txt, .docx, .pdf" hidden>
 
-                <button class="btn" id="btn-review"><i class="fas fa-file-alt"></i> Revisar documento<br><span
+                <button class="btn" id="btn-review"><i class="fas fa-sync-alt"></i> Revisar documento<br><span
                         id="shortcut-review-text"></span></button>
             </div>
         </section>
@@ -973,7 +975,181 @@
             </div>
         </section>
 
-        <p id="version">Versión: 0.5.0</p>
+        <!-- Sección para mostrar las palabras a evitar -->
+        <section id="palabras">
+            <h2><i class="fa-solid fa-ban"></i> Palabras a evitar</h2>
+            <p>La aplicación verifica automáticamente si en el texto ingresado se encuentra alguna de las palabras a evitar.</p>
+            <ul>
+                <li>
+                    <strong>Cosa</strong>: <em>Es impreciso. Debe sustituirse por un término más específico.</em>
+                    <br><strong>Sustitutos:</strong> elemento, factor, objeto
+                </li>
+                <li>
+                    <strong>Falta</strong>: <em>Es una palabra de coloquio popular.</em>
+                    <br><strong>Sustitutos:</strong> ausencia, carencia
+                </li>
+                <li>
+                    <strong>Lo que es</strong>: <em>Redundante y poco formal. Es mejor eliminar o simplificar.</em>
+                </li>
+                <li>
+                    <strong>Actualmente</strong>: <em>Aunque no es incorrecto, es preferible usar otros términos.</em>
+                    <br><strong>Sustitutos:</strong> en la actualidad, en el presente
+                </li>
+                <li>
+                    <strong>Capacitación</strong>: <em>Este cambio depende del contexto.</em>
+                    <br><strong>Sustitutos:</strong> formación
+                </li>
+                <li>
+                    <strong>Adiestramiento</strong>: <em>Este cambio depende del contexto.</em>
+                    <br><strong>Sustitutos:</strong> formación
+                </li>
+                <li>
+                    <strong>Hay que</strong>: <em>Es informal, por lo que debe evitarse su uso.</em>
+                    <br><strong>Sustitutos:</strong> es necesario, se requiere, debe
+                </li>
+                <li>
+                    <strong>Poner</strong>: <em>Es demasiado vago. Se recomienda usar otras palabras según el
+                        contexto.</em>
+                    <br><strong>Sustitutos:</strong> colocar, implementar, instalar, incluir
+                </li>
+                <li>
+                    <strong>Hacer</strong>: <em>Es demasiado genérico.</em>
+                    <br><strong>Sustitutos:</strong> realizar, desarrollar, ejecutar
+                </li>
+                <li>
+                    <strong>Muy</strong>: <em>No aporta precisión. Es mejor usar un adjetivo más preciso.</em>
+                </li>
+                <li>
+                    <strong>Bastante</strong>: <em>Es informal.</em>
+                    <br><strong>Sustitutos:</strong> suficiente, considerable
+                </li>
+                <li>
+                    <strong>Fácilmente</strong>: <em>Informal.</em>
+                    <br><strong>Sustitutos:</strong> de manera sencilla, con facilidad
+                </li>
+                <li>
+                    <strong>Porque</strong>: <em>En redacción formal, puede ser más adecuado usar otros términos.</em>
+                    <br><strong>Sustitutos:</strong> debido a que, ya que, puesto que
+                </li>
+                <li>
+                    <strong>Todo el mundo</strong>: <em>Informal.</em>
+                    <br><strong>Sustitutos:</strong> todos, la población general
+                </li>
+                <li>
+                    <strong>Bueno/Malo</strong>: <em>Demasiado subjetivo. Es mejor usar adjetivos más específicos.</em>
+                    <br><strong>Sustitutos:</strong> beneficioso, positivo, adverso, inadecuado
+                </li>
+                <li>
+                    <strong>Se puede ver</strong>: <em>Frase coloquial. Es preferible "se observa", "se percibe", "se
+                        aprecia", etc.</em>
+                    <br><strong>Sustitutos:</strong> se observa, se percibe, se aprecia
+                </li>
+                <li>
+                    <strong>Mejor</strong>: <em>Se recomienda sustituir por versión más formal.</em>
+                    <br><strong>Sustitutos:</strong> más adecuado, más óptimo, preferible
+                </li>
+                <li>
+                    <strong>Pienso</strong>: <em>No debe usarse en textos científicos, ya que introduce
+                        subjetividad.</em>
+                    <br><strong>Sustitutos:</strong> se considera, se observa, se ha determinado
+                </li>
+                <li>
+                    <strong>Creo</strong>: <em>No debe usarse en textos científicos, ya que introduce subjetividad.</em>
+                    <br><strong>Sustitutos:</strong> se considera, se observa, se ha determinado
+                </li>
+                <li>
+                    <strong>Sería bueno</strong>: <em>Demasiado coloquial. Mejor usar "sería conveniente", "sería
+                        beneficioso", "resulta adecuado".</em>
+                    <br><strong>Sustitutos:</strong> sería conveniente, sería beneficioso, resulta adecuado
+                </li>
+                <li>
+                    <strong>etc.</strong>: <em>Aunque común, no es adecuado en textos académicos.</em>
+                </li>
+                <li>
+                    <strong>Demasiado</strong>: <em>Puede parecer subjetivo o coloquial.</em>
+                    <br><strong>Sustitutos:</strong> en exceso, en gran medida, significativamente
+                </li>
+                <li>
+                    <strong>La verdad es que</strong>: <em>No aporta información concreta. Debe eliminarse o
+                        reformularse.</em>
+                </li>
+                <li>
+                    <strong>Obviamente</strong>: <em>Sugiere que algo es evidente sin pruebas.</em>
+                    <br><strong>Sustitutos:</strong> claramente, es evidente que
+                </li>
+                <li>
+                    <strong>Demasiado poco</strong>: <em>En lugar de esto, es mejor emplear términos más formales y
+                        específicos.</em>
+                    <br><strong>Sustitutos:</strong> en exceso, insuficiente, excesivamente
+                </li>
+                <li>
+                    <strong>Demasiado mucho</strong>: <em>En lugar de esto, es mejor emplear términos más formales y
+                        específicos.</em>
+                    <br><strong>Sustitutos:</strong> en exceso, insuficiente, excesivamente
+                </li>
+                <li>
+                    <strong>Quizás</strong>: <em>Debe evitarse en redacciones académicas, ya que es subjetivo e
+                        impreciso.</em>
+                    <br><strong>Sustitutos:</strong> es posible que, puede que
+                </li>
+                <li>
+                    <strong>Tal vez</strong>: <em>Debe evitarse en redacciones académicas, ya que es subjetivo e
+                        impreciso.</em>
+                    <br><strong>Sustitutos:</strong> es posible que, puede que
+                </li>
+                <li>
+                    <strong>Básicamente</strong>: <em>Esta palabra no agrega valor al texto. Debe eliminarse o
+                        reemplazarse por una explicación más clara.</em>
+                </li>
+                <li>
+                    <strong>Siempre</strong>: <em>Esta expresión tiende a ser demasiado absoluta.</em>
+                    <br><strong>Sustitutos:</strong> en la mayoría de los casos, generalmente
+                </li>
+                <li>
+                    <strong>Nunca</strong>: <em>Esta expresión tiende a ser demasiado absoluta.</em>
+                    <br><strong>Sustitutos:</strong> en la mayoría de los casos, generalmente
+                </li>
+                <li>
+                    <strong>Un poco</strong>: <em>Es informal y poco preciso.</em>
+                    <br><strong>Sustitutos:</strong> ligeramente, levemente, de forma limitada
+                </li>
+                <li>
+                    <strong>Más o menos</strong>: <em>Es una expresión informal.</em>
+                    <br><strong>Sustitutos:</strong> aproximadamente, alrededor de
+                </li>
+                <li>
+                    <strong>Al parecer</strong>: <em>Es subjetivo.</em>
+                    <br><strong>Sustitutos:</strong> se considera, se estima
+                </li>
+                <li>
+                    <strong>Literalmente</strong>: <em>Debe evitarse, ya que a menudo es mal utilizado. Describir el
+                        hecho sin añadir esta palabra.</em>
+                </li>
+                <li>
+                    <strong>Ciertamente</strong>: <em>Similar a "obviamente", puede sugerir que algo es verdad sin
+                        suficiente evidencia.</em>
+                    <br><strong>Sustitutos:</strong> de acuerdo con, según los datos disponibles
+                </li>
+                <li>
+                    <strong>Es decir</strong>: <em>En algunos casos es informal.</em>
+                    <br><strong>Sustitutos:</strong> esto significa, lo que implica
+                </li>
+                <li>
+                    <strong>De alguna manera</strong>: <em>Evitar esta frase y ser más específico.</em>
+                    <br><strong>Sustitutos:</strong> de modo que, así que
+                </li>
+                <li>
+                    <strong>Algunas veces</strong>: <em>Evitar esta frase y ser más específico.</em>
+                    <br><strong>Sustitutos:</strong> ocasionalmente, en ocasiones
+                </li>
+                <li>
+                    <strong>De todos modos</strong>: <em>Evitar esta frase y ser más específico.</em>
+                    <br><strong>Sustitutos:</strong> en cualquier caso, de cualquier forma
+                </li>
+            </ul>
+        </section>
+
+        <p id="version">Versión: 0.5.1</p>
     </div>
 
 </body>

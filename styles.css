@@ -385,7 +385,7 @@ strong {
     font-weight: bold;
 }
 
-i {
+i, em {
     font-style: italic;
 }
 
@@ -676,7 +676,8 @@ input:checked+.slider::before {
 /* Estilos para la sección de reglas de redacción */
 #reglas,
 #citas,
-#conectivos {
+#conectivos,
+#palabras {
     padding: 2rem;
     border-radius: var(--radius);
     background-color: var(--color-secondary-bg);
@@ -685,7 +686,9 @@ input:checked+.slider::before {
 
 #reglas h2,
 #citas h2,
-#conectivos h2 {
+#conectivos h2,
+#sinonimos h2,
+#palabras h2 {
     margin-bottom: 1.5rem;
     font-size: 2em;
     font-weight: bold;
@@ -693,7 +696,8 @@ input:checked+.slider::before {
 }
 
 #reglas li,
-#citas li {
+#citas li,
+#palabras li  {
     margin: 1rem 0;
     padding: 1rem;
     border-left: 0.25rem solid var(--primary-color);
@@ -701,13 +705,19 @@ input:checked+.slider::before {
 }
 
 #reglas li:hover,
-#citas li:hover {
+#citas li:hover,
+#palabras li:hover {
     background-color: rgba(110, 142, 251, 0.1);
 }
 
 #reglas li strong,
-#citas li strong {
+#citas li strong,
+#palabras li strong {
     color: var(--primary-color);
+}
+
+#palabras p{
+    margin-bottom: 2rem;
 }
 
 
