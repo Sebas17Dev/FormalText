@@ -417,7 +417,7 @@ function checkDocument() {
 
                     if (checkMarkRepeatedWords.checked) {
                         const regex = new RegExp(`\\b${originalWordsMap[word]}\\b`, 'gi');
-                        highlightedText = highlightedText.replace(regex, `<span class="repeated-word-highlight">${originalWordsMap[word]}</span>`);
+                        highlightedText = highlightedText.replace(regex, `<span class="repeated-word-highlight" title="Se repite ${count} veces">${originalWordsMap[word]}</span>`);
                     }
                 }
             });
