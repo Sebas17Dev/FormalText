@@ -385,7 +385,7 @@ strong {
     font-weight: bold;
 }
 
-i{
+i {
     font-style: italic;
 }
 
@@ -674,32 +674,39 @@ input:checked+.slider::before {
 
 
 /* Estilos para la sección de reglas de redacción */
-#reglas, #citas, #conectivos{
+#reglas,
+#citas,
+#conectivos {
     padding: 2rem;
     border-radius: var(--radius);
     background-color: var(--color-secondary-bg);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-#reglas h2, #citas h2, #conectivos h2 {
+#reglas h2,
+#citas h2,
+#conectivos h2 {
     margin-bottom: 1.5rem;
     font-size: 2em;
     font-weight: bold;
     color: var(--primary-color);
 }
 
-#reglas li , #citas li{
+#reglas li,
+#citas li {
     margin: 1rem 0;
     padding: 1rem;
     border-left: 0.25rem solid var(--primary-color);
     transition: background-color var(--transition-medium);
 }
 
-#reglas li:hover, #citas li:hover {
-    background-color: rgba(110, 142, 251, 0.1); 
+#reglas li:hover,
+#citas li:hover {
+    background-color: rgba(110, 142, 251, 0.1);
 }
 
-#reglas li strong, #citas li strong {
+#reglas li strong,
+#citas li strong {
     color: var(--primary-color);
 }
 
@@ -811,7 +818,17 @@ input[type="checkbox"]:checked+label::before::after {
 }
 
 #btn-review:hover {
-    background-color: #005bb5;
+    background-color: #1c80e4;
+    transform: translateY(-2px);
+}
+
+#btn-upload {
+    background-color: #4caf50;
+    transition: background-color 0.3s var(--transition-timing-function-default), transform 0.2s var(--transition-timing-function-default);
+}
+
+#btn-upload:hover {
+    background-color: #45a049;
     transform: translateY(-2px);
 }
 
@@ -827,6 +844,7 @@ input[type="checkbox"]:checked+label::before::after {
 }
 
 #btn-review span,
+#btn-upload span,
 #btn-clear span {
     font-size: 0.8em;
 }
@@ -905,7 +923,7 @@ input[type="checkbox"]:checked+label::before::after {
         height: 150px;
     }
 
-    .checkbox-wrapper{
+    .checkbox-wrapper {
         font-size: 0.9em;
     }
 
@@ -923,27 +941,29 @@ input[type="checkbox"]:checked+label::before::after {
         align-items: center;
     }
 
-    .counts{
+    .counts {
         font-size: 0.9em;
     }
-    
-    .button-group{
+
+    .button-group {
         flex-wrap: wrap-reverse;
     }
 
-    .example{
+    .example {
         padding: 0.2rem;
     }
 
-    #reglas, #citas {
+    #reglas,
+    #citas {
         padding: 1rem;
     }
 
-    #reglas li, #citas li{
+    #reglas li,
+    #citas li {
         padding: 0.5rem;
     }
 
-    blockquote{
+    blockquote {
         font-size: 0.9em;
     }
 }

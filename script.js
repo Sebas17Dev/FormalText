@@ -18,8 +18,10 @@ const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
+const fileInput = document.getElementById('file-input');
 const shortcutClearText = document.getElementById("shortcut-clear-text");
 const shortcutReviewText = document.getElementById("shortcut-review-text");
+const shortcutUploadText = document.getElementById('shortcut-upload-text');
 const wordCountDisplay = document.getElementById("word-count");
 const charCountDisplay = document.getElementById("char-count");
 const paragraphCountDisplay = document.getElementById("paragraph-count");
@@ -98,7 +100,6 @@ const consoleStyles = `
 const customMessage = "¡Hola! Esta aplicación web fue hecha con HTML, CSS, y JavaScript. Espero que te sea de mucha utilidad ★•`‿↼";
 console.log("%c" + customMessage, consoleStyles);
 
-
 // Función para detectar el sistema operativo
 const getOperatingSystem = () => {
     const userAgent = window.navigator.userAgent;
@@ -117,9 +118,11 @@ const updateButtonText = () => {
     if (os === "Windows" || os === "Linux") {
         shortcutClearText.innerHTML = "(Ctrl + L)";
         shortcutReviewText.innerHTML = "(Ctrl + Enter)";
+        shortcutUploadText.innerHTML = "(Ctrl + U)";
     } else if (os === "MacOS") {
         shortcutClearText.innerHTML = "(Cmd + L)";
         shortcutReviewText.innerHTML = "(Cmd + Enter)";
+        shortcutUploadText.innerHTML = "(Cmd + U)";
     }
 }
 
@@ -616,6 +619,72 @@ documentInput.addEventListener('input', () => {
     updateAverages();
 });
 
+fileInput.addEventListener('change', event => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        // Verifica el tipo de archivo
+        if (file.type === "text/plain") {
+            reader.onload = e => {
+                documentInput.innerText = e.target.result;
+            }
+            reader.readAsText(file);  // Lee el archivo como texto
+
+        } else if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+            // Usamos Mammoth.js para archivos .docx
+            reader.onload = e => {
+                const arrayBuffer = e.target.result;
+                mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                    .then(result => {
+                        documentInput.innerHTML = result.value;
+                    })
+                    .catch(err => {
+                        console.error("Error al convertir el archivo .docx: ", err);
+                        alert("No se pudo procesar el archivo .docx");
+                    });
+            };
+            reader.readAsArrayBuffer(file);  // Lee el archivo como un array buffer
+
+        } else if (file.type === "application/pdf") {
+            // Usamos pdf.js para leer archivos PDF
+            const pdfReader = new FileReader();
+            pdfReader.onload = e => {
+                const typedArray = new Uint8Array(e.target.result);
+                pdfjsLib.getDocument(typedArray).promise.then(pdf => {
+                    let textContent = "";
+                    let promises = [];
+
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        promises.push(
+                            pdf.getPage(i).then(page => {
+                                return page.getTextContent().then(text => {
+                                    text.items.forEach(item => {
+                                        textContent += item.str + " ";  // Concatenar el texto de cada página
+                                    });
+                                });
+                            })
+                        );
+                    }
+
+                    // Esperamos a que todas las promesas de las páginas se resuelvan
+                    Promise.all(promises).then(() => {
+                        documentInput.innerText = textContent;  // Mostrar el contenido del PDF
+                    });
+                }).catch(err => {
+                    console.error("Error al procesar el archivo PDF: ", err);
+                    alert("No se pudo procesar el archivo PDF");
+                });
+            };
+            pdfReader.readAsArrayBuffer(file);  // Lee el archivo como un array buffer
+
+        } else {
+            alert("Por favor, sube un archivo válido (.txt, .docx, .pdf).");
+        }
+    }
+});
+
+
 // Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
 documentInput.addEventListener('paste', event => {
     event.preventDefault();
@@ -631,20 +700,24 @@ reviewButton.addEventListener('click', () => {
     isReviewing = false;
 });
 
-// Escucha el evento de teclado
-document.addEventListener('keydown', event => {
-    if (event.ctrlKey && event.key === 'Enter') {
-        event.preventDefault();
-        checkDocument();
-    }
-});
-
 // Evento del botón de limpiar
 clearButton.addEventListener("click", clearDocument);
 
 // Escucha el evento de teclado
 document.addEventListener('keydown', event => {
-    if (event.ctrlKey && event.key === 'l') {
+    const isCtrlOrCmd = event.ctrlKey || event.metaKey;
+
+    if (isCtrlOrCmd && event.key === 'Enter') {
+        event.preventDefault();
+        checkDocument();
+    }
+
+    if (isCtrlOrCmd && event.key.toLowerCase() === 'u') {
+        event.preventDefault();
+        fileInput.click();
+    }
+
+    if (isCtrlOrCmd && event.key.toLowerCase() === 'l') {
         event.preventDefault();
         clearDocument();
     }
