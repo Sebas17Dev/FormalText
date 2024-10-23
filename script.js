@@ -18,6 +18,8 @@ const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
+const shortcutClearText = document.getElementById("shortcut-clear-text");
+const shortcutReviewText = document.getElementById("shortcut-review-text");
 const wordCountDisplay = document.getElementById("word-count");
 const charCountDisplay = document.getElementById("char-count");
 const paragraphCountDisplay = document.getElementById("paragraph-count");
@@ -96,6 +98,31 @@ const consoleStyles = `
 const customMessage = "¡Hola! Esta aplicación web fue hecha con HTML, CSS, y JavaScript. Espero que te sea de mucha utilidad ★•`‿↼";
 console.log("%c" + customMessage, consoleStyles);
 
+
+// Función para detectar el sistema operativo
+const getOperatingSystem = () => {
+    const userAgent = window.navigator.userAgent;
+    if (userAgent.includes("Windows")) return "Windows";
+    if (userAgent.includes("Mac")) return "MacOS";
+    if (userAgent.includes("Linux")) return "Linux";
+    if (userAgent.includes("Android")) return "Android";
+    if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
+    return "Other";
+}
+
+// Función para ajustar los textos de los botones
+const updateButtonText = () => {
+    const os = getOperatingSystem();
+
+    if (os === "Windows" || os === "Linux") {
+        shortcutClearText.innerHTML = "(Ctrl + L)";
+        shortcutReviewText.innerHTML = "(Ctrl + Enter)";
+    } else if (os === "MacOS") {
+        shortcutClearText.innerHTML = "(Cmd + L)";
+        shortcutReviewText.innerHTML = "(Cmd + Enter)";
+    }
+}
+
 //Funciones para mostrar u ocultar navbar
 const showSidebar = () => sidebar.classList.add('active');
 const hideSidebar = () => sidebar.classList.remove('active');
@@ -152,7 +179,7 @@ const getNumberFromWords = (words, startIndex) => {
     let i = startIndex + 1;
 
     let lastWasThousand = false; // Para controlar cuando encontramos "mil"
-    
+
     // Mientras se encuentren más palabras numéricas, continuar formando el número
     while (i < words.length && (words[i].toLowerCase() === 'y' || numberWords[words[i].toLowerCase()] !== undefined)) {
         fullNumberWord += ' ' + words[i]; // Concatenar la palabra actual
@@ -660,3 +687,4 @@ checkboxes.forEach(({ element, key }) => {
     element.addEventListener("change", () => handleCheckboxChange({ element, key }));
 });
 
+updateButtonText();

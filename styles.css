@@ -589,33 +589,12 @@ input:checked+.slider::before {
 
 
 /* Estilos para los conectivos recomendados */
-.recommended-connectors {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: var(--color-primary-bg);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.recommended-connectors h2 {
-    display: flex;
-    margin-bottom: 2rem;
-    font-size: 1.8em;
-    font-weight: 600;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.recommended-connectors h2 i {
-    margin-right: 10px;
-}
-
 .connector-category {
     margin-bottom: 1.5rem;
     padding: 20px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-primary-text);
     border-radius: 8px;
-    background-color: var(--color-secondary-bg);
+    background-color: var(--color-primary-bg);
     transition: box-shadow 0.3s var(--transition-timing-function-default);
 }
 
@@ -695,14 +674,14 @@ input:checked+.slider::before {
 
 
 /* Estilos para la sección de reglas de redacción */
-#reglas, #citas {
+#reglas, #citas, #conectivos{
     padding: 2rem;
     border-radius: var(--radius);
     background-color: var(--color-secondary-bg);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-#reglas h2, #citas h2 {
+#reglas h2, #citas h2, #conectivos h2 {
     margin-bottom: 1.5rem;
     font-size: 2em;
     font-weight: bold;
@@ -901,10 +880,6 @@ input[type="checkbox"]:checked+label::before::after {
     .counts {
         flex-direction: column;
         gap: 0.5rem;
-    }
-
-    .recommended-connectors h2 {
-        font-size: 1.5em;
     }
 
     .connector-category h3 {
