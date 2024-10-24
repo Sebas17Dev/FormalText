@@ -86,6 +86,7 @@ const firstAndSecondPersonVerbs = [
 
 const inclusiveLanguage = ['todas', 'todos', 'nosotras', 'nosotros', 'ustedes'];
 let isReviewing = false;
+let hasErrors = false; // Inicializar con la suposición de que no hay errores
 
 // Custom message
 const consoleStyles = `
@@ -103,12 +104,12 @@ console.log("%c" + customMessage, consoleStyles);
 
 // Función para detectar el sistema operativo
 const getOperatingSystem = () => {
-    const userAgent = window.navigator.userAgent;
-    if (userAgent.includes("Windows")) return "Windows";
-    if (userAgent.includes("Mac")) return "MacOS";
-    if (userAgent.includes("Linux")) return "Linux";
-    if (userAgent.includes("Android")) return "Android";
-    if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    if (userAgent.includes("windows")) return "Windows";
+    if (userAgent.includes("mac")) return "MacOS";
+    if (userAgent.includes("linux")) return "Linux";
+    if (userAgent.includes("android")) return "Android";
+    if (/iphone|ipad|ipod/.test(userAgent)) return "iOS";
     return "Other";
 }
 
@@ -124,7 +125,7 @@ const updateButtonText = () => {
         shortcutClearText.innerHTML = "(Cmd + L)";
         shortcutReviewText.innerHTML = "(Cmd + Enter)";
         shortcutUploadText.innerHTML = "(Cmd + U)";
-    }else if (os === "Android" || os === "iOS") {
+    } else if (os === "Android" || os === "iOS") {
         shortcutClearText.innerHTML = "";
         shortcutReviewText.innerHTML = "";
         shortcutUploadText.innerHTML = "";
@@ -327,8 +328,7 @@ const checkPronounsUsage = documentText => {
         }
 
         feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene pronombres, verbos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.<br>`;
-        feedbackDiv.classList.remove("hidden", "success");
-        feedbackDiv.classList.add("error");
+        hasErrors = true;
     } else {
         feedbackDiv.innerHTML += `<i class="fa-solid fa-check-circle"></i> El texto está correctamente escrito en tercera persona.<br>`;
     }
@@ -357,6 +357,7 @@ function checkDocument() {
     let wordOccurrences = {}; // Para almacenar las ocurrencias de cada palabra
     let repeatedWordsPerParagraph = {}; // Para almacenar palabras repetidas por párrafo
     let tooLongParagraphs = [];
+    let allParagraphsWithinLimit = true;
     let numberFormatIssues = [];
 
     // Dividir el texto en párrafos
@@ -370,6 +371,7 @@ function checkDocument() {
         // Verificar si el párrafo excede el límite de palabras
         if (checkParagraphLength.checked && wordsInParagraph > maxWordsPerParagraph) {
             tooLongParagraphs.push(`Párrafo ${paragraphIndex + 1} (${wordsInParagraph} palabras)`);
+            allParagraphsWithinLimit = false;
         }
 
         // Procesar el texto de cada párrafo
@@ -464,37 +466,36 @@ function checkDocument() {
 
     let feedbackContent = ""; // Variable temporal para acumular el contenido
 
-    // Condiciones finales combinadas
-    if (foundInformalWords || (checkParagraphLength.checked && tooLongParagraphs.length > 0)) {
-        if (foundInformalWords) {
-            feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
-        }
+    // Condiciones finales para palabras no formales
+    if (foundInformalWords) {
+        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+        hasErrors = true;
+    } else {
+        feedbackContent += `<i class="fa-solid fa-check-circle"></i> El texto no contiene palabras informales.<br>`;
+    }
 
-        if (checkParagraphLength.checked && tooLongParagraphs.length > 0) {
+    // Verificar longitud de los párrafos
+    if (checkParagraphLength.checked) {
+        if (tooLongParagraphs.length > 0) {
             feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite recomendado de ${maxWordsPerParagraph} palabras:<br><ul>`;
             tooLongParagraphs.forEach(paragraph => {
                 feedbackContent += `<li>${paragraph}</li>`;
             });
             feedbackContent += `</ul>`;
+            hasErrors = true;
+        } else {
+            feedbackContent += `<i class="fa-solid fa-check-circle"></i> La longitud de todos los párrafos es adecuada.<br>`;
         }
-
-        feedbackDiv.classList.remove("hidden", "success", "warning");
-        feedbackDiv.classList.add("error");
-    } else {
-        feedbackContent += `<i class="fa-solid fa-check-circle"></i> El documento está correcto.`;
-        feedbackDiv.classList.remove("hidden", "error", "warning");
-        feedbackDiv.classList.add("success");
     }
 
     // Verificar si hubo problemas con el formato de los números
     if (numberFormatIssues.length > 0) {
         feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
-        feedbackDiv.classList.remove("hidden", "success", "warning");
-        feedbackDiv.classList.add("error");
         numberFormatIssues.forEach(issue => {
             feedbackContent += `<li>${issue}</li>`;
         });
         feedbackContent += `</ul>`;
+        hasErrors = true;
     }
 
     // Actualizar el contenido del feedbackDiv
@@ -509,14 +510,30 @@ function checkDocument() {
     if (checkRepeatedWords.checked) {
         showRepeatedWordsByParagraph(repeatedWordsPerParagraph);
     }
+
+    // Actualizar el estado final del feedbackDiv basado en si hubo errores o no
+    if (hasErrors) {
+        feedbackDiv.classList.remove('hidden', "success", 'warning',);
+        feedbackDiv.classList.add("error");
+    } else {
+        feedbackDiv.classList.remove("hidden", "error", "warning");
+        feedbackDiv.classList.add("success");
+    }
+
+    // Mostrar mensaje si no hay ningún error
+    if (!hasErrors) {
+        feedbackDiv.insertAdjacentHTML('afterbegin', `<i class="fa-solid fa-star"></i> El texto no contiene errores de redacción. ¡Buen trabajo!`);
+    }
+
+    hasErrors = false;
 }
 
 // Función para mostrar palabras repetidas por párrafo
 const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
     let repeatedWordsHtml = `
         <div class="repeated-words-section">
-            <i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong>
-            <ul class="repeated-words-list">`;
+        <div><i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong></div>
+        <ul class="repeated-words-list">`;
 
     let hasRepeatedWords = false;
 
