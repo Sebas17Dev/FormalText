@@ -124,6 +124,10 @@ const updateButtonText = () => {
         shortcutClearText.innerHTML = "(Cmd + L)";
         shortcutReviewText.innerHTML = "(Cmd + Enter)";
         shortcutUploadText.innerHTML = "(Cmd + U)";
+    }else if (os === "Android" || os === "iOS") {
+        shortcutClearText.innerHTML = "";
+        shortcutReviewText.innerHTML = "";
+        shortcutUploadText.innerHTML = "";
     }
 }
 
