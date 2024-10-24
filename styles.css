@@ -385,7 +385,8 @@ strong {
     font-weight: bold;
 }
 
-i, em {
+i,
+em {
     font-style: italic;
 }
 
@@ -684,6 +685,8 @@ input:checked+.slider::before {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+
+
 #reglas h2,
 #citas h2,
 #conectivos h2,
@@ -697,7 +700,7 @@ input:checked+.slider::before {
 
 #reglas li,
 #citas li,
-#palabras li  {
+#palabras li {
     margin: 1rem 0;
     padding: 1rem;
     border-left: 0.25rem solid var(--primary-color);
@@ -716,7 +719,7 @@ input:checked+.slider::before {
     color: var(--primary-color);
 }
 
-#palabras p{
+#palabras p {
     margin-bottom: 2rem;
 }
 
@@ -859,7 +862,7 @@ input[type="checkbox"]:checked+label::before::after {
     font-size: 0.8em;
 }
 
-
+/* version styles */
 #version {
     position: relative;
     bottom: 0;
@@ -869,6 +872,47 @@ input[type="checkbox"]:checked+label::before::after {
     color: var(--primary-color);
     text-align: center;
 }
+
+
+/* Footer styles */
+footer {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    font-size: 0.8em;
+    text-align: center;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-autor {
+    position: relative;
+    font-weight: bold;
+    cursor: default;
+    transition: color 0.3s ease-in-out;
+}
+
+.highlight-autor::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #ff6b6b, #f4c430, #1dd1a1);
+    content: '';
+    transition: transform 0.3s ease-in-out;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+}
+
+.highlight-autor:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.highlight-autor:hover {
+    color: var(--primary-color);
+}
+
 
 .hidden {
     display: none;
@@ -935,6 +979,10 @@ input[type="checkbox"]:checked+label::before::after {
 
     .checkbox-wrapper {
         font-size: 0.9em;
+    }
+
+    #conectivos {
+        padding: 0.5rem;
     }
 
     .recommended-connectors h2 {

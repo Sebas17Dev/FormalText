@@ -761,6 +761,3 @@ checkboxes.forEach(({ element, key }) => {
 });
 
 updateButtonText();
-
-
-
