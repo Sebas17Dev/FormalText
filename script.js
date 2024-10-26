@@ -285,7 +285,7 @@ const checkPronounsUsage = documentText => {
     paragraphs.forEach((paragraph, paragraphIndex) => {
         const wordsInParagraph = normalizeWord(paragraph).split(/\s+/);
         foundPronouns[paragraphIndex + 1] = [];
-        foundVerbs[paragraphIndex + 1] = []; // Crear lista para verbos
+        foundVerbs[paragraphIndex + 1] = []; 
         foundInclusiveTerms[paragraphIndex + 1] = [];
 
         wordsInParagraph.forEach(word => {
@@ -294,8 +294,8 @@ const checkPronounsUsage = documentText => {
                 hasPronouns = true;
             }
             if (firstAndSecondPersonVerbs.includes(word)) {
-                foundVerbs[paragraphIndex + 1].push(word); // Agregar verbo encontrado
-                hasVerbs = true; // Marcar que se han encontrado verbos
+                foundVerbs[paragraphIndex + 1].push(word);
+                hasVerbs = true;
             }
             if (inclusiveLanguage.includes(word)) {
                 foundInclusiveTerms[paragraphIndex + 1].push(word);
@@ -308,31 +308,32 @@ const checkPronounsUsage = documentText => {
         if (hasPronouns) {
             Object.entries(foundPronouns).forEach(([paragraphIndex, pronouns]) => {
                 if (pronouns.length > 0) {
-                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${pronouns.join(', ')}. <br>`;
+                    feedbackMessage += `<div class="feedback-pronoun"><b>En el párrafo ${paragraphIndex}:</b> ${pronouns.join(', ')} (pronombres).</div>`;
                 }
             });
         }
         if (hasVerbs) {
             Object.entries(foundVerbs).forEach(([paragraphIndex, verbs]) => {
                 if (verbs.length > 0) {
-                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${verbs.join(', ')} (verbos). <br>`;
+                    feedbackMessage += `<div class="feedback-verb"><b>En el párrafo ${paragraphIndex}:</b> ${verbs.join(', ')} (verbos).</div>`;
                 }
             });
         }
         if (hasInclusiveLanguage) {
             Object.entries(foundInclusiveTerms).forEach(([paragraphIndex, terms]) => {
                 if (terms.length > 0) {
-                    feedbackMessage += `En el párrafo ${paragraphIndex}: ${terms.join(', ')} (términos inclusivos). <br>`;
+                    feedbackMessage += `<div class="feedback-inclusive"><b>En el párrafo ${paragraphIndex}:</b> ${terms.join(', ')} (términos inclusivos).</div>`;
                 }
             });
         }
 
-        feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene pronombres, verbos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.<br>`;
+        feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene elementos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.<br>`;
         hasErrors = true;
     } else {
         feedbackDiv.innerHTML += `<i class="fa-solid fa-check-circle"></i> El texto está correctamente escrito en tercera persona.<br>`;
     }
 }
+
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
