@@ -5,7 +5,8 @@ const sections = {
     reglas: document.getElementById('reglas'),
     conectivos: document.getElementById('conectivos'),
     citas: document.getElementById('citas'),
-    palabras: document.getElementById('palabras')
+    palabras: document.getElementById('palabras'),
+    diccionario: document.getElementById('diccionario')
 };
 const feedbackDiv = document.getElementById("feedback");
 const documentInput = document.getElementById('document-input');
@@ -29,6 +30,8 @@ const paragraphCountDisplay = document.getElementById("paragraph-count");
 const avgWordsInParagraphsDisplay = document.getElementById("avg-words-in-paragraphs");
 const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-in-paragraphs");
 const exampleButtons = document.querySelectorAll('.btn.show-example');
+const btnDiccionarioRae = document.getElementById("btn-diccionario-rae");
+const palabraBuscarRae = document.getElementById("palabra-buscar-rae");
 const checkboxes = [
     { element: checkRepeatedWords, key: "checkRepeatedWords" },
     { element: checkMarkRepeatedWords, key: "checkMarkPepeatedWords" },
@@ -506,7 +509,7 @@ function checkDocument() {
         });
         feedbackContent += `</ul></div>`;
         hasErrors = true;
-    }else {
+    } else {
         feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El formato de los números es correcto.</div>`;
     }
 
@@ -785,6 +788,16 @@ window.addEventListener("load", () => {
     for (const [key, checkbox] of Object.entries(checkboxes)) {
         const savedValue = localStorage.getItem(key);
         checkbox.checked = savedValue === "true";
+    }
+});
+
+btnDiccionarioRae.addEventListener("click", () => {
+    const palabra = palabraBuscarRae.value.trim();
+    if (palabra) {
+        const url = `https://dle.rae.es/${palabra}`;
+        window.open(url, "_blank");
+    } else {
+        alert("Por favor, ingrese una palabra para buscar en el diccionario de la RAE.");
     }
 });
 

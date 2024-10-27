@@ -33,6 +33,7 @@
             <li><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li><a href="#" data-section="citas">Citas</a></li>
             <li><a href="#" data-section="palabras">Palabras a evitar</a></li>
+            <li><a href="#" data-section="diccionario">Diccionario según RAE</a></li>
         </ul>
         <ul>
             <li>
@@ -50,6 +51,7 @@
             <li class="hide-on-mobile"><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="citas">Citas</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="palabras">Palabras a evitar</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="diccionario">Diccionario según RAE</a></li>
             <li class="menu-button" onclick="showSidebar()"><a href="#"><i class="fa-solid fa-bars"></i></a></li>
         </ul>
     </nav>
@@ -1162,7 +1164,20 @@
             </ul>
         </section>
 
-        <p id="version">Versión: 0.6.0</p>
+        <!-- Sección para consultar el diccionario de la RAE -->
+        <section id="diccionario">
+            <h2><i class="fa-solid fa-book"></i> Diccionario según RAE</h2>
+            <label for="palabra-buscar-rae">Ingrese una palabra para consultar su significado y sinónimos según la RAE (Diccionario de la Lengua Española)</label>
+
+            <div class="diccionario-input">
+                <input type="text" id="palabra-buscar-rae" placeholder="Escribe una palabra...">
+                <button class="btn" id="btn-diccionario-rae">
+                    <i class="fa-solid fa-search"></i> Buscar en RAE
+                </button>
+            </div>
+        </section>
+
+        <p id="version">Versión: 0.6.1</p>
     </div>
 
     <footer>
