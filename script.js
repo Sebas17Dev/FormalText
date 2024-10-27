@@ -585,8 +585,8 @@ const countWords = text => {
 
 // Función para contar caracteres
 const countCharacters = text => {
-    return text.length;
-}
+    return text.trim().length; // Retorna 0 si el texto está vacío o solo contiene espacios
+};
 
 // Función para contar párrafos
 const countParagraphs = text => {
@@ -665,6 +665,8 @@ fileInput.addEventListener('change', event => {
         if (file.type === "text/plain") {
             reader.onload = e => {
                 documentInput.innerText = e.target.result;
+                updateCounts();
+                updateAverages();
             }
             reader.readAsText(file);  // Lee el archivo como texto
 
@@ -675,6 +677,8 @@ fileInput.addEventListener('change', event => {
                 mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
                     .then(result => {
                         documentInput.innerHTML = result.value;
+                        updateCounts();
+                        updateAverages();
                     })
                     .catch(err => {
                         console.error("Error al convertir el archivo .docx: ", err);
@@ -707,6 +711,8 @@ fileInput.addEventListener('change', event => {
                     // Esperamos a que todas las promesas de las páginas se resuelvan
                     Promise.all(promises).then(() => {
                         documentInput.innerText = textContent;  // Mostrar el contenido del PDF
+                        updateCounts();
+                        updateAverages();
                     });
                 }).catch(err => {
                     console.error("Error al procesar el archivo PDF: ", err);
@@ -718,6 +724,7 @@ fileInput.addEventListener('change', event => {
         } else {
             alert("Por favor, sube un archivo válido (.txt, .docx, .pdf).");
         }
+
     }
 });
 
@@ -824,4 +831,3 @@ checkboxes.forEach(({ element, key }) => {
 });
 
 updateButtonText();
-
