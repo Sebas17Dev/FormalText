@@ -990,8 +990,11 @@ input[type="checkbox"]:checked+label::before::after {
 }
 
 #btn-upload {
+    display: flex;
     background-color: #4caf50;
     transition: background-color 0.3s var(--transition-timing-function-default), transform 0.2s var(--transition-timing-function-default);
+    flex-direction: column;
+    justify-content: center;
 }
 
 #btn-upload:hover {

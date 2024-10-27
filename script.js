@@ -179,6 +179,7 @@ const clearDocument = () => {
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
 }
 
+
 // Función para normalizar el texto eliminando acentos y caracteres especiales
 const normalizeWord = word => {
     return word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Elimina acentos
@@ -225,16 +226,16 @@ const validateNumberFormat = (paragraphText, paragraphIndex) => {
     let i = 0;
 
     while (i < words.length) {
-        const originalWord = words[i];
+        const originalWord = words[i].replace(/[.,;:!?{}]/g, ''); // Eliminar puntuación para la comparación
 
         // Verificar si es un número compuesto (ej: "ochenta y nueve")
         if (numberWords[originalWord.toLowerCase()] !== undefined) {
             const { fullNumberWord, numValue, endIndex } = getNumberFromWords(words, i);
             let nextWord = words[endIndex + 1] ? words[endIndex + 1].trim() : null;
 
-            // Normalizar la siguiente palabra para ignorar signos de puntuación comunes (coma, punto, punto y coma)
+            // Normalizar la siguiente palabra para ignorar signos de puntuación comunes
             if (nextWord) {
-                nextWord = nextWord.replace(/[.,;:]/g, ''); // Elimina caracteres de puntuación
+                nextWord = nextWord.replace(/[.,;:!?{}]/g, ''); // Elimina caracteres de puntuación
             }
 
             // Si la siguiente palabra no es el número en paréntesis
@@ -248,7 +249,7 @@ const validateNumberFormat = (paragraphText, paragraphIndex) => {
         else if (!isNaN(originalWord)) {
             const numValue = parseInt(originalWord, 10);
             const numberAsWord = numberToWord(numValue); // Convertir el número en dígito a su forma en palabras
-            const previousWord = words[i - 1] ? words[i - 1].toLowerCase() : null; // No normalizar aquí, usar directamente
+            const previousWord = words[i - 1] ? words[i - 1].toLowerCase().replace(/[.,;:!?{}]/g, '') : null; // Normalizar la palabra anterior
             let nextWord = words[i + 1] ? words[i + 1].trim() : null;
 
             // Normalizar la siguiente palabra para ignorar signos de puntuación comunes
@@ -267,6 +268,7 @@ const validateNumberFormat = (paragraphText, paragraphIndex) => {
 
     return numberIssues;
 }
+
 
 // Función auxiliar para convertir números a palabras en español (simplificada)
 const numberToWord = num => {
