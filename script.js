@@ -757,6 +757,10 @@ document.addEventListener('keydown', event => {
         event.preventDefault();
         clearDocument();
     }
+
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+        event.preventDefault();
+    }
 });
 
 // Asignar el evento de click a cada botón
@@ -801,9 +805,23 @@ btnDiccionarioRae.addEventListener("click", () => {
     }
 });
 
+// Agregar el evento para detectar "Enter" en el input de ingresar la palabra del diccionario
+palabraBuscarRae.addEventListener("keypress", event => {
+    if (event.key === "Enter") btnDiccionarioRae.click();
+});
+
+document.addEventListener('contextmenu', event => {
+    event.preventDefault();
+});
+
+documentInput.addEventListener('contextmenu', event => {
+    event.stopPropagation(); // Evitar que el evento suba a la ventana
+});
+
 // Agregar eventos para guardar la selección y actualizar el análisis
 checkboxes.forEach(({ element, key }) => {
     element.addEventListener("change", () => handleCheckboxChange({ element, key }));
 });
 
 updateButtonText();
+
