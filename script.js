@@ -285,7 +285,7 @@ const checkPronounsUsage = documentText => {
     paragraphs.forEach((paragraph, paragraphIndex) => {
         const wordsInParagraph = normalizeWord(paragraph).split(/\s+/);
         foundPronouns[paragraphIndex + 1] = [];
-        foundVerbs[paragraphIndex + 1] = []; 
+        foundVerbs[paragraphIndex + 1] = [];
         foundInclusiveTerms[paragraphIndex + 1] = [];
 
         wordsInParagraph.forEach(word => {
@@ -327,13 +327,12 @@ const checkPronounsUsage = documentText => {
             });
         }
 
-        feedbackDiv.innerHTML += `<i class="fa-solid fa-exclamation-circle"></i> El texto contiene elementos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.<br>`;
+        feedbackDiv.innerHTML += `<div class='error'><i class="fa-solid fa-exclamation-circle"></i> El texto contiene elementos de primera o segunda persona o lenguaje inclusivo: ${feedbackMessage} Asegúrese de escribir en tercera persona y evitar el lenguaje inclusivo.</div>`;
         hasErrors = true;
     } else {
-        feedbackDiv.innerHTML += `<i class="fa-solid fa-check-circle"></i> El texto está correctamente escrito en tercera persona.<br>`;
+        feedbackDiv.innerHTML += `<div class='success'><i class="fa-solid fa-check-circle"></i> El texto está correctamente escrito en tercera persona.</div>`;
     }
 }
-
 
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
@@ -457,46 +456,58 @@ function checkDocument() {
     // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
     let explanations = '';
     Object.keys(wordOccurrences).forEach((word) => {
-        const substitutes = informalWordsData[word].substitutes.length > 0 ?
-            ` Posibles sustitutos: ${informalWordsData[word].substitutes.join(', ')}` : '';
-        const occurrencesLinks = wordOccurrences[word].map(id => `<a href="#${id}" class="word-link">${word}</a>`).join(', ');
+        const substitutes = informalWordsData[word].substitutes.length > 0
+            ? `<div class="substitutes">Posibles sustitutos: <span>${informalWordsData[word].substitutes.join(', ')}</span></div>`
+            : '';
+        const occurrencesLinks = wordOccurrences[word]
+            .map(id => `<a href="#${id}" class="word-link">${word}</a>`)
+            .join(', ');
 
         // Crear un div para cada explicación
-        explanations += `<div class="explanation">${occurrencesLinks}: ${informalWordsData[word].explanation}${substitutes}</div>`;
+        explanations += `
+        <div class="explanation">
+            <div class="occurrences">${occurrencesLinks}</div>
+            <div class="description">${informalWordsData[word].explanation}</div>
+            ${substitutes}
+        </div>
+    `;
     });
+
 
     let feedbackContent = ""; // Variable temporal para acumular el contenido
 
     // Condiciones finales para palabras no formales
     if (foundInformalWords) {
-        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br>${explanations}`;
+        feedbackContent += `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> Se han encontrado palabras no formales en el documento:<br><div class='explanations-container'>${explanations}</div></div>`;
         hasErrors = true;
     } else {
-        feedbackContent += `<i class="fa-solid fa-check-circle"></i> El texto no contiene palabras informales.<br>`;
+        feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El texto no contiene palabras informales.<br></div>`;
     }
 
     // Verificar longitud de los párrafos
     if (checkParagraphLength.checked) {
         if (tooLongParagraphs.length > 0) {
-            feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite recomendado de ${maxWordsPerParagraph} palabras:<br><ul>`;
+            feedbackContent += `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> Los siguientes párrafos exceden el límite recomendado de ${maxWordsPerParagraph} palabras:<br><ul>`;
             tooLongParagraphs.forEach(paragraph => {
                 feedbackContent += `<li>${paragraph}</li>`;
             });
-            feedbackContent += `</ul>`;
+            feedbackContent += `</ul></div>`;
             hasErrors = true;
         } else {
-            feedbackContent += `<i class="fa-solid fa-check-circle"></i> La longitud de todos los párrafos es adecuada.<br>`;
+            feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> La longitud de todos los párrafos es adecuada.</div>`;
         }
     }
 
     // Verificar si hubo problemas con el formato de los números
     if (numberFormatIssues.length > 0) {
-        feedbackContent += `<i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
+        feedbackContent += `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
         numberFormatIssues.forEach(issue => {
             feedbackContent += `<li>${issue}</li>`;
         });
-        feedbackContent += `</ul>`;
+        feedbackContent += `</ul></div>`;
         hasErrors = true;
+    }else {
+        feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El formato de los números es correcto.</div>`;
     }
 
     // Actualizar el contenido del feedbackDiv

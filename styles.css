@@ -423,22 +423,68 @@ em {
 }
 
 
-/* Enlaces hacia palabras informales */
+/* Estilos de palabras informales en el feedback */
 .feedback a.word-link {
     padding-bottom: 2px;
-    font-weight: bold;
+    border-bottom: 1px solid transparent;
+    font-weight: 500;
     color: var(--secondary-color);
-    transition: transform 0.3s var(--transition-timing-function-default);
+    transition: color var(--transition-medium) var(--transition-timing-function-default), border-bottom var(--transition-medium) var(--transition-timing-function-default);
 }
 
 .feedback a.word-link:hover {
-    text-decoration: underline;
-    transform: scale(1.05);
+    border-bottom: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.explanations-container {
+    display: flex;
+    margin-block: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-start
 }
 
 .explanation {
-    margin: 5px 0;
-    padding: 10px;
+    min-width: 200px;
+    max-width: 300px;
+    padding: 0.5rem;
+    border-left: 4px solid var(--secondary-color);
+    border-radius: 10px;
+    background-color: #eaeaea;
+    transition: background-color 0.3s var(--transition-timing-function-default), box-shadow 0.3s var(--transition-timing-function-default);
+    flex: 1 1 calc(33.33% - 1rem);
+    /* Ocupan un tercio del ancho en pantallas grandes */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.explanation:hover {
+    background-color: #fafafa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.explanation .occurrences {
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.explanation .description {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #333;
+}
+
+.explanation .substitutes {
+    font-size: 0.85em;
+    color: #555;
+}
+
+.explanation .substitutes span {
+    font-weight: 600;
+    color: var(--secondary-color);
 }
 
 
@@ -522,7 +568,8 @@ input:checked+.slider::before {
     display: flex;
     margin-top: 20px;
     padding: 10px;
-    border-radius: var(--radius);
+    border: 1px solid transparent;
+    border-radius: 5rem;
     font-size: 1.1em;
     box-shadow: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.5);
     flex-direction: column;
@@ -530,18 +577,27 @@ input:checked+.slider::before {
 }
 
 .feedback.success {
-    border: 1px solid var(--success-color);
-    color: var(--success-color);
+    border: 1px solid var(--success-color)
 }
 
 .feedback.error {
-    border: 1px solid var(--error-color);
-    color: var(--error-color); 
+    border: 1px solid var(--error-color)
 }
 
 .feedback.warning {
-    border: 1px solid var(--warning-color);
-    color:  var(--warning-color); 
+    border: 1px solid var(--warning-color)
+}
+
+.success {
+    color: var(--success-color);
+}
+
+.error {
+    color: var(--error-color);
+}
+
+.warning {
+    color: var(--warning-color);
 }
 
 .feedback i {
@@ -554,14 +610,14 @@ input:checked+.slider::before {
     padding: 0.5rem;
     border-bottom: 5px solid #ffa500;
     border-left: 5px solid #ffa500;
-    border-radius: var(--radius);
+    border-radius: 3rem;
 }
 
 .repeated-words-section i {
     margin-top: 0;
 }
 
-.repeated-words-section div{
+.repeated-words-section div {
     display: flex;
     column-gap: 0.5rem;
     justify-content: center;
@@ -606,7 +662,9 @@ input:checked+.slider::before {
 
 
 /* Estilos para los tipos de errores de tercera persona */
-.feedback-pronoun, .feedback-verb, .feedback-inclusive  {
+.feedback-pronoun,
+.feedback-verb,
+.feedback-inclusive {
     margin-block: 0.8rem;
     padding: 0.5rem;
     border-left: 5px solid #FF4500;
@@ -706,13 +764,13 @@ input:checked+.slider::before {
 #citas,
 #conectivos,
 #palabras {
+    position: relative;
     padding: 2rem;
+    padding-top: 3rem;
     border-radius: var(--radius);
     background-color: var(--color-secondary-bg);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-
-
 
 #reglas h2,
 #citas h2,
@@ -843,6 +901,25 @@ input[type="checkbox"]:checked+label::before::after {
     cursor: pointer;
 }
 
+.btn-download {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    z-index: 10;
+    background-color: var(--secondary-color);
+    transition: background-color var(--transition-medium) var(--transition-timing-function-default);
+    align-items: center;
+}
+
+.btn-download i {
+    margin-right: 0.5rem;
+}
+
+.btn-download:hover {
+    background-color: #9e6ade;
+}
+
 .button-group {
     display: flex;
     margin-top: 1.2rem;
@@ -949,7 +1026,8 @@ footer {
     font-size: 1.2em;
     color: gold;
     opacity: 0;
-    content: '★'; /* Carácter estrella */
+    content: '★';
+    /* Carácter estrella */
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     transform: translateX(10px);
 }
@@ -988,6 +1066,19 @@ footer {
 
     header h1 {
         font-size: 2em;
+    }
+
+    #reglas,
+    #citas,
+    #conectivos,
+    #palabras {
+        padding-top: 2rem;
+    }
+
+    .btn-download {
+        position: static;
+        margin-bottom: 1rem;
+        font-size: 0.9em;
     }
 
     textarea,
