@@ -38,7 +38,7 @@ const informalWordsData = {
     },
     'muy': {
         explanation: 'No aporta precisión. Es mejor usar un adjetivo más preciso.',
-        substitutes: []
+        substitutes: ['fundamental', 'crucial']
     },
     'bastante': {
         explanation: 'Es informal.',
@@ -56,9 +56,13 @@ const informalWordsData = {
         explanation: 'Informal.',
         substitutes: ['todos', 'la población general']
     },
-    'bueno/malo': {
+    'bueno': {
         explanation: 'Demasiado subjetivo. Es mejor usar adjetivos más específicos.',
-        substitutes: ['beneficioso', 'positivo', 'adverso', 'inadecuado']
+        substitutes: ['beneficioso', 'positivo']
+    },
+    'malo': {
+        explanation: 'Demasiado subjetivo. Es mejor usar adjetivos más específicos.',
+        substitutes: ['adverso', 'inadecuado']
     },
     'se puede ver': {
         explanation: 'Frase coloquial. Es preferible "se observa", "se percibe", "se aprecia", etc.',
@@ -150,7 +154,107 @@ const informalWordsData = {
     },
     'de alguna manera': {
         explanation: 'Evitar esta frase y ser más directo en la formulación de ideas.',
+        substitutes: ['De un modo particular', 'En ciertos aspectos', 'De una manera más concreta']
+    },
+    'algún tipo de': {
+        explanation: 'Expresión vaga y poco específica. Mejor utilizar términos concretos.',
+        substitutes: ['una variedad de', 'un tipo específico de']
+    },
+    'algo así como': {
+        explanation: 'Expresión poco precisa que puede confundir. Es mejor ser claro.',
+        substitutes: ['similar a', 'parecido a']
+    },
+    'de pronto': {
+        explanation: 'No es adecuado en redacción formal, ya que añade subjetividad.',
+        substitutes: ['inesperadamente']
+    },
+    'se dice': {
+        explanation: 'Introducción informal. En contexto formal, mejor citar fuentes o usar otras expresiones.',
+        substitutes: ['se establece', 'según expertos', 'se ha determinado']
+    },
+    'vale': {
+        explanation: 'Podría reescribirse de forma más formal.',
+        substitutes: ['es relevante considerar', 'es conveniente']
+    },
+    'vale la pena': {
+        explanation: 'Podría reescribirse de forma más formal.',
+        substitutes: ['es relevante considerar', 'es conveniente']
+    },
+    'simplemente': {
+        explanation: 'No aporta valor informativo y puede eliminarse o reformularse.',
         substitutes: []
+    },
+    'claro': {
+        explanation: 'Es informal y subjetivo; mejor expresarlo de forma objetiva.',
+        substitutes: ['evidente', 'notorio']
+    },
+    'seguro': {
+        explanation: 'Puede sonar subjetivo. Mejor usar términos más precisos según el contexto.',
+        substitutes: ['confirmado', 'verificado']
+    },
+    'sólo': {
+        explanation: 'Evitar en textos formales; mejor usar términos específicos.',
+        substitutes: ['únicamente', 'exclusivamente']
+    },
+    'obvio': {
+        explanation: 'Es subjetivo y puede evitarse o sustituirse por términos concretos.',
+        substitutes: ['evidente', 'notorio']
+    },
+    'cosas así': {
+        explanation: 'Es informal y demasiado vago; utilizar términos específicos.',
+        substitutes: ['situaciones similares', 'casos parecidos']
+    },
+    'básico': {
+        explanation: 'Demasiado impreciso. Es mejor usar un término específico según el contexto.',
+        substitutes: ['fundamental', 'esencial', 'primario']
+    },
+    'ideal': {
+        explanation: 'Es subjetivo en textos académicos; mejor usar un término objetivo.',
+        substitutes: ['óptimo', 'adecuado']
+    },
+    'genial': {
+        explanation: 'Es informal y demasiado subjetivo.',
+        substitutes: ['sobresaliente']
+    },
+    'tal cual': {
+        explanation: 'Es una expresión coloquial; mejor eliminar o reformular.',
+        substitutes: []
+    },
+    'así como': {
+        explanation: 'Puede sonar coloquial. En su lugar, usar términos de unión más precisos.',
+        substitutes: ['además de', 'al igual que']
+    },
+    'punto de vista': {
+        explanation: 'Introduce subjetividad. Mejor emplear "perspectiva" o "criterio".',
+        substitutes: ['perspectiva', 'criterio']
+    },
+    'visto así': {
+        explanation: 'Expresión informal; es mejor reformular.',
+        substitutes: ['desde esta perspectiva', 'desde este enfoque']
+    },
+    'probablemente': {
+        explanation: 'Si bien no es incorrecto, en un contexto académico es preferible cambiarlo.',
+        substitutes: ['es probable que', 'es posible que']
+    },
+    'apenas': {
+        explanation: 'Puede resultar poco preciso.',
+        substitutes: ['con dificultad', 'en un grado mínimo']
+    },
+    'aunque sea': {
+        explanation: 'Es una frase informal, eliminar o reformular.',
+        substitutes: []
+    },
+    'como sea': {
+        explanation: 'Frase coloquial que puede reformularse.',
+        substitutes: ['de cualquier modo', 'independientemente de']
+    },
+    'buena idea': {
+        explanation: 'es una frase común en lenguaje coloquial, en un texto científico-académico su ambigüedad y subjetividad no cumplen con las normas.',
+        substitutes: ['propuesta adecuada', 'solución eficaz']
+    },
+    'mala idea': {
+        explanation: 'es una frase común en lenguaje coloquial, en un texto científico-académico su ambigüedad y subjetividad no cumplen con las normas.',
+        substitutes: ['propuesta inconveniente', 'opción inadecuada']
     },
     'maldita': {
         explanation: 'Es una palabra vulgar e inapropiada en textos formales.',
@@ -178,7 +282,7 @@ const informalWordsData = {
     },
     'mierda': {
         explanation: 'Es un término vulgar y no se debe usar en escritos formales.',
-        substitutes: ['desastre', 'problema', 'situación desfavorable']
+        substitutes: ['problema', 'situación desfavorable']
     },
     'imbécil': {
         explanation: 'Es un insulto despectivo y no apropiado en ningún contexto formal.',
@@ -214,7 +318,7 @@ const informalWordsData = {
     },
     'gilipollas': {
         explanation: 'Es un insulto vulgar en España, no adecuado para contextos formales.',
-        substitutes: ['persona imprudente', 'persona necia']
+        substitutes: ['persona imprudente']
     },
     'huevón': {
         explanation: 'Es un insulto coloquial en muchos países latinoamericanos.',
@@ -230,7 +334,7 @@ const informalWordsData = {
     },
     'baboso': {
         explanation: 'Es despectivo e informal.',
-        substitutes: ['persona tonta', 'persona ingenua']
+        substitutes: ['persona ingenua']
     },
     'patán': {
         explanation: 'Es despectivo y no adecuado para textos formales.',
