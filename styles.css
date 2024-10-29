@@ -1090,6 +1090,39 @@ footer {
     transform: translateX(0);
 }
 
+/* Estilos de botón para subir hacia arriba la pantalla */
+#scroll-top-btn {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 999;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    font-size: 1.2em;
+    color: white;
+    background-color: #333;
+    opacity: 0;
+    cursor: pointer; 
+    transition: opacity var(--transition-medium) var(--transition-timing-function-default), font-size var(--transition-medium) var(--transition-timing-function-default);
+    pointer-events: none; 
+}
+
+#scroll-top-btn.show {
+    opacity: 0.7;
+    pointer-events: auto;
+}
+
+#scroll-top-btn:hover {
+    font-size: 1.4em;
+    opacity: 1;
+}
+
+#scroll-top-btn:active {
+    font-size: 1.1em;
+    opacity: 1;
+}
+
 
 .hidden {
     display: none;
@@ -1161,6 +1194,10 @@ footer {
     }
 
     header p {
+        font-size: 1em;
+    }
+
+    .feedback {
         font-size: 1em;
     }
 

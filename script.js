@@ -32,6 +32,7 @@ const avgSentencesInParagraphsDisplay = document.getElementById("avg-sentences-i
 const exampleButtons = document.querySelectorAll('.btn.show-example');
 const btnDiccionarioRae = document.getElementById("btn-diccionario-rae");
 const palabraBuscarRae = document.getElementById("palabra-buscar-rae");
+const scrollTopBtn = document.getElementById("scroll-top-btn");
 const checkboxes = [
     { element: checkRepeatedWords, key: "checkRepeatedWords" },
     { element: checkMarkRepeatedWords, key: "checkMarkPepeatedWords" },
@@ -651,6 +652,20 @@ const toggleExample = button => {
     exampleParagraph.classList.toggle('show');
     button.textContent = exampleParagraph.classList.contains('show') ? 'Ocultar ejemplo' : 'Ver ejemplo';
 }
+
+// Mostrar el botón al desplazarse hacia abajo si la pantalla ha bajado un poco
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) {
+        scrollTopBtn.classList.add("show");
+    } else {
+        scrollTopBtn.classList.remove("show");
+    }
+});
+
+// Función para volver al inicio de la página
+scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 // Escucha el evento 'input' para actualizar en tiempo real
 documentInput.addEventListener('input', () => {
