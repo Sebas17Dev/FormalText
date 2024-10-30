@@ -179,6 +179,7 @@ const clearDocument = () => {
     paragraphCountDisplay.innerText = 'Párrafos: 0';
     avgWordsInParagraphsDisplay.innerText = 'Promedio de palabras en párrafos: 0';
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
+    documentInput.classList.remove('has-content');
 }
 
 
@@ -654,6 +655,75 @@ const toggleExample = button => {
     button.textContent = exampleParagraph.classList.contains('show') ? 'Ocultar ejemplo' : 'Ver ejemplo';
 }
 
+// Función que procesa el archivo en función de su tipo
+const handleFile = (file) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    if (file.type === "text/plain") {
+        reader.onload = e => {
+            documentInput.innerText = e.target.result;
+            updateCounts();
+            updateAverages();
+            documentInput.classList.add("has-content");
+        };
+        reader.readAsText(file);
+
+    } else if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+        reader.onload = e => {
+            const arrayBuffer = e.target.result;
+            mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                .then(result => {
+                    documentInput.innerHTML = result.value;
+                    updateCounts();
+                    updateAverages();
+                    documentInput.classList.add("has-content");
+                })
+                .catch(err => {
+                    console.error("Error al convertir el archivo .docx: ", err);
+                    alert("No se pudo procesar el archivo .docx");
+                });
+        };
+        reader.readAsArrayBuffer(file);
+
+    } else if (file.type === "application/pdf") {
+        reader.onload = e => {
+            const typedArray = new Uint8Array(e.target.result);
+            pdfjsLib.getDocument(typedArray).promise.then(pdf => {
+                let textContent = "";
+                let promises = [];
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    promises.push(
+                        pdf.getPage(i).then(page => {
+                            return page.getTextContent().then(text => {
+                                text.items.forEach(item => {
+                                    textContent += item.str + " ";
+                                });
+                            });
+                        })
+                    );
+                }
+
+                Promise.all(promises).then(() => {
+                    documentInput.innerText = textContent;
+                    updateCounts();
+                    updateAverages();
+                    documentInput.classList.add("has-content");
+                });
+            }).catch(err => {
+                console.error("Error al procesar el archivo PDF: ", err);
+                alert("No se pudo procesar el archivo PDF");
+            });
+        };
+        reader.readAsArrayBuffer(file);
+
+    } else {
+        alert("Por favor, sube un archivo válido (.txt, .docx, .pdf).");
+    }
+};
+
 // Mostrar el botón al desplazarse hacia abajo si la pantalla ha bajado un poco
 window.addEventListener("scroll", () => {
     if (window.scrollY > 40) {
@@ -689,84 +759,38 @@ documentInput.addEventListener('paste', event => {
     document.execCommand('insertText', false, cleanedText);
 });
 
+// Permitir que se pueda arrastrar el archivo en el div
+documentInput.addEventListener("dragover", event => {
+    event.preventDefault();
+    documentInput.classList.add("dragging");
+});
+
+documentInput.addEventListener("dragleave", () => {
+    documentInput.classList.remove("dragging");
+});
+
+// Manejar el evento de soltar archivos en el input de ingresar texto
+documentInput.addEventListener("drop", event => {
+    event.preventDefault();
+    documentInput.classList.remove("dragging");
+    handleFile(event.dataTransfer.files[0]);
+});
+
 fileInput.addEventListener('change', event => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-
-        // Verifica el tipo de archivo
-        if (file.type === "text/plain") {
-            reader.onload = e => {
-                documentInput.innerText = e.target.result;
-                updateCounts();
-                updateAverages();
-            }
-            reader.readAsText(file);  // Lee el archivo como texto
-
-        } else if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-            // Usamos Mammoth.js para archivos .docx
-            reader.onload = e => {
-                const arrayBuffer = e.target.result;
-                mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-                    .then(result => {
-                        documentInput.innerHTML = result.value;
-                        updateCounts();
-                        updateAverages();
-                    })
-                    .catch(err => {
-                        console.error("Error al convertir el archivo .docx: ", err);
-                        alert("No se pudo procesar el archivo .docx");
-                    });
-            };
-            reader.readAsArrayBuffer(file);  // Lee el archivo como un array buffer
-
-        } else if (file.type === "application/pdf") {
-            // Usamos pdf.js para leer archivos PDF
-            const pdfReader = new FileReader();
-            pdfReader.onload = e => {
-                const typedArray = new Uint8Array(e.target.result);
-                pdfjsLib.getDocument(typedArray).promise.then(pdf => {
-                    let textContent = "";
-                    let promises = [];
-
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        promises.push(
-                            pdf.getPage(i).then(page => {
-                                return page.getTextContent().then(text => {
-                                    text.items.forEach(item => {
-                                        textContent += item.str + " ";  // Concatenar el texto de cada página
-                                    });
-                                });
-                            })
-                        );
-                    }
-
-                    // Esperamos a que todas las promesas de las páginas se resuelvan
-                    Promise.all(promises).then(() => {
-                        documentInput.innerText = textContent;  // Mostrar el contenido del PDF
-                        updateCounts();
-                        updateAverages();
-                    });
-                }).catch(err => {
-                    console.error("Error al procesar el archivo PDF: ", err);
-                    alert("No se pudo procesar el archivo PDF");
-                });
-            };
-            pdfReader.readAsArrayBuffer(file);  // Lee el archivo como un array buffer
-
-        } else {
-            alert("Por favor, sube un archivo válido (.txt, .docx, .pdf).");
-        }
-
-    }
+    handleFile(event.target.files[0]);
 });
 
 // Función para pegar el texto del portapapeles
 pasteBtn.addEventListener("click", async () => {
     try {
         const text = await navigator.clipboard.readText();
-        documentInput.innerText = text;
-        documentInput.classList.add("has-content");
+
+        if (text.trim() === "") {
+            alert("El portapapeles está vacío. Copia algo primero.");
+        } else {
+            documentInput.innerText = text;
+            documentInput.classList.add("has-content");
+        }
     } catch (err) {
         console.error("Error al pegar el texto:", err);
     }

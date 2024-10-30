@@ -381,8 +381,13 @@ textarea:focus {
     background-color: var(--color-primary-bg);
     outline: none;
     resize: none;
-    transition: border-color 0.3s var(--transition-timing-function-default), background-color 0.3s var(--transition-timing-function-default);
+    transition: border 0.3s var(--transition-timing-function-default), background-color 0.3s var(--transition-timing-function-default);
     overflow-wrap: break-word;
+}
+
+.editable.dragging {
+    border: 2px dashed var(--color-primary-text);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 b,
@@ -942,6 +947,11 @@ input[type="checkbox"]:checked+label::before::after {
     border-radius: 50%;
 }
 
+/* Contenedor padre de editable y el botón de pegar */
+.text-container {
+    position: relative;
+    width: 100%;
+}
 
 /* Estilo general del grupo de botones */
 .btn {
@@ -950,12 +960,6 @@ input[type="checkbox"]:checked+label::before::after {
     color: #fff;
     outline: none;
     cursor: pointer;
-}
-
-/* Contenedor padre de editable y el botón de pegar */
-.text-container {
-    position: relative;
-    width: 100%;
 }
 
 /* Estilos para el botón de "Pegar texto" */
@@ -998,7 +1002,6 @@ input[type="checkbox"]:checked+label::before::after {
 
 /* Estilos para el botones de descargar */
 .btn-download {
-    position: absolute;
     top: 1rem;
     right: 1rem;
     display: inline-flex;
@@ -1006,6 +1009,10 @@ input[type="checkbox"]:checked+label::before::after {
     background-color: var(--secondary-color);
     transition: background-color var(--transition-medium) var(--transition-timing-function-default);
     align-items: center;
+}
+
+h2 + .btn-download {
+    position: absolute;
 }
 
 .btn-download i {
