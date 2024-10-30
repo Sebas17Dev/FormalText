@@ -18,6 +18,7 @@ const checkParagraphLength = document.getElementById("check-paragraph-length");
 const checkNumberFormat = document.getElementById('check-number-format');
 const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-errors");
 const checkAllConnectives = document.getElementById("check-all-connectives");
+const pasteBtn = document.getElementById("paste-btn");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
 const fileInput = document.getElementById('file-input');
@@ -671,6 +672,21 @@ scrollTopBtn.addEventListener("click", () => {
 documentInput.addEventListener('input', () => {
     updateCounts();
     updateAverages();
+
+    // Ajustar opacidad del botón de pegar cuando hay contenido en el área de texto
+    if (documentInput.innerText.trim() !== "") {
+        documentInput.classList.add("has-content");
+    } else {
+        documentInput.classList.remove("has-content");
+    }
+});
+
+// Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
+documentInput.addEventListener('paste', event => {
+    event.preventDefault();
+    const text = (event.clipboardData || window.clipboardData).getData('text');
+    const cleanedText = cleanText(text);
+    document.execCommand('insertText', false, cleanedText);
 });
 
 fileInput.addEventListener('change', event => {
@@ -745,12 +761,15 @@ fileInput.addEventListener('change', event => {
     }
 });
 
-// Escucha el evento 'input' para contar palabras, caracteres y párrafos en tiempo real
-documentInput.addEventListener('paste', event => {
-    event.preventDefault();
-    const text = (event.clipboardData || window.clipboardData).getData('text');
-    const cleanedText = cleanText(text);
-    document.execCommand('insertText', false, cleanedText);
+// Función para pegar el texto del portapapeles
+pasteBtn.addEventListener("click", async () => {
+    try {
+        const text = await navigator.clipboard.readText();
+        documentInput.innerText = text;
+        documentInput.classList.add("has-content");
+    } catch (err) {
+        console.error("Error al pegar el texto:", err);
+    }
 });
 
 // Agregar el evento al botón de revisar
