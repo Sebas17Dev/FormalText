@@ -71,6 +71,7 @@
 ::selection {
     color: var(--color-text-selected);
     background-color: var(--color-bg-selected);
+
 }
 
 ::-moz-selection {
@@ -284,6 +285,13 @@ nav ul:not(.sidebar) li:first-child {
     display: none;
 }
 
+a[data-section]:not(nav a[data-section]) {
+    color: var(--primary-color);
+}
+
+a[data-section]:not(nav a[data-section]):hover {
+    text-decoration: underline;
+}
 
 /* Container */
 .container {
@@ -800,11 +808,11 @@ input:checked+.slider::before {
     transition: background-color var(--transition-medium);
 }
 
-#reglas li ul{
+#reglas li ul {
     text-align: left;
 }
 
-#reglas li ul li{
+#reglas li ul li {
     margin: 0.5rem 0;
     padding: 0.5rem;
 }
@@ -1003,7 +1011,7 @@ input[type="checkbox"]:checked+label::before::after {
     transform: translate(-50%, -5%) scale(0.9);
 }
 
-.editable.has-content + .paste-btn {
+.editable.has-content+.paste-btn {
     opacity: 0;
     pointer-events: none;
 }
@@ -1020,7 +1028,7 @@ input[type="checkbox"]:checked+label::before::after {
     align-items: center;
 }
 
-h2 + .btn-download {
+h2+.btn-download {
     position: absolute;
 }
 
@@ -1230,11 +1238,11 @@ footer {
         flex-direction: row;
     }
 
-    .paste-btn i{
+    .paste-btn i {
         font-size: 1.2em;
     }
 
-    h2 + .btn-download {
+    h2+.btn-download {
         position: static;
         margin-bottom: 1rem;
         font-size: 0.9em;

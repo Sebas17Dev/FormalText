@@ -1,5 +1,5 @@
 const sidebar = document.querySelector('.sidebar');
-const navLinks = document.querySelectorAll('nav a[data-section]');
+const navLinks = document.querySelectorAll('[data-section]');
 const sections = {
     inicio: document.getElementById('inicio'),
     reglas: document.getElementById('reglas'),
@@ -155,6 +155,15 @@ navLinks.forEach(link => {
 
         // Mostrar la sección seleccionada
         sections[sectionId].classList.add('active');
+        
+        const sectionTop = sections[sectionId].offsetTop; // Desplazar la vista hacia la parte superior de la sección seleccionada
+        const headerOffset = 100; //Ajustar valor según navbar
+        const elementPosition = sectionTop - headerOffset;
+
+        window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+        });
 
         // Eliminar clase active de todos los enlaces
         navLinks.forEach(link => {
@@ -181,7 +190,6 @@ const clearDocument = () => {
     avgSentencesInParagraphsDisplay.innerText = 'Promedio de oraciones en párrafos: 0';
     documentInput.classList.remove('has-content');
 }
-
 
 // Función para normalizar el texto eliminando acentos y caracteres especiales
 const normalizeWord = word => {
