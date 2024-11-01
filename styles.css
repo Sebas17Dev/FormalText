@@ -800,6 +800,15 @@ input:checked+.slider::before {
     transition: background-color var(--transition-medium);
 }
 
+#reglas li ul{
+    text-align: left;
+}
+
+#reglas li ul li{
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+}
+
 #reglas li:hover,
 #citas li:hover,
 #palabras li:hover {
@@ -1225,7 +1234,7 @@ footer {
         font-size: 1.2em;
     }
 
-    .btn-download {
+    h2 + .btn-download {
         position: static;
         margin-bottom: 1rem;
         font-size: 0.9em;
