@@ -9,7 +9,7 @@ const informalWordsData = {
         substitutes: ['ausencia', 'carencia']
     },
     'lo que es': {
-        explanation: 'Redundante y poco formal. Es mejor eliminar o simplificar.',
+        explanation: 'Redundante y poco formal. Se recomienda eliminar o simplificar.',
         substitutes: []
     },
     'actualmente': {
@@ -29,15 +29,15 @@ const informalWordsData = {
         substitutes: ['es necesario', 'se requiere', 'debe']
     },
     'poner': {
-        explanation: 'Es demasiado vago. Se recomienda usar otras palabras según el contexto.',
+        explanation: 'Es vago. Se recomienda usar otras palabras según el contexto.',
         substitutes: ['colocar', 'implementar', 'instalar', 'incluir']
     },
     'hacer': {
-        explanation: 'Es demasiado genérico.',
+        explanation: 'Es genérico y poco formal.',
         substitutes: ['realizar', 'desarrollar', 'ejecutar']
     },
     'muy': {
-        explanation: 'No aporta precisión. Es mejor usar un adjetivo más preciso o solo eliminar.',
+        explanation: 'No aporta precisión. Se recomienda usar un adjetivo más preciso o solo eliminar.',
         substitutes: ['fundamental', 'crucial']
     },
     'bastante': {
@@ -57,15 +57,15 @@ const informalWordsData = {
         substitutes: ['todos', 'la población general']
     },
     'bueno': {
-        explanation: 'Demasiado subjetivo. Es mejor usar adjetivos más específicos.',
+        explanation: 'Es subjetivo. Se debe usar adjetivos más específicos.',
         substitutes: ['beneficioso', 'positivo']
     },
     'malo': {
-        explanation: 'Demasiado subjetivo. Es mejor usar adjetivos más específicos.',
+        explanation: 'Es subjetivo. Se debe usar adjetivos más específicos.',
         substitutes: ['adverso', 'inadecuado']
     },
     'se puede ver': {
-        explanation: 'Frase coloquial. Es preferible "se observa", "se percibe", "se aprecia", etc.',
+        explanation: 'Frase coloquial. Es preferible usar otros términos.',
         substitutes: ['se observa', 'se percibe', 'se aprecia']
     },
     'mejor': {
@@ -81,7 +81,7 @@ const informalWordsData = {
         substitutes: ['se considera', 'se observa', 'se ha determinado']
     },
     'sería bueno': {
-        explanation: 'Demasiado coloquial. Mejor usar "sería conveniente", "sería beneficioso", "resulta adecuado".',
+        explanation: ' coloquial.  usar "sería conveniente", "sería beneficioso", "resulta adecuado".',
         substitutes: ['sería conveniente', 'sería beneficioso', 'resulta adecuado']
     },
     'etc.': {
@@ -101,11 +101,11 @@ const informalWordsData = {
         substitutes: ['es evidente que']
     },
     'demasiado poco': {
-        explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
+        explanation: 'En lugar de esto, se deben emplear términos más formales y específicos.',
         substitutes: ['insuficiente']
     },
     'demasiado mucho': {
-        explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
+        explanation: 'En lugar de esto, se deben emplear términos más formales y específicos.',
         substitutes: ['en exceso', 'excesivamente']
     },
     'quizás': {
@@ -121,11 +121,11 @@ const informalWordsData = {
         substitutes: []
     },
     'siempre': {
-        explanation: 'Esta expresión tiende a ser demasiado absoluta.',
+        explanation: 'Esta expresión tiende a ser absoluta.',
         substitutes: ['en la mayoría de los casos', 'generalmente']
     },
     'nunca': {
-        explanation: 'Esta expresión tiende a ser demasiado absoluta.',
+        explanation: 'Esta expresión tiende a ser absoluta.',
         substitutes: ['en la mayoría de los casos', 'generalmente']
     },
     'un poco': {
@@ -133,7 +133,7 @@ const informalWordsData = {
         substitutes: ['ligeramente', 'levemente', 'de forma limitada']
     },
     'más o menos': {
-        explanation: 'Es una expresión informal.',
+        explanation: 'Es una expresión informal y no aceptable en textos científicos.',
         substitutes: ['aproximadamente', 'alrededor de']
     },
     'al parecer': {
@@ -145,7 +145,7 @@ const informalWordsData = {
         substitutes: []
     },
     'ciertamente': {
-        explanation: 'Similar a "obviamente", puede sugerir que algo es verdad sin suficiente evidencia.',
+        explanation: 'Puede sugerir que algo es verdad sin suficiente evidencia.',
         substitutes: ['de acuerdo con', 'según los datos disponibles']
     },
     'es decir': {
@@ -153,7 +153,7 @@ const informalWordsData = {
         substitutes: ['esto significa', 'lo que implica']
     },
     'o sea': {
-        explanation: 'es muy coloquial para redacción formal.',
+        explanation: 'es una expresión coloquial.',
         substitutes: ['esto implica']
     },
     'de alguna manera': {
@@ -165,11 +165,11 @@ const informalWordsData = {
         substitutes: ['de un modo particular', 'de manera específica', 'en ciertos aspectos', 'de una manera más concreta']
     },
     'algún tipo de': {
-        explanation: 'Expresión vaga y poco específica. Mejor utilizar términos concretos.',
+        explanation: 'Expresión vaga y poco específica. Se deben emplear términos concretos.',
         substitutes: ['una variedad de', 'un tipo específico de']
     },
     'algo así como': {
-        explanation: 'Expresión poco precisa que puede confundir. Es mejor ser claro.',
+        explanation: 'Expresión poco precisa que puede confundir. Se debe ser preciso.',
         substitutes: ['similar a', 'parecido a']
     },
     'de pronto': {
@@ -177,7 +177,7 @@ const informalWordsData = {
         substitutes: ['inesperadamente']
     },
     'se dice': {
-        explanation: 'Introducción informal. En contexto formal, mejor citar fuentes o usar otras expresiones.',
+        explanation: 'Introducción informal. En contexto formal, se recomienda citar fuentes o usar otras expresiones.',
         substitutes: ['se establece', 'según expertos', 'se ha determinado']
     },
     'vale': {
@@ -192,16 +192,20 @@ const informalWordsData = {
         explanation: 'No aporta valor informativo y puede eliminarse o reformularse.',
         substitutes: []
     },
+    'simple': {
+        explanation: 'Puede ser poco específico y ambiguo en contextos formales.',
+        substitutes: ['sencillo', 'elemental']
+    },
     'claro': {
-        explanation: 'Es informal y subjetivo; mejor expresarlo de forma objetiva.',
+        explanation: 'Es informal y subjetivo; se debe expresar de forma objetiva.',
         substitutes: ['evidente', 'notorio']
     },
     'seguro': {
-        explanation: 'Puede sonar subjetivo. Mejor usar términos más precisos según el contexto.',
+        explanation: 'Puede sonar subjetivo. Se debe usar términos más precisos según el contexto.',
         substitutes: ['confirmado', 'verificado']
     },
     'sólo': {
-        explanation: 'Evitar en textos formales; mejor usar términos específicos.',
+        explanation: 'Evitar en textos formales; se debe usar términos específicos.',
         substitutes: ['únicamente', 'exclusivamente']
     },
     'obvio': {
@@ -209,23 +213,27 @@ const informalWordsData = {
         substitutes: ['evidente', 'notorio']
     },
     'cosas así': {
-        explanation: 'Es informal y demasiado vago; utilizar términos específicos.',
+        explanation: 'Es informal y vago; utilizar términos específicos.',
         substitutes: ['situaciones similares', 'casos parecidos']
     },
+    'lo que pasa es que': {
+        explanation: 'es coloquial y poco preciso. Reformular directamente o eliminar.',
+        substitutes: []
+    },
     'básico': {
-        explanation: 'Demasiado impreciso. Es mejor usar un término específico según el contexto.',
+        explanation: 'Es impreciso. Se debe usar un término específico según el contexto.',
         substitutes: ['fundamental', 'esencial', 'primario']
     },
     'ideal': {
-        explanation: 'Es subjetivo en textos académicos; mejor usar un término objetivo.',
+        explanation: 'Es subjetivo en textos académicos; se debe usar un término objetivo.',
         substitutes: ['óptimo', 'adecuado']
     },
     'genial': {
-        explanation: 'Es informal y demasiado subjetivo.',
+        explanation: 'Es informal y subjetivo.',
         substitutes: ['sobresaliente']
     },
     'tal cual': {
-        explanation: 'Es una expresión coloquial; mejor eliminar o reformular.',
+        explanation: 'Es una expresión coloquial; se debe eliminar o reformular.',
         substitutes: []
     },
     'así como': {
@@ -233,11 +241,11 @@ const informalWordsData = {
         substitutes: ['además de', 'al igual que']
     },
     'punto de vista': {
-        explanation: 'Introduce subjetividad. Mejor emplear "perspectiva" o "criterio".',
+        explanation: 'Introduce subjetividad. Debe cambiarse.',
         substitutes: ['perspectiva', 'criterio']
     },
     'visto así': {
-        explanation: 'Expresión informal; es mejor reformular.',
+        explanation: 'Expresión informal; se debe reformular.',
         substitutes: ['desde esta perspectiva', 'desde este enfoque']
     },
     'probablemente': {
@@ -277,11 +285,11 @@ const informalWordsData = {
         substitutes: ['además', 'cabe destacar']
     },
     'sinceramente': {
-        explanation: 'introduce subjetividad y no aporta contenido objetivo. Mejor eliminarlo o reformular la oración.',
+        explanation: 'introduce subjetividad y no aporta contenido objetivo. Se debe eliminar o reformular la oración.',
         substitutes: []
     },
     'tarde o temprano': {
-        explanation: 'frase demasiado informal y vaga.',
+        explanation: 'frase informal y vaga.',
         substitutes: ['eventualmente', 'en algún momento']
     },
     'en base a': {
@@ -293,7 +301,7 @@ const informalWordsData = {
         substitutes: ['finalmente', 'en conclusión', 'para concluir']
     },
     'clase de': {
-        explanation: 'es un término muy informal.',
+        explanation: 'es un término informal.',
         substitutes: ['tipo de', 'variedad de', 'especie de']
     },
     'típico': {
@@ -309,7 +317,7 @@ const informalWordsData = {
         substitutes: ['según los datos', 'es evidente que']
     },
     'lo cual significa': {
-        explanation: 'es una expresión coloquial. Es mejor sustituirla.',
+        explanation: 'es una expresión coloquial. Se debe sustituir.',
         substitutes: ['lo que implica', 'esto indica']
     },
     'a lo mejor': {
@@ -321,7 +329,7 @@ const informalWordsData = {
         substitutes: ['según los datos', 'de acuerdo con la evidencia']
     },
     'uno de los cuales': {
-        explanation: 'Puede resultar poco claro en oraciones complejas y textos académicos.',
+        explanation: 'Puede resultar poco preciso en oraciones complejas y textos académicos.',
         substitutes: ['entre los cuales', 'como parte de estos']
     },
     'maldita': {

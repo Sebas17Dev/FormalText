@@ -492,6 +492,10 @@ em {
     color: #333;
 }
 
+.explanation .description:first-letter {
+    text-transform: uppercase;
+}
+
 .explanation .substitutes {
     font-size: 0.85em;
     color: #555;

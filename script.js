@@ -379,6 +379,42 @@ function checkDocument() {
     let tooLongParagraphs = [];
     let allParagraphsWithinLimit = true;
     let numberFormatIssues = [];
+    const informalPhrases = Object.keys(informalWordsData); // Palabras informales que pueden ser frases
+    let highlightedText = documentText;
+
+    // Buscar y resaltar palabras informales compuestas y simples
+    informalPhrases.forEach(phrase => {
+        const regex = new RegExp(`\\b${phrase}\\b`, 'gi');
+        if (highlightedText.match(regex)) {
+            foundInformalWords = true;
+            const phraseId = `word-${wordCounter++}`;
+            wordOccurrences[phrase] = (wordOccurrences[phrase] || []).concat([phraseId]); // Almacenar ID
+            const titleText = informalWordsData[phrase].explanation;
+            highlightedText = highlightedText.replace(regex, `<a href="#${phraseId}" id="${phraseId}" class="informal-highlight" title="${titleText}">${phrase}</a>`);
+        }
+    });
+
+    documentInput.innerHTML = highlightedText.replace(/\n/g, '<br>'); // Agregar saltos de línea HTML
+
+    // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
+    let explanations = '';
+    Object.keys(wordOccurrences).forEach((word) => {
+        const substitutes = informalWordsData[word].substitutes.length > 0
+            ? `<div class="substitutes">Posibles sustitutos: <span>${informalWordsData[word].substitutes.join(', ')}</span></div>`
+            : '';
+        const occurrencesLinks = wordOccurrences[word]
+            .map(id => `<a href="#${id}" class="word-link">${word}</a>`)
+            .join(', ');
+
+        explanations += `
+            <div class="explanation">
+                <div class="occurrences">${occurrencesLinks}</div>
+                <div class="description">${informalWordsData[word].explanation}</div>
+                ${substitutes}
+            </div>
+        `;
+    });
+
 
     // Dividir el texto en párrafos
     const paragraphs = documentText.split(/\n+/);
@@ -407,18 +443,6 @@ function checkDocument() {
             // Verificar si la palabra es común
             if (commonWords.has(lowerCaseWord)) {
                 return word; // Si es común, no resaltar
-            }
-
-            // Verificar si es una palabra informal
-            if (informalWordsData[lowerCaseWord]) {
-                foundInformalWords = true;
-                const wordId = `word-${wordCounter++}`;
-                if (!wordOccurrences[lowerCaseWord]) {
-                    wordOccurrences[lowerCaseWord] = []; // Inicializar ocurrencias
-                }
-                wordOccurrences[lowerCaseWord].push(wordId); // Almacenar ID
-                const titleText = informalWordsData[lowerCaseWord].explanation;
-                return `<a href="#${wordId}" id="${wordId}" class="informal-highlight" title="${titleText}">${word}</a>`;
             }
 
             // Contar palabras repetidas
@@ -453,8 +477,6 @@ function checkDocument() {
             }
         }
 
-        documentInput.innerHTML += highlightedText + '<br>';
-
         // Verificar formato de números, si la opción está activada
         if (checkNumberFormat.checked) {
             const numberIssuesInParagraph = validateNumberFormat(paragraph, paragraphIndex);
@@ -471,26 +493,6 @@ function checkDocument() {
             }
             */
         }
-    });
-
-    // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
-    let explanations = '';
-    Object.keys(wordOccurrences).forEach((word) => {
-        const substitutes = informalWordsData[word].substitutes.length > 0
-            ? `<div class="substitutes">Posibles sustitutos: <span>${informalWordsData[word].substitutes.join(', ')}</span></div>`
-            : '';
-        const occurrencesLinks = wordOccurrences[word]
-            .map(id => `<a href="#${id}" class="word-link">${word}</a>`)
-            .join(', ');
-
-        // Crear un div para cada explicación
-        explanations += `
-        <div class="explanation">
-            <div class="occurrences">${occurrencesLinks}</div>
-            <div class="description">${informalWordsData[word].explanation}</div>
-            ${substitutes}
-        </div>
-    `;
     });
 
 
