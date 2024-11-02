@@ -6,6 +6,7 @@ const sections = {
     conectivos: document.getElementById('conectivos'),
     citas: document.getElementById('citas'),
     palabras: document.getElementById('palabras'),
+    textos: document.getElementById('textos'),
     diccionario: document.getElementById('diccionario')
 };
 const feedbackDiv = document.getElementById("feedback");

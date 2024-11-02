@@ -778,6 +778,7 @@ input:checked+.slider::before {
 #citas,
 #conectivos,
 #palabras,
+#textos,
 #diccionario {
     position: relative;
     padding: 2rem;
@@ -792,16 +793,19 @@ input:checked+.slider::before {
 #conectivos h2,
 #sinonimos h2,
 #palabras h2,
+#textos h2, 
 #diccionario h2 {
     margin-bottom: 1.5rem;
     font-size: 2em;
     font-weight: bold;
     color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #reglas li,
 #citas li,
-#palabras li {
+#palabras li,
+#textos li {
     margin: 1rem 0;
     padding: 1rem;
     border-left: 0.25rem solid var(--primary-color);
@@ -819,7 +823,8 @@ input:checked+.slider::before {
 
 #reglas li:hover,
 #citas li:hover,
-#palabras li:hover {
+#palabras li:hover,
+#textos li:hover {
     background-color: rgba(110, 142, 251, 0.1);
 }
 
@@ -843,6 +848,22 @@ blockquote {
     color: #333;
     text-align: justify;
     background-color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* Estilos para la sección de textos de utilidad */
+#textos li{
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+}
+
+.textos-categorias {
+    margin-block: 1.5rem;
+}
+
+.textos-categorias h3 {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
 }
 
 
@@ -1200,13 +1221,14 @@ footer {
 
 
 /* Responsive Design */
-@media (min-width: 999px) {
+
+@media (min-width: 1381px) {
     .sidebar.active {
         display: none;
     }
 }
 
-@media (max-width: 998px) {
+@media (max-width: 1380px) {
     .hide-on-mobile {
         display: none;
     }

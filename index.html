@@ -22,9 +22,23 @@
     <script src="numbers.js" type="text/javascript" defer></script>
     <script src="script.js" type="text/javascript" defer></script>
     <script src="darkMode.js" type="text/javascript" defer></script>
+
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MKX3PTW9');
+    </script>
 </head>
 
 <body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKX3PTW9" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
     <nav>
         <ul class="sidebar">
             <li onclick="hideSidebar()"><a href="#"><i class="fa-solid fa-x"></i></a></li>
@@ -33,6 +47,7 @@
             <li><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li><a href="#" data-section="citas">Citas</a></li>
             <li><a href="#" data-section="palabras">Palabras a evitar</a></li>
+            <li><a href="#" data-section="textos">Textos de utilidad</a></li>
             <li><a href="#" data-section="diccionario">Diccionario según RAE</a></li>
         </ul>
         <ul>
@@ -51,6 +66,7 @@
             <li class="hide-on-mobile"><a href="#" data-section="conectivos">Conectivos recomendados</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="citas">Citas</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="palabras">Palabras a evitar</a></li>
+            <li class="hide-on-mobile"><a href="#" data-section="textos">Textos de utilidad</a></li>
             <li class="hide-on-mobile"><a href="#" data-section="diccionario">Diccionario según RAE</a></li>
             <li class="menu-button" onclick="showSidebar()"><a href="#"><i class="fa-solid fa-bars"></i></a></li>
         </ul>
@@ -168,11 +184,13 @@
                 <li><strong>Coherencia en el texto:</strong> La redacción debe mantener la coherencia entre ideas y
                     párrafos, con un desarrollo progresivo del tema a investigar.</li>
                 <li><strong>Conectores y coherencia:</strong> Para asegurar la coherencia, se deben usar conectores
-                    apropiados que relacionen las ideas de forma clara <a href="#" data-section="conectivos">(ver conectivos recomendados <i class="fas fa-arrow-right"></i>)</a>.</li>
+                    apropiados que relacionen las ideas de forma clara <a href="#" data-section="conectivos">(ver
+                        conectivos recomendados <i class="fas fa-arrow-right"></i>)</a>.</li>
                 <li><strong>Estructura de los párrafos:</strong> Cada párrafo debe contener una idea principal y varias
                     ideas secundarias que la desarrollen. La estructura lógica y la claridad son fundamentales.</li>
                 <li><strong>Estilo formal y técnico:</strong> El informe debe emplear un estilo de escritura formal y un
-                    lenguaje técnico adecuado al ámbito informático <a href="#" data-section="palabras">(ver palabras a evitar <i class="fas fa-arrow-right"></i>)</a>.</li>
+                    lenguaje técnico adecuado al ámbito informático <a href="#" data-section="palabras">(ver palabras a
+                        evitar <i class="fas fa-arrow-right"></i>)</a>.</li>
             </ul>
             <h2><i class="fa-solid fa-file-lines"></i> Estructura y formato</h2>
             <ul>
@@ -302,14 +320,32 @@
                     Los números de página deben estar centrados en la parte inferior de cada hoja, y usar el mismo tipo
                     de letra que se ha empleado en el documento.
                 </li>
-                <li><strong>Formato de los Objetivos Específicos:</strong> Los objetivos deben indicarse en formato de
+                <li><strong>Formato de los Objetivos Específicos:</strong> Los objetivos específicos deben indicarse en
+                    formato de
                     numeración. Por ejemplo:
                     <div style="text-align: justify;">
                         <br>1. (Se indica el primer objetivo).
                         <br>2. (Se indica el segundo objetivo).
                         <br>3. (Se indica el tercer objetivo).
                     </div>
-                    <br>No deben utilizarse formatos como "Objetivo N°1:" u otras variaciones.
+                    <br>No deben utilizarse formatos como "Objetivo N°1:", "Objetivo específico N°1:" u otras
+                    variaciones.
+                </li>
+                <li><strong>Artículos a añadir en "Bases Legales":</strong> En la sección de
+                    "Bases Legales", se deben incluir los artículos relevantes de las leyes y normativas que respaldan
+                    el proyecto. Se deben incorporar obligatoriamente:
+                    <br><br>Constitución de la República Bolivariana de Venezuela:
+                    <b>Artículo 102</b>,
+                    <b>Artículo 110</b>,
+                    <b>Artículo 111</b>.
+                    <br><br>Ley Orgánica de Ciencia, Tecnología e Innovación (LOCTI):
+                    <b>Artículo 1</b>,
+                    <b>Artículo 2</b>,
+                    <b>Artículo 3</b>,
+                    <b>Artículo 7</b>.
+                    <br><br>Ley Sobre el Derecho de Autor:
+                    <b>Artículo 5</b>.
+                    <br><br>Decreto N° 3.390 (Sobre software libre).
                 </li>
                 <li><strong>Formato para referencias en "Definición de términos básicos":</strong> En la sección de
                     "Definición de términos básicos", las referencias de las definiciones pueden presentarse en uno de
@@ -1324,10 +1360,75 @@
             </ul>
         </section>
 
-        <!-- Sección para consultar el diccionario de la RAE -->
+        <!-- Sección para mostrar los textos de utilidad -->
+        <section id="textos">
+            <h2><i class="fa-solid fa-book"></i> Textos de utilidad</h2>
+            <p>En esta sección puedes descargar diferentes recursos de utilidad para la redacción de proyectos.</p>
+
+            <div class="textos-categorias">
+                <h3>Textos de orden académico</h3>
+                <ul>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_de_orden_académico/Manual Normas y Procedimientos de Proyecto (MANPPRO) - 2022.pdf"><i class="fa-solid fa-download"></i>
+                            Manual Normas y Procedimientos de Proyecto (MANPPRO) - 2022</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_de_orden_académico/Manual Normas y Procedimientos de Proyecto (MANPPRO) - 2015.pdf"><i class="fa-solid fa-download"></i>
+                            Manual Normas y Procedimientos de Proyecto (MANPPRO) - 2015</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_de_orden_académico/Manual de Trabajos de Grado de Especialización y Maestría y Tesis Doctorales (UPEL) - 2016.pdf"><i class="fa-solid fa-download"></i>
+                            Manual de Trabajos de Grado de Especialización y Maestría y Tesis Doctorales (UPEL) - 2016</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="textos-categorias">
+                <h3>Leyes y reglamentos</h3>
+                <ul>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_leyes_y_reglamentos/Constitución de la República Bolivariana de Venezuela - 1999.pdf"><i class="fa-solid fa-download"></i>
+                            Constitución de la República Bolivariana de Venezuela - 1999</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_leyes_y_reglamentos/Ley Orgánica de Ciencia, Tecnología e Innovacion - 2022.pdf"><i class="fa-solid fa-download"></i>
+                            Ley Orgánica de Ciencia, Tecnología e Innovacion - 2022</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_leyes_y_reglamentos/Ley Sobre el Derecho de Autor - 1993.pdf"><i class="fa-solid fa-download"></i>
+                            Ley Sobre el Derecho de Autor - 1993</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_leyes_y_reglamentos/Ley Orgánica del Trabajo, los Trabajadores y las Trabajadoras - 2012.pdf"><i class="fa-solid fa-download"></i>
+                            Ley Orgánica del Trabajo, los Trabajadores y las Trabajadoras - 2012</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_leyes_y_reglamentos/Ley orgánica del Deporte, Actividad Física y Educación Física - 2011.pdf"><i class="fa-solid fa-download"></i>
+                            Ley orgánica del Deporte, Actividad Física y Educación Física - 2011</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="textos-categorias">
+                <h3>Libros sobre tecnologías</h3>
+                <ul>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_libros_sobre_tecnologías/Eloquent JavaScript - Marijn Haverbeke - 2018.pdf"><i class="fa-solid fa-download"></i>
+                            Eloquent JavaScript - Marijn Haverbeke - 2018</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-download" href="./public/documents/textos/textos_libros_sobre_tecnologías/Introducción a AJAX - Javier Eguíluz Pérez - 2008.pdf"><i class="fa-solid fa-download"></i>
+                            Introducción a AJAX - Javier Eguíluz Pérez - 2008</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Sección para consultar el diccrio de la RAE -->
         <section id="diccionario">
             <h2><i class="fa-solid fa-book"></i> Diccionario según RAE</h2>
-            <label for="palabra-buscar-rae">Ingrese una palabra para consultar su significado y sinónimos según la RAE
+            <label for="palabra-buscar-rae">Ingrese una palabra para consultar su significado y sinónimos según la
+                RAE
                 (Diccionario de la Lengua Española)</label>
 
             <div class="diccionario-input">
@@ -1338,9 +1439,9 @@
             </div>
         </section>
 
-        <p id="version">Versión: 0.7.2</p>
+        <p id="version">Versión: 0.7.3</p>
     </div>
-
+iona
     <footer>
         <p>Creado por <span class="highlight-autor">Sebastián Terán</span></p>
     </footer>
