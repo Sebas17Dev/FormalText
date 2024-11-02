@@ -20,6 +20,8 @@ const checkNumberFormat = document.getElementById('check-number-format');
 const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-errors");
 const checkAllConnectives = document.getElementById("check-all-connectives");
 const pasteBtn = document.getElementById("paste-btn");
+const audioBtn = document.getElementById("audio-btn");
+const audioIcon = audioBtn.querySelector("i");
 const clearButton = document.getElementById("btn-clear");
 const reviewButton = document.getElementById("btn-review");
 const fileInput = document.getElementById('file-input');
@@ -93,6 +95,7 @@ const firstAndSecondPersonVerbs = [
 const inclusiveLanguage = ['todas', 'todos', 'nosotras', 'nosotros', 'ustedes'];
 let isReviewing = false;
 let hasErrors = false; // Inicializar con la suposición de que no hay errores
+let isPlaying = false; // Variable para rastrear si está reproduciendo el texto
 
 // Custom message
 const consoleStyles = `
@@ -156,7 +159,7 @@ navLinks.forEach(link => {
 
         // Mostrar la sección seleccionada
         sections[sectionId].classList.add('active');
-        
+
         const sectionTop = sections[sectionId].offsetTop; // Desplazar la vista hacia la parte superior de la sección seleccionada
         const headerOffset = 100; //Ajustar valor según navbar
         const elementPosition = sectionTop - headerOffset;
@@ -897,6 +900,43 @@ documentInput.addEventListener('contextmenu', event => {
 // Agregar eventos para guardar la selección y actualizar el análisis
 checkboxes.forEach(({ element, key }) => {
     element.addEventListener("change", () => handleCheckboxChange({ element, key }));
+});
+
+// Restablecer botón e ícono a estado inicial
+const resetAudioButton = () => {
+    audioBtn.classList.remove("pause-mode");
+    audioIcon.classList.replace("fa-stop", "fa-volume-up");
+    isPlaying = false;
+}
+
+// Event listener para el botón de audio
+audioBtn.addEventListener("click", () => {
+    const text = documentInput.innerText.trim();
+
+    // Si hay texto para reproducir
+    if (text) {
+        if (!isPlaying) {
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "es-ES";
+            speech.rate = 1;
+
+            audioIcon.classList.replace("fa-volume-up", "fa-stop");
+            window.speechSynthesis.speak(speech);
+            isPlaying = true;
+
+            speech.onend = () => {
+                resetAudioButton();
+            };
+        } else {
+            window.speechSynthesis.cancel();
+            resetAudioButton();
+        }
+    }
+});
+
+// Detener síntesis de voz si se recarga o cierra la página
+window.addEventListener("beforeunload", () => {
+    window.speechSynthesis.cancel();
 });
 
 updateButtonText();

@@ -380,6 +380,7 @@ textarea:focus {
     height: 340px;
     margin-bottom: 1rem;
     padding: 15px;
+    padding-bottom: 40px;
     border: 2px solid #ddd;
     border-radius: 8px;
     font-size: 1em;
@@ -1037,6 +1038,25 @@ input[type="checkbox"]:checked+label::before::after {
     pointer-events: none;
 }
 
+/* Estilos para el boton de audio */
+.audio-btn {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    width: 2rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    transition:  background-color var(--transition-fast) var(--transition-timing-function-default);
+    justify-content: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.audio-btn:hover {
+    background-color: #0056b3;
+}
+
 
 /* Estilos para el botones de descargar */
 .btn-download {
@@ -1304,7 +1324,7 @@ footer {
 
     textarea,
     .editable {
-        height: 150px;
+        height: 180px;
     }
 
     .checkbox-wrapper {

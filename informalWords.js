@@ -37,7 +37,7 @@ const informalWordsData = {
         substitutes: ['realizar', 'desarrollar', 'ejecutar']
     },
     'muy': {
-        explanation: 'No aporta precisión. Es mejor usar un adjetivo más preciso.',
+        explanation: 'No aporta precisión. Es mejor usar un adjetivo más preciso o solo eliminar.',
         substitutes: ['fundamental', 'crucial']
     },
     'bastante': {
@@ -90,7 +90,7 @@ const informalWordsData = {
     },
     'demasiado': {
         explanation: 'Puede parecer subjetivo o coloquial.',
-        substitutes: ['en exceso', 'en gran medida', 'significativamente']
+        substitutes: ['en exceso', 'en gran medida']
     },
     'la verdad es que': {
         explanation: 'No aporta información concreta. Debe eliminarse o reformularse.',
@@ -98,15 +98,15 @@ const informalWordsData = {
     },
     'obviamente': {
         explanation: 'Sugiere que algo es evidente sin pruebas.',
-        substitutes: ['claramente', 'es evidente que']
+        substitutes: ['es evidente que']
     },
     'demasiado poco': {
         explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
-        substitutes: ['en exceso', 'insuficiente', 'excesivamente']
+        substitutes: ['insuficiente']
     },
     'demasiado mucho': {
         explanation: 'En lugar de esto, es mejor emplear términos más formales y específicos.',
-        substitutes: ['en exceso', 'insuficiente', 'excesivamente']
+        substitutes: ['en exceso', 'excesivamente']
     },
     'quizás': {
         explanation: 'Debe evitarse en redacciones académicas, ya que es subjetivo e impreciso.',
@@ -152,9 +152,17 @@ const informalWordsData = {
         explanation: 'En algunos casos es informal.',
         substitutes: ['esto significa', 'lo que implica']
     },
+    'o sea': {
+        explanation: 'es muy coloquial para redacción formal.',
+        substitutes: ['esto implica']
+    },
     'de alguna manera': {
         explanation: 'Evitar esta frase y ser más directo en la formulación de ideas.',
-        substitutes: ['De un modo particular', 'En ciertos aspectos', 'De una manera más concreta']
+        substitutes: ['de un modo particular', 'en ciertos aspectos', 'de una manera más concreta']
+    },
+    'de alguna forma': {
+        explanation: 'Evitar esta frase y ser más directo en la formulación de ideas.',
+        substitutes: ['de un modo particular', 'de manera específica', 'en ciertos aspectos', 'de una manera más concreta']
     },
     'algún tipo de': {
         explanation: 'Expresión vaga y poco específica. Mejor utilizar términos concretos.',
@@ -255,6 +263,66 @@ const informalWordsData = {
     'mala idea': {
         explanation: 'es una frase común en lenguaje coloquial, en un texto científico-académico su ambigüedad y subjetividad no cumplen con las normas.',
         substitutes: ['propuesta inconveniente', 'opción inadecuada']
+    },
+    'al fin y al cabo': {
+        explanation: 'es coloquial y redundante, debe evitarse su uso.',
+        substitutes: ['por lo tanto', 'en definitiva']
+    },
+    'como tal': {
+        explanation: 'es ambiguo y no añade claridad al texto.',
+        substitutes: ['en sí mismo', 'en su esencia']
+    },
+    'dicho sea de paso': {
+        explanation: 'es una expresión coloquial y redundante.',
+        substitutes: ['además', 'cabe destacar']
+    },
+    'sinceramente': {
+        explanation: 'introduce subjetividad y no aporta contenido objetivo. Mejor eliminarlo o reformular la oración.',
+        substitutes: []
+    },
+    'tarde o temprano': {
+        explanation: 'frase demasiado informal y vaga.',
+        substitutes: ['eventualmente', 'en algún momento']
+    },
+    'en base a': {
+        explanation: 'no es correcto gramaticalmente. Es un error común de redacción.',
+        substitutes: ['con base en', 'basado en', 'basándose en', 'de acuerdo con', 'a juzgar por']
+    },
+    'en fin': {
+        explanation: 'es una expresión coloquial y poco precisa.',
+        substitutes: ['finalmente', 'en conclusión', 'para concluir']
+    },
+    'clase de': {
+        explanation: 'es un término muy informal.',
+        substitutes: ['tipo de', 'variedad de', 'especie de']
+    },
+    'típico': {
+        explanation: 'puede ser vago, general y poco formal.',
+        substitutes: ['habitual', 'común', 'frecuente']
+    },
+    'cosas como': {
+        explanation: 'carece de precisión y se recomienda evitarlo.',
+        substitutes: ['elementos tales como', 'factores como']
+    },
+    'sin duda': {
+        explanation: 'es subjetivo y sugiere opinión',
+        substitutes: ['según los datos', 'es evidente que']
+    },
+    'lo cual significa': {
+        explanation: 'es una expresión coloquial. Es mejor sustituirla.',
+        substitutes: ['lo que implica', 'esto indica']
+    },
+    'a lo mejor': {
+        explanation: 'es una expresión coloquial que introduce subjetividad.',
+        substitutes: ['es probable que']
+    },
+    'según mi opinión': {
+        explanation: 'se debe evitar subjetividad en textos académicos.',
+        substitutes: ['según los datos', 'de acuerdo con la evidencia']
+    },
+    'uno de los cuales': {
+        explanation: 'Puede resultar poco claro en oraciones complejas y textos académicos.',
+        substitutes: ['entre los cuales', 'como parte de estos']
     },
     'maldita': {
         explanation: 'Es una palabra vulgar e inapropiada en textos formales.',
