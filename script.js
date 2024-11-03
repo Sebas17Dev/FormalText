@@ -411,7 +411,7 @@ const updateReadabilityBar = (score, feedbackContainer) => {
 
     // Ajustar la longitud de la barra según la puntuación de legibilidad
     const width = Math.min(score, 100);
-    
+
     readabilityBar.style.width = `${width}%`;
     readabilityScoreText.innerText = `Legibilidad: ${score.toFixed(2)}`;
 
@@ -662,16 +662,19 @@ function checkDocument() {
         }
     }
 
-    // Verificar si hubo problemas con el formato de los números
-    if (numberFormatIssues.length > 0) {
-        feedbackContent += `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
-        numberFormatIssues.forEach(issue => {
-            feedbackContent += `<li>${issue}</li>`;
-        });
-        feedbackContent += `</ul></div>`;
-        hasErrors = true;
-    } else {
-        feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El formato de los números es correcto.</div>`;
+    // Verificar errores de formato de numeros
+    if (checkNumberFormat.checked) {
+        // Verificar si hubo problemas con el formato de los números
+        if (numberFormatIssues.length > 0) {
+            feedbackContent += `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> Los siguientes números no siguen la regla de redacción (esta regla no aplica en las fuentes o subtítulos de tablas, gráficos o figuras):<br><ul>`;
+            numberFormatIssues.forEach(issue => {
+                feedbackContent += `<li>${issue}</li>`;
+            });
+            feedbackContent += `</ul></div>`;
+            hasErrors = true;
+        } else {
+            feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El formato de los números es correcto.</div>`;
+        }
     }
 
     // Actualizar el contenido del feedbackDiv
