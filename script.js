@@ -15,6 +15,7 @@ const checkRepeatedWords = document.getElementById("check-repeated-words");
 const checkMarkRepeatedWords = document.getElementById("mark-repeated-words");
 const checkThirdPerson = document.getElementById("check-third-person");
 const checkMarkNonThirdPerson = document.getElementById("mark-non-third-person");
+const checkReadability = document.getElementById("check-readability");
 const checkParagraphLength = document.getElementById("check-paragraph-length");
 const checkNumberFormat = document.getElementById('check-number-format');
 const checkMarkNumberFormatErrors = document.getElementById("mark-number-format-errors");
@@ -42,6 +43,7 @@ const checkboxes = [
     { element: checkMarkRepeatedWords, key: "checkMarkPepeatedWords" },
     { element: checkThirdPerson, key: "checkThirdPerson" },
     { element: checkMarkNonThirdPerson, key: "checkMarkNonThirdPerson" },
+    { element: checkReadability, key: "checkReadability" },
     { element: checkParagraphLength, key: "checkParagraphLength" },
     { element: checkNumberFormat, key: "checkNumberFormat" },
     { element: checkMarkNumberFormatErrors, key: "checkMarkNumberFormatErrors" },
@@ -284,7 +286,6 @@ const validateNumberFormat = (paragraphText, paragraphIndex) => {
     return numberIssues;
 }
 
-
 // Función auxiliar para convertir números a palabras en español (simplificada)
 const numberToWord = num => {
     // Verificamos si el número está dentro del rango y lo devolvemos
@@ -354,6 +355,148 @@ const checkPronounsUsage = documentText => {
     }
 }
 
+// Función para contar las sílabas en una palabra en español
+const countSyllables = word => {
+    word = word.toLowerCase();
+    if (word.length <= 3) return 1;
+    const syllableMatches = word.match(/[aeiouáéíóúü]+/g);
+    return syllableMatches ? syllableMatches.length : 1;
+};
+
+// Función para interpolar colores
+const interpolateColor = (color1, color2, factor) => {
+    const result = color1.slice(1).match(/.{1,2}/g).map((val, index) => {
+        const color1Val = parseInt(val, 16);
+        const color2Val = parseInt(color2.slice(1).match(/.{1,2}/g)[index], 16);
+        return Math.round(color1Val + factor * (color2Val - color1Val)).toString(16).padStart(2, '0');
+    });
+    return `#${result.join('')}`;
+};
+
+// Función para obtener el color de la barra según el puntaje
+const getReadabilityColor = score => {
+    if (score > 100) {
+        return "#4caf50"; // Color verde oscuro para puntuaciones superiores a 100
+    } else if (score >= 80) {
+        return interpolateColor("#8bc34a", "#4caf50", (score - 80) / 20); // Gradiente de verde claro a verde
+    } else if (score >= 60) {
+        return interpolateColor("#ffeb3b", "#8bc34a", (score - 60) / 20); // Gradiente de amarillo a verde claro
+    } else if (score >= 40) {
+        return interpolateColor("#ff9800", "#ffeb3b", (score - 40) / 20); // Gradiente de naranja a amarillo
+    } else {
+        return interpolateColor("#f44336", "#ff9800", score / 40); // Gradiente de rojo a naranja
+    }
+};
+
+// Función para actualizar la barra de legibilidad
+const updateReadabilityBar = (score, feedbackContainer) => {
+    // Crear y agregar el contenedor si no existe
+    const readabilityContainer = document.createElement('div');
+    readabilityContainer.classList.add('readability-container');
+
+    // Crear la barra de legibilidad y el texto de puntaje
+    const readabilityBar = document.createElement('div');
+    readabilityBar.classList.add('readability-bar');
+    readabilityBar.id = 'readability-bar';
+
+    const readabilityScoreText = document.createElement('span');
+    readabilityScoreText.id = 'readability-score-text';
+
+    // Agregar barra y texto al contenedor
+    readabilityContainer.appendChild(readabilityBar);
+    readabilityContainer.appendChild(readabilityScoreText);
+
+    // Agregar el contenedor de legibilidad al feedback general
+    feedbackContainer.appendChild(readabilityContainer);
+
+    // Ajustar la longitud de la barra según la puntuación de legibilidad
+    const width = Math.min(score, 100);
+    
+    readabilityBar.style.width = `${width}%`;
+    readabilityScoreText.innerText = `Legibilidad: ${score.toFixed(2)}`;
+
+    // Cambiar el color de la barra según el nivel de legibilidad, de manera gradual
+    readabilityBar.style.backgroundColor = getReadabilityColor(score);
+}
+
+// Función para calcular el índice de legibilidad de Flesch-Szigriszt para español
+const calculateReadability = text => {
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+    const words = text.split(/\s+/).filter(word => word.length > 1);
+    const syllableCount = words.reduce((count, word) => count + countSyllables(word), 0);
+
+    const sentenceCount = sentences.length || 1;
+    const wordCount = words.length || 1;
+
+    // Cálculo del índice de Flesch-Szigriszt ajustado para español
+    const readabilityScore = 206.84 - (1.02 * (wordCount / sentenceCount)) - (60 * (syllableCount / wordCount));
+    return readabilityScore;
+};
+
+// Función para verificar legibilidad de texto
+const checkTextReadability = text => {
+    // Cálculo de la legibilidad
+    const readabilityScore = calculateReadability(text);
+
+    // Crear el feedback según el puntaje de legibilidad
+    let readabilityFeedback = '';
+    if (readabilityScore >= 80) {
+        readabilityFeedback = `<div class="success"><i class="fa-solid fa-check-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo cual es excelente para un público académico y técnico. El texto es claro y preciso. Mantenga este estilo para garantizar que el contenido sea accesible incluso para lectores de nivel intermedio.</div>`;
+    } else if (readabilityScore >= 60) {
+        readabilityFeedback = `<div class="success"><i class="fa-solid fa-check-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, adecuado para un público académico y técnico avanzado. No obstante, podría simplificar algunos términos técnicos o dividir párrafos largos para mejorar la accesibilidad, especialmente si la audiencia incluye lectores con menos experiencia técnica.</div>`;
+    } else if (readabilityScore >= 50) {
+        readabilityFeedback = `<div class="success"><i class="fa-solid fa-check-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, apropiado para un público universitario. Se recomienda revisar la longitud de las oraciones y eliminar repeticiones. Asegúrese de que las ideas principales sean claras y respalden las ideas secundarias.</div>`;
+    } else if (readabilityScore >= 40) {
+        readabilityFeedback = `<div class="success"><i class="fa-solid fa-check-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, adecuado para lectores universitarios, aunque podría resultar complejo para algunos. Considere utilizar conectores para mejorar la cohesión, y revise que los términos técnicos sean necesarios y claros.</div>`;
+    } else if (readabilityScore >= 30) {
+        readabilityFeedback = `<div class="warning"><i class="fa-solid fa-info-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo cual es comprensible para lectores con experiencia en textos técnicos, pero podría dificultar la comprensión general. Podría mejorar la claridad evitando estructuras de oraciones demasiado complejas y asegurando precisión en los términos especializados.</div>`;
+    } else if (readabilityScore >= 20) {
+        readabilityFeedback = `<div class="warning"><i class="fa-solid fa-info-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo que indica un nivel de dificultad elevado. Revise la estructura de las oraciones, reduzca la longitud de los párrafos y considere simplificar algunos términos técnicos para mejorar la comprensión.</div>`;
+    } else {
+        readabilityFeedback = `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo que sugiere un nivel de dificultad alto, posiblemente excesivo para la mayoría de lectores. Reescriba el texto con oraciones más cortas y directas, y evite términos técnicos complejos que no sean necesarios para la precisión científica. Utilice sinónimos más accesibles y divida el contenido en bloques de ideas más claros. Intente expresar las mismas ideas con menos palabras.</div>`;
+    }
+
+    // Añadir el feedback al contenedor de feedback
+    feedbackDiv.innerHTML += readabilityFeedback;
+
+    // Actualizar la barra de legibilidad
+    updateReadabilityBar(readabilityScore, feedbackDiv);
+}
+
+// Función para mostrar palabras repetidas por párrafo
+const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
+    let repeatedWordsHtml = `
+        <div class="repeated-words-section">
+        <div><i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong></div>
+        <ul class="repeated-words-list">`;
+
+    let hasRepeatedWords = false;
+
+    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
+        hasRepeatedWords = true;
+
+        repeatedWordsHtml += `
+            <li class="repeated-words-paragraph">
+                <h4>${paragraph}:</h4>
+                <ul class="repeated-word-items">`;
+
+        repeatedWords.forEach(wordCount => {
+            repeatedWordsHtml += `<li class="repeated-word">
+                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
+                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
+            </li>`;
+        });
+
+        repeatedWordsHtml += `</ul></li>`;
+    });
+
+    repeatedWordsHtml += '</ul></div>';
+
+    if (hasRepeatedWords) {
+        feedbackDiv.innerHTML += repeatedWordsHtml;
+    }
+}
+
 // Función para revisar el documento, resaltar palabras no formales y mostrar explicaciones
 function checkDocument() {
     const documentText = documentInput.innerText.trim();
@@ -418,7 +561,6 @@ function checkDocument() {
 
     // Dividir el texto en párrafos
     const paragraphs = documentText.split(/\n+/);
-
     paragraphs.forEach((paragraph, paragraphIndex) => {
         let wordCount = {};
         let originalWordsMap = {};
@@ -495,7 +637,6 @@ function checkDocument() {
         }
     });
 
-
     let feedbackContent = ""; // Variable temporal para acumular el contenido
 
     // Condiciones finales para palabras no formales
@@ -505,6 +646,7 @@ function checkDocument() {
     } else {
         feedbackContent += `<div class="success"><i class="fa-solid fa-check-circle"></i> El texto no contiene palabras informales.<br></div>`;
     }
+
 
     // Verificar longitud de los párrafos
     if (checkParagraphLength.checked) {
@@ -535,6 +677,11 @@ function checkDocument() {
     // Actualizar el contenido del feedbackDiv
     feedbackDiv.innerHTML = feedbackContent;
 
+    // Verificar la legibilidad del texto
+    if (checkReadability.checked) {
+        checkTextReadability(documentText);
+    }
+
     //Verificar el uso de tercera persona
     if (checkThirdPerson.checked) {
         checkPronounsUsage(documentText);
@@ -560,40 +707,6 @@ function checkDocument() {
     }
 
     hasErrors = false;
-}
-
-// Función para mostrar palabras repetidas por párrafo
-const showRepeatedWordsByParagraph = repeatedWordsPerParagraph => {
-    let repeatedWordsHtml = `
-        <div class="repeated-words-section">
-        <div><i class="fa-solid fa-info-circle"></i> <strong>Palabras repetidas:</strong></div>
-        <ul class="repeated-words-list">`;
-
-    let hasRepeatedWords = false;
-
-    Object.entries(repeatedWordsPerParagraph).forEach(([paragraph, repeatedWords]) => {
-        hasRepeatedWords = true;
-
-        repeatedWordsHtml += `
-            <li class="repeated-words-paragraph">
-                <h4>${paragraph}:</h4>
-                <ul class="repeated-word-items">`;
-
-        repeatedWords.forEach(wordCount => {
-            repeatedWordsHtml += `<li class="repeated-word">
-                <span class="word-highlight">${wordCount.split(":")[0]}</span> 
-                <span class="word-count">(${wordCount.split(":")[1].trim()} veces)</span>
-            </li>`;
-        });
-
-        repeatedWordsHtml += `</ul></li>`;
-    });
-
-    repeatedWordsHtml += '</ul></div>';
-
-    if (hasRepeatedWords) {
-        feedbackDiv.innerHTML += repeatedWordsHtml;
-    }
 }
 
 // Función para contar palabras
@@ -864,6 +977,7 @@ window.addEventListener("load", () => {
         "checkMarkPepeatedWords": checkMarkRepeatedWords,
         "checkThirdPerson": checkThirdPerson,
         "checkMarkNonThirdPerson": checkMarkNonThirdPerson,
+        "checkReadability": checkReadability,
         "checkParagraphLength": checkParagraphLength,
         "checkNumberFormat": checkNumberFormat,
         "checkMarkNumberFormatErrors": checkMarkNumberFormatErrors,

@@ -624,6 +624,34 @@ input:checked+.slider::before {
     font-size: 1.5em;
 }
 
+
+/* Estilos de información sobre la legibilidad del texto */
+.readability-container {
+    position: relative;
+    overflow: hidden;
+    width: 70%;
+    height: 20px;
+    margin: 20px 0;
+    border-radius: var(--radius);
+    background-color: #f3f3f3;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.readability-bar {
+    width: 0%;
+    height: 100%;
+}
+
+#readability-score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-weight: bold;
+    color: #333;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos de palabras repetidas*/
 .repeated-words-section {
     margin: 1rem;
     padding: 0.5rem;
@@ -798,7 +826,7 @@ input:checked+.slider::before {
 #conectivos h2,
 #sinonimos h2,
 #palabras h2,
-#textos h2, 
+#textos h2,
 #diccionario h2 {
     margin-bottom: 1.5rem;
     font-size: 2em;
@@ -857,7 +885,7 @@ blockquote {
 
 
 /* Estilos para la sección de textos de utilidad */
-#textos li{
+#textos li {
     margin: 0.5rem 0;
     padding: 0.5rem;
 }
@@ -1052,7 +1080,7 @@ input[type="checkbox"]:checked+label::before::after {
     padding: 0.5rem;
     border-radius: 50%;
     background-color: var(--primary-color);
-    transition:  background-color var(--transition-fast) var(--transition-timing-function-default);
+    transition: background-color var(--transition-fast) var(--transition-timing-function-default);
     justify-content: center;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
