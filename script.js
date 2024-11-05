@@ -454,6 +454,7 @@ const checkTextReadability = text => {
         readabilityFeedback = `<div class="warning"><i class="fa-solid fa-info-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo que indica un nivel de dificultad elevado. Revise la estructura de las oraciones, reduzca la longitud de los párrafos y considere simplificar algunos términos técnicos para mejorar la comprensión.</div>`;
     } else {
         readabilityFeedback = `<div class="error"><i class="fa-solid fa-exclamation-circle"></i> El índice de legibilidad es ${readabilityScore.toFixed(2)}, lo que sugiere un nivel de dificultad alto, posiblemente excesivo para la mayoría de lectores. Reescriba el texto con oraciones más cortas y directas, y evite términos técnicos complejos que no sean necesarios para la precisión científica. Utilice sinónimos más accesibles y divida el contenido en bloques de ideas más claros. Intente expresar las mismas ideas con menos palabras.</div>`;
+        hasErrors = true;
     }
 
     // Añadir el feedback al contenedor de feedback
@@ -537,7 +538,6 @@ function checkDocument() {
         }
     });
 
-    documentInput.innerHTML = highlightedText.replace(/\n/g, '<br>'); // Agregar saltos de línea HTML
 
     // Crear la lista de explicaciones sin duplicar y agregar enlaces a cada ocurrencia
     let explanations = '';
@@ -573,7 +573,7 @@ function checkDocument() {
         }
 
         // Procesar el texto de cada párrafo
-        let highlightedText = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
+        let highlightedParagraph = paragraph.split(/([^\p{L}\p{N}]+)/gu).map(word => {
             const lowerCaseWord = normalizeWord(word); // Normalizar la palabra
             originalWordsMap[lowerCaseWord] = word; // Almacenar la palabra original
 
@@ -603,13 +603,14 @@ function checkDocument() {
         // Resaltar palabras repetidas solo en este párrafo
         if (checkRepeatedWords.checked) {
             let repeatedWords = [];
+
             Object.entries(wordCount).forEach(([word, count]) => {
                 if (count > 1) {
                     repeatedWords.push(`${word}: ${count} veces`);
 
                     if (checkMarkRepeatedWords.checked) {
                         const regex = new RegExp(`\\b${originalWordsMap[word]}\\b`, 'gi');
-                        highlightedText = highlightedText.replace(regex, `<span class="repeated-word-highlight" title="Se repite ${count} veces">${originalWordsMap[word]}</span>`);
+                        highlightedParagraph = highlightedParagraph.replace(regex, `<span class="repeated-word-highlight" title="Se repite ${count} veces">${word}</span>`);
                     }
                 }
             });
@@ -618,6 +619,9 @@ function checkDocument() {
                 repeatedWordsPerParagraph[`Párrafo ${paragraphIndex + 1}`] = repeatedWords;
             }
         }
+
+        highlightedText = highlightedText.replace(paragraph, highlightedParagraph);
+
 
         // Verificar formato de números, si la opción está activada
         if (checkNumberFormat.checked) {
@@ -636,6 +640,9 @@ function checkDocument() {
             */
         }
     });
+
+    documentInput.innerHTML = highlightedText.replace(/\n/g, '<br>');
+
 
     let feedbackContent = ""; // Variable temporal para acumular el contenido
 
