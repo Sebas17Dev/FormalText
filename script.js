@@ -558,7 +558,6 @@ function checkDocument() {
         `;
     });
 
-
     // Dividir el texto en párrafos
     const paragraphs = documentText.split(/\n+/);
     paragraphs.forEach((paragraph, paragraphIndex) => {
@@ -627,17 +626,6 @@ function checkDocument() {
         if (checkNumberFormat.checked) {
             const numberIssuesInParagraph = validateNumberFormat(paragraph, paragraphIndex);
             numberFormatIssues = numberFormatIssues.concat(numberIssuesInParagraph);
-
-            /*
-            // Resaltar los errores de formato de número en el texto
-            if (checkMarkNumberFormatErrors.checked) {
-                numberIssuesInParagraph.forEach(issue => {
-                    const errorPattern = issue.split('"')[1]; // Extraer el texto que debería estar
-                    const regex = new RegExp(`(${errorPattern})`, 'g');
-                    documentInput.innerHTML = documentInput.innerHTML.replace(regex, `<span class="error-highlight">${errorPattern}</span>`);
-                });
-            }
-            */
         }
     });
 

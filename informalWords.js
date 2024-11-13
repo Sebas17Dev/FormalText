@@ -8,6 +8,14 @@ const informalWordsData = {
         explanation: 'Es una palabra de coloquio popular.',
         substitutes: ['ausencia', 'carencia']
     },
+    'malo': {
+        explanation: 'Es subjetivo. Se debe usar adjetivos más específicos.',
+        substitutes: ['adverso', 'deficiente', 'inadecuado']
+    },
+    'mala': {
+        explanation: 'Es subjetivo y ambiguo en contextos académicos. Usar términos más precisos.',
+        substitutes: ['deficiente', 'desfavorable', 'inapropiado', 'inadecuado']
+    },
     'lo que es': {
         explanation: 'Redundante y poco formal. Se recomienda eliminar o simplificar.',
         substitutes: []
