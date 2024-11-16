@@ -32,6 +32,10 @@ const informalWordsData = {
         explanation: 'Este cambio depende del contexto.',
         substitutes: ['formación']
     },
+    'perfecto': {
+        explanation: 'Es subjetivo, ya que lo que se considera "perfecto" puede variar dependiendo de la percepción personal. Se recomienda utilizar un término más objetivo según el contexto.',
+        substitutes: ['ideal', 'óptimo', 'adecuado', 'exacto']
+    },
     'hay que': {
         explanation: 'Es informal, por lo que debe evitarse su uso.',
         substitutes: ['es necesario', 'se requiere', 'debe']
@@ -92,7 +96,7 @@ const informalWordsData = {
         explanation: ' coloquial.  usar "sería conveniente", "sería beneficioso", "resulta adecuado".',
         substitutes: ['sería conveniente', 'sería beneficioso', 'resulta adecuado']
     },
-    'etc.': {
+    'etc': {
         explanation: 'Aunque común, no es adecuado en textos académicos.',
         substitutes: []
     },
@@ -204,6 +208,10 @@ const informalWordsData = {
         explanation: 'Puede ser poco específico y ambiguo en contextos formales.',
         substitutes: ['sencillo', 'elemental']
     },
+    'al final del día': {
+        explanation: 'Es coloquial y largo. Sustituir.',
+        substitutes: ['en última instancia', 'finalmente']
+    },
     'claro': {
         explanation: 'Es informal y subjetivo; se debe expresar de forma objetiva.',
         substitutes: ['evidente', 'notorio']
@@ -238,7 +246,15 @@ const informalWordsData = {
     },
     'genial': {
         explanation: 'Es informal y subjetivo.',
-        substitutes: ['sobresaliente']
+        substitutes: ['sobresaliente', 'notable', 'interesante']
+    },
+    'cool': {
+        explanation: 'Es informal y subjetivo.',
+        substitutes: ['sobresaliente', 'notable', 'interesante']
+    },
+    'chevere': {
+        explanation: 'Es informal y subjetivo.',
+        substitutes: ['relevante', 'destacable', 'notable', 'interesante']
     },
     'tal cual': {
         explanation: 'Es una expresión coloquial; se debe eliminar o reformular.',
